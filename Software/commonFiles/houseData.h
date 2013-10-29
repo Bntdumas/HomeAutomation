@@ -13,12 +13,7 @@ class houseData : public QObject
     /**
       * @brief properties for QML communication.
       */
-    Q_PROPERTY(bool lightningDesk READ lightningDesk WRITE requestUpdateLightningDesk NOTIFY lightningDeskChanged)
-    Q_PROPERTY(bool lightningBed READ lightningBed WRITE requestUpdateLightningBed NOTIFY lightningBedChanged)
-    Q_PROPERTY(bool lightningTable READ lightningTable WRITE requestUpdateLightningTable NOTIFY lightningTableChanged)
-    Q_PROPERTY(bool lightningWorkshop READ lightningWorkshop WRITE requestUpdateLightningWorkshop NOTIFY lightningWorkshopChanged)
-    Q_PROPERTY(bool powerScreen READ powerScreen WRITE requestUpdatePowerScreen NOTIFY powerScreenChanged)
-    Q_PROPERTY(bool powerSpeakers READ powerSpeakers WRITE requestUpdatePowerSpeakers NOTIFY powerSpeakersChanged)
+    Q_PROPERTY(bool powerPlug READ powerPlug WRITE requestUpdatePowerPlug NOTIFY powerPlugChanged)
 
     Q_PROPERTY(QString ip READ ip WRITE setIp NOTIFY ipChanged)
     Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
@@ -44,18 +39,13 @@ public:
      * @brief set the entire house ligthning state using the @ref PlugFlag QFlag
      * @param A PlugFlag QFlag
      */
-    void setPowerPlugs(int lights);
+    void setAllPowerPlugs(int lights);
 
     /**
      * @brief set individual states of the house plugs.
      * @param the boolean state. (true: on, false: off)
      */
-    void setLightningDesk(bool state);
-    void setLightningBed(bool state);
-    void setLightningTable(bool state);
-    void setLightningWorkshop(bool state);
-    void setPowerScreen(bool state);
-    void setPowerSpeakers(bool state);
+    void setPowerPlug(bool state, PlugFlag plug);
 
    /**
       * @brief saves the server IP and Port.
@@ -73,13 +63,8 @@ public:
     /**
      * @brief getters
      */
-   PlugFlags powerPlugs() const {return m_powerPlugs;}
-    bool lightningDesk() const {return m_powerPlugs & Desk;}
-    bool lightningBed() const {return m_powerPlugs & Bed;}
-    bool lightningTable() const {return m_powerPlugs & Table;}
-    bool lightningWorkshop() const {return m_powerPlugs & Workshop;}
-    bool powerScreen() const {return m_powerPlugs & Screen;}
-    bool powerSpeakers() const {return m_powerPlugs & Speakers;}
+   PlugFlags allPowerPlugs() const {return m_powerPlugs;}
+    bool powerPlug(PlugFlag plug) const {return m_powerPlugs & plug;}
 
     QString ip() const { return m_IP; }
     int port() const { return m_port; }
@@ -88,12 +73,7 @@ Q_SIGNALS:
     /**
      * @brief signals related to defined Q_PROPERTIES, they are used by QtQuick
      */
-    void lightningDeskChanged();
-    void lightningBedChanged();
-    void lightningTableChanged();
-    void lightningWorkshopChanged();
-    void powerScreenChanged();
-    void powerSpeakersChanged();
+    void powerPlugChanged();
 
     void ipChanged();
     void portChanged();
@@ -114,13 +94,6 @@ public Q_SLOTS:
      */
     void requestUpdatePowerPlugs(houseData::PlugFlags lights) ;
     void requestUpdatePowerPlugs(houseData::PlugFlag plug, bool state);
-
-    void requestUpdateLightningDesk(bool state);
-    void requestUpdateLightningBed(bool state);
-    void requestUpdateLightningTable(bool state);
-    void requestUpdateLightningWorkshop(bool state);
-    void requestUpdatePowerScreen(bool state);
-    void requestUpdatePowerSpeakers(bool state);
 
 private:
 

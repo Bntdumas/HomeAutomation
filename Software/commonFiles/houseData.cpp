@@ -24,7 +24,7 @@ void houseData::setPort(int port)
     setIpAndPort(m_IP, port);
 }
 
-void houseData::setPowerPlugs(int flags)
+void houseData::setAllPowerPlugs(int flags)
 {
     PlugFlags plugs = static_cast<PlugFlags>(flags);
     if (m_powerPlugs == plugs) {

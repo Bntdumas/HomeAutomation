@@ -140,7 +140,7 @@ bool tcpClient::parsePowerPlugs(const QString &message)
     strippedData.remove(0, 3);
     strippedData.remove(strippedData.count()-1, 1);
     bool ok = false;
-    m_houseData->setPowerPlugs( static_cast<houseData::PlugFlags>(strippedData.toInt(&ok)));
+    m_houseData->setAllPowerPlugs( static_cast<houseData::PlugFlags>(strippedData.toInt(&ok)));
     qDebug() << "Power plugs parsed: " << m_houseData->powerPlugs();
     m_gotInitialPowerPlugs = ok;
     return ok;
