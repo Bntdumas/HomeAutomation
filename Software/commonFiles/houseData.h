@@ -10,42 +10,28 @@
 class houseData : public QObject
 {
     Q_OBJECT
-    /**
-      * @brief properties for QML communication.
-      */
-    Q_PROPERTY(bool powerPlug READ powerPlug WRITE requestUpdatePowerPlug NOTIFY powerPlugChanged)
 
     Q_PROPERTY(QString ip READ ip WRITE setIp NOTIFY ipChanged)
     Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
 
 public:
-    explicit houseData(QObject *parent = 0);
+    explicit houseData(QObject *parent = 0);   
+
 
     /**
-     * @brief Describe the different state of the house plugs, as flags.
+     * @brief Defines a Power Plug
      */
-    enum PlugFlag {
-        Start = 1
-        ,Bed = 2
-        ,Table = 4
-        ,Workshop = 8
-        ,Screen = 16
-        ,Speakers = 32
-        ,Desk = 64
+    struct powerPlug {
+        QUuid ID;
+        QString readableName;
+        bool state;
     };
-    Q_DECLARE_FLAGS(PlugFlags, PlugFlag)
-
-    /**
-     * @brief set the entire house ligthning state using the @ref PlugFlag QFlag
-     * @param A PlugFlag QFlag
-     */
-    void setAllPowerPlugs(int lights);
 
     /**
      * @brief set individual states of the house plugs.
      * @param the boolean state. (true: on, false: off)
      */
-    void setPowerPlug(bool state, PlugFlag plug);
+    void setPowerPlug(powerPlug plug);
 
    /**
       * @brief saves the server IP and Port.
@@ -63,9 +49,6 @@ public:
     /**
      * @brief getters
      */
-   PlugFlags allPowerPlugs() const {return m_powerPlugs;}
-    bool powerPlug(PlugFlag plug) const {return m_powerPlugs & plug;}
-
     QString ip() const { return m_IP; }
     int port() const { return m_port; }
 
@@ -73,7 +56,7 @@ Q_SIGNALS:
     /**
      * @brief signals related to defined Q_PROPERTIES, they are used by QtQuick
      */
-    void powerPlugChanged();
+    void powerPlugChanged(PlugFlag plug);
 
     void ipChanged();
     void portChanged();

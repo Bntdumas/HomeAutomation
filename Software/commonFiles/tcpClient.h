@@ -42,7 +42,6 @@ public Q_SLOTS:
     /**
      * @brief send the current house lightning state to the server
      */
-    void sendPowerPlugsData(bool screens , bool speakers , bool desk , bool table , bool bed , bool workshop);
     void sendPowerPlugsData(houseData::PlugFlags powerPlugs);
 
 Q_SIGNALS:

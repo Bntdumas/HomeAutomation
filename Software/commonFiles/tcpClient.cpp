@@ -111,20 +111,7 @@ bool tcpClient::send(const QString &message)
     return true;
 }
 
-void tcpClient::sendPowerPlugsData(bool screens , bool speakers , bool desk , bool table , bool bed , bool workshop)
-{
-    houseData::PlugFlags powerPlugs;
-    if (screens)  powerPlugs |= houseData::Screen;
-    if (speakers)     powerPlugs |= houseData::Speakers ;
-    if (desk)    powerPlugs |= houseData::Desk;
-    if (table)         powerPlugs |= houseData::Table;
-    if (bed)         powerPlugs |= houseData::Bed;
-    if (workshop) powerPlugs |= houseData::Workshop;
-
-    sendPowerPlugsData(powerPlugs);
-}
-
-void tcpClient::sendPowerPlugsData(houseData::PlugFlags powerPlugs)
+void tcpClient::`sendPowerPlugsData(houseData::PlugFlags powerPlugs)
 {
     QString frame = QString::fromLatin1("@L:%1$").arg(powerPlugs);
     if  (!send(frame)) {
