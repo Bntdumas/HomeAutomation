@@ -1,0 +1,17 @@
+# output devices
+Lamp_Ambiance
+Lamp_SpotLight
+Lamp_RGB
+Lamp_RoomLight
+Lamp_LED
+ComputerSwitch
+User_Screen
+
+# input devices
+Sensor_Temperature
+Sensor_Light
+Sensor_Humidity
+User_PushButton
+User_Potentiometer
+
+

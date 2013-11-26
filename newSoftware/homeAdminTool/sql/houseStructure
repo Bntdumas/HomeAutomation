@@ -1,0 +1,44 @@
+# Defines the physical devices present in the house
+#
+# using the following form, for each room:
+# @ ROOMNAME
+# O OUTPUTDEVICE1, DEVICENAME
+# O OUTPUTDEVICE2, DEVICENAME
+# I INPUTDEVICE1, DEVICENAME
+# I INPUTDEVICE2, DEVICENAME
+#
+# - A room name starts with @
+# - An Input device line begins with I
+# - An Output device line begins with O
+#
+# - ROOMNAME is a human readable name for the Room (Ex. Kitchen)
+# - (INPUT|OUTPUT)DEVICE is a device from the "devicesTypes" file (Ex. Lamp_RoomLight)
+# - DEVICENAME is a human readable name for the Device (Ex. "Kitchen ceiling light")
+
+@ Bedroom
+O Lamp_RoomLight, Ceiling lamp
+O Lamp_RoomLight, Night shelf lamp
+
+@Kitchen
+O Lamp_RoomLight, Ceiling lamp
+O Lamp_RoomLight, Foot lamp
+O Lamp_Ambiance, Window lamp
+
+@Lobby
+O Lamp_RoomLight, Ceiling lamp
+O Lamp_Ambiance, Coffee table lamp
+
+@Office
+O Lamp_RoomLight, Main lamp
+O Lamp_Ambiance, Keyboard key lamp
+O Lamp_Spotlight, Workshop lights
+
+@LivingRoom
+O Lamp_RoomLight, Ceiling lamp
+O Lamp_RoomLight, Armchair sphere light
+O Lamp_Spotlight, Armchair Reading light
+O Lamp_Ambiance, Bookshelf lamp
+O Lamp_Ambiance, Window lamp
+O Lamp_Spotlight, Computer desk light
+
+#@Bathroom
