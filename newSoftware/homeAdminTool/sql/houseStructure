@@ -19,21 +19,21 @@
 O Lamp_RoomLight, Ceiling lamp
 O Lamp_RoomLight, Night shelf lamp
 
-@Kitchen
+@ Kitchen
 O Lamp_RoomLight, Ceiling lamp
 O Lamp_RoomLight, Foot lamp
 O Lamp_Ambiance, Window lamp
 
-@Lobby
+@ Lobby
 O Lamp_RoomLight, Ceiling lamp
 O Lamp_Ambiance, Coffee table lamp
 
-@Office
+@ Office
 O Lamp_RoomLight, Main lamp
 O Lamp_Ambiance, Keyboard key lamp
 O Lamp_Spotlight, Workshop lights
 
-@LivingRoom
+@ LivingRoom
 O Lamp_RoomLight, Ceiling lamp
 O Lamp_RoomLight, Armchair sphere light
 O Lamp_Spotlight, Armchair Reading light
@@ -41,4 +41,4 @@ O Lamp_Ambiance, Bookshelf lamp
 O Lamp_Ambiance, Window lamp
 O Lamp_Spotlight, Computer desk light
 
-#@Bathroom
+#@ Bathroom
