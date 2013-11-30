@@ -92,93 +92,113 @@ bool databaseAdmin::createDevicesTypes()
 
 bool databaseAdmin::createHouseStructure()
 {
-    QStringList list;
-    QFile file(fileName);
+    Q_EMIT message(tr("Creating house structure..."), Info);
+    QFile file("://sql/houseStructure");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        Q_EMIT message(tr("Could not open file %1").arg(fileName), SoftwareError);
+        Q_EMIT message(tr("Could not open file"), SoftwareError);
         return false;
       }
 
+    QString currentRoomName;
     while (!file.atEnd()) {
         QString line = file.readLine();
-        QString currentRoomName;
+        line.remove('\n');
         if (line.startsWith("#")) { //comment
             continue;
         }
 
         if (line.startsWith("@ ")) { // roomm name
             currentRoomName = line.remove("@ ");
-            if (!executeSQL(QStringLiteral("INSERT INTO tblRoom(roomName) VALUES(%1)").arg(line))) {
-                Q_EMIT message(tr("Could not create room %1.").arg(line), SoftwareError);
-                return false;
-            }
+            addRoom(currentRoomName);
 
         } else if (line.startsWith("O ")) { // output
-            if (currentRoomName.isEmpty()) {
-                Q_EMIT message(tr("Could not add output device: no associated room"), SoftwareError);
-                return false;
-            }
-
-            currentDevice = line.remove("O ");
+            line.remove("O ");
             QStringList parameters = line.split(", ");
             if (parameters.count() != 2) {
                 Q_EMIT message(tr("Output device parameter mismatch (2 required).").arg(line), SoftwareError);
                 return false;
             }
+            addOutput(currentRoomName, parameters.at(1), parameters.at(0));
 
-            if (!executeSQL(QStringLiteral("INSERT INTO tblOutput(outputID, outputName, fk_roomName, fk_deviceName) VALUES(%1, %2, %3, %4)")
-                            .arg(QUuid::createUuid().toString())
-                            .arg(parameters.at(1))
-                            .arg(currentRoomName)
-                            .arg(parameters.at(0)))) {
-                Q_EMIT message(tr("Could not create output device %1.").arg(parameter.at(1)), SoftwareError);
-                return false;
-            }
         } else if (line.startsWith("I ")) { // input
-            if (currentRoomName.isEmpty()) {
-                Q_EMIT message(tr("Could not add input device: no associated room"), SoftwareError);
-                return false;
-            }
-
-            currentDevice = line.remove("O ");
+            line.remove("I ");
             QStringList parameters = line.split(", ");
             if (parameters.count() != 2) {
                 Q_EMIT message(tr("Input device parameter mismatch (2 required).").arg(line), SoftwareError);
                 return false;
             }
-
-            if (!executeSQL(QStringLiteral("INSERT INTO tblInput(inputID, inputName, fk_roomName, fk_deviceName) VALUES(%1, %2, %3, %4)")
-                            .arg(QUuid::createUuid().toString())
-                            .arg(parameters.at(1))
-                            .arg(currentRoomName)
-                            .arg(parameters.at(0)))) {
-                Q_EMIT message(tr("Could not create input device %1.").arg(parameter.at(1)), SoftwareError);
-                return false;
-            }
+            addInput(currentRoomName, parameters.at(1), parameters.at(0));
         }
+
     }
 
-    if (list.isEmpty()) {
-        Q_EMIT message(tr("No items were found in the %1 file.").arg(Filename), SoftwareError);
-        return QStringList();
-    }
-
-      return list;
+    Q_EMIT message(tr("House structure created succesfully"), Success);
+    return true;
 }
 
 bool databaseAdmin::addRoom(const QString &room)
 {
-
+    Q_EMIT message(tr("Adding room: %1").arg(room), Info);
+    if (!executeSQL(QStringLiteral("INSERT INTO tblRoom(roomName) VALUES('%1');").arg(room))) {
+        Q_EMIT message(tr("Could not create room %1.").arg(room), SoftwareError);
+        return false;
+    }
+    Q_EMIT message(tr("Room %1 created succesfully").arg(room), Success);
+    return true;
 }
 
-bool databaseAdmin::addOutput(const QString &room, const QString &type)
+bool databaseAdmin::addOutput(const QString &room, const QString &outputName, const QString &deviceName)
 {
+    if (room.isEmpty()) {
+        Q_EMIT message(tr("Could not add output device: no associated room"), SoftwareError);
+        return false;
+    }
 
+    Q_EMIT message(tr("Adding output device: %1 to room %2").arg(outputName).arg(room), Info);
+    const QString newOutputID = databaseTools::createUuid();
+    if (!executeSQL(QStringLiteral("INSERT INTO tblOutput(outputID, outputName, fk_roomName, fk_deviceName) VALUES('%1', '%2', '%3', '%4');")
+                    .arg(newOutputID)
+                    .arg(outputName)
+                    .arg(room)
+                    .arg(deviceName))) {
+        Q_EMIT message(tr("Could not create output device %1.").arg(outputName), SoftwareError);
+        return false;
+    }
+    if (!executeSQL(QStringLiteral("INSERT INTO tblOutputState(fk_outputID, state) VALUES('%1', %2);")
+                    .arg(newOutputID)
+                    .arg(QStringLiteral("FALSE")))) {
+        Q_EMIT message(tr("Could not create output device %1.").arg(outputName), SoftwareError);
+        return false;
+    }
+    Q_EMIT message(tr("Output %1 created succesfully").arg(outputName), Success);
+    return true;
 }
 
-bool databaseAdmin::addInput(const QString &room, const QString &type)
+bool databaseAdmin::addInput(const QString &room, const QString &inputName, const QString &deviceName)
 {
+    if (room.isEmpty()) {
+        Q_EMIT message(tr("Could not add input device: no associated room"), SoftwareError);
+        return false;
+    }
 
+    Q_EMIT message(tr("Adding input device: %1 to room %2").arg(inputName).arg(room), Info);
+    const QString newInputID = databaseTools::createUuid();
+    if (!executeSQL(QStringLiteral("INSERT INTO tblInput(inputID, inputName, fk_roomName, fk_deviceName) VALUES('%1', '%2', '%3', '%4');")
+                    .arg(newInputID)
+                    .arg(inputName)
+                    .arg(room)
+                    .arg(deviceName))) {
+        Q_EMIT message(tr("Could not create input device %1.").arg(inputName), SoftwareError);
+        return false;
+    }
+    if (!executeSQL(QStringLiteral("INSERT INTO tblInputState(fk_inputID, state) VALUES('%1', %2);")
+                    .arg(newInputID)
+                    .arg(QStringLiteral("0")))) {
+        Q_EMIT message(tr("Could not create input device %1.").arg(inputName), SoftwareError);
+        return false;
+    }
+    Q_EMIT message(tr("Input %1 created succesfully").arg(inputName), Success);
+    return true;
 }
 
 bool databaseAdmin::executeStatements(const QStringList &statements)
