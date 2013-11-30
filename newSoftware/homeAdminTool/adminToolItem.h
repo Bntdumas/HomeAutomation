@@ -10,17 +10,18 @@ public:
     explicit adminToolItem(QObject *parent = 0);
     enum messageType {
         Info = 0,
+        Success,
         Warning,
         DatabaseError,
         SoftwareError
     };
 
 Q_SIGNALS:
-    void message(const QString &text, const messageType type);
+    void message(const QString &text, const adminToolItem::messageType type);
     
 public slots:
     
 };
-Q_DECLARE_METATYPE(messageType)
+Q_DECLARE_METATYPE(adminToolItem::messageType)
 
 #endif // ADMINTOOLITEM_H
