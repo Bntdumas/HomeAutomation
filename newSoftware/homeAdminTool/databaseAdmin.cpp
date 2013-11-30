@@ -43,7 +43,33 @@ bool databaseAdmin::createTables()
 
 bool databaseAdmin::deleteTables()
 {
+    Q_EMIT message(tr("Deleting tables..."), Info);
+    QStringList tablesStatements;
+    if (!databaseTools::extractStatementsFromFile(QStringLiteral("://sql/tables.sql"), &tablesStatements)) {
+        Q_EMIT message(tablesStatements.first(), SoftwareError);
+        return false;
+    }
 
+    // Retrieve tables names
+    QStringList tableNames;
+    Q_FOREACH(const QString &tableStatement, tablesStatements) {
+        QRegExp parseRegExp(QStringLiteral("CREATE TABLE (\\w+)"));
+        int pos = parseRegExp.indexIn(tableStatement);
+        if (pos > -1) {
+            tableNames.append(parseRegExp.cap(1));
+        }
+    }
+
+    if (tableNames.isEmpty()) {
+        Q_EMIT message("Could not retrieve tables to delete.", SoftwareError);
+        return false;
+    }
+
+    Q_FOREACH(const QString &table, tableNames) {
+        executeSQL(QStringLiteral("DROP TABLE %1;").arg(table));
+    }
+    Q_EMIT message(tr("Tables deleted succesfully"), Success);
+    return true;
 }
 
 bool databaseAdmin::createDevicesTypes()
