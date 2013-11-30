@@ -4,32 +4,41 @@
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QFile>
 #include <QUuid>
 
 databaseAdmin::databaseAdmin(QObject *parent) :
-    QObject(parent)
+    adminToolItem(parent)
 {
 }
 
 bool databaseAdmin::connectToDB()
 {
+    Q_EMIT message(tr("Connecting to the database..."), Info);
     QSqlDatabase db = databaseTools::getDatabase(true);
     bool dbOpened = db.open();
     if (!dbOpened) {
         Q_EMIT message(tr("Failed to connect to the databse: %1").arg(db.lastError().text()), DatabaseError);
+    } else {
+        Q_EMIT message(tr("Connected"), Success);
     }
     return dbOpened;
 }
 
 bool databaseAdmin::createTables()
 {
+    Q_EMIT message(tr("Creating tables..."), Info);
     QStringList tablesStatements;
     if (!databaseTools::extractStatementsFromFile(QStringLiteral("://sql/tables.sql"), &tablesStatements)) {
         Q_EMIT message(tablesStatements.first(), SoftwareError);
         return false;
     }
-    return executeStatements(tablesStatements);
+    if (executeStatements(tablesStatements)) {
+        Q_EMIT message(tr("Tables created succesfully"), Success);
+        return true;
+    } else
+        return false;
 }
 
 bool databaseAdmin::deleteTables()
