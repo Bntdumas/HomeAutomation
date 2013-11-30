@@ -203,7 +203,7 @@ bool databaseAdmin::addInput(const QString &room, const QString &inputName, cons
 
 bool databaseAdmin::executeStatements(const QStringList &statements)
 {
-    Q_FOREACH(const QString &statement, tablesStatements) {
+    Q_FOREACH(const QString &statement, statements) {
         executeSQL(statement);
     }
     return true;
