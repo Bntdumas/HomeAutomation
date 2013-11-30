@@ -59,17 +59,19 @@ public Q_SLOTS:
     /**
      * @brief Add an output to the database
      * @param room: the room name
-     * @param type: the output type
+     * @param outputName: the output name (ex "Bed lamp")
+     * @param deviceName: the device name (from \b deviceType file)
      * @return true if the output was correctly added
      */
-    bool addOutput(const QString &room, const QString &type);
+    bool addOutput(const QString &room, const QString &outputName, const QString &deviceName);
     
     /**
      * @brief Add an input to the database
-     * @param the room name
+     * @param inputName: the output name (ex "Room's thermometer")
+     * @param deviceName: the device name (from \b deviceType file)
      * @return true if the output was correctly added
      */
-    bool addInput(const QString &room, const QString &type);
+    bool addInput(const QString &room, const QString &inputName, const QString &deviceName);
 
 private:
     /**
@@ -88,10 +90,10 @@ private:
 
     /**
      * @brief execute the passed SQL query.
-     * @param query: the query to execute
+     * @param queryString: the query to execute
      * @return true if query worked
      */
-    bool executeSQL(const QString &query);
+    bool executeSQL(const QString &queryString);
     
 };
 
