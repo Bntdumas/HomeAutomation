@@ -1,24 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>adminWindow</class>
- <widget class="QMainWindow" name="adminWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="adminWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>658</width>
+    <height>460</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>adminWindow</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTextBrowser" name="txtLog">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>1</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>658</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDatabase">
+    <property name="title">
+     <string>Database</string>
+    </property>
+    <addaction name="actionReset_database"/>
+    <addaction name="actionCreate_Update_tables"/>
+    <addaction name="actionCreate_Update_devices_types"/>
+    <addaction name="actionCreate_house_structure"/>
+    <addaction name="actionDrop_tables"/>
+   </widget>
+   <addaction name="menuDatabase"/>
+  </widget>
+  <action name="actionCreate_house_structure">
+   <property name="text">
+    <string>Create/Update house structure</string>
+   </property>
+  </action>
+  <action name="actionCreate_Update_devices_types">
+   <property name="text">
+    <string>Create/Update devices types</string>
+   </property>
+  </action>
+  <action name="actionCreate_Update_tables">
+   <property name="text">
+    <string>Create/Update tables</string>
+   </property>
+  </action>
+  <action name="actionDrop_tables">
+   <property name="text">
+    <string>Drop tables</string>
+   </property>
+  </action>
+  <action name="actionReset_database">
+   <property name="text">
+    <string>Reset database</string>
+   </property>
+  </action>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
