@@ -1,43 +1,43 @@
--- Room names
+/* Room names */
 CREATE TABLE tblRoom (
     roomName text PRIMARY KEY
 );
 STATEMENT_END
 
--- Device type (Lamp, temperature sensor, etc)
+/* Device type (Lamp, temperature sensor, etc) */
 CREATE TABLE tblType (
     deviceName text PRIMARY KEY
 );
 STATEMENT_END
 
--- List of outputs devices connected to the house
+/* List of outputs devices connected to the house */
 CREATE TABLE tblOutput (
-    outputID uuid PRIMARY KEY,
-    outputName text NOT NULL
-    fk_roomName int  NOT NULL,
-    fk_deviceName int NOT NULL
+    outputID text PRIMARY KEY,
+    outputName text NOT NULL,
+    fk_roomName text  NOT NULL,
+    fk_deviceName text NOT NULL
 );
 STATEMENT_END
 
--- List of inputs devices connected to the house
+/* List of inputs devices connected to the house */
 CREATE TABLE tblInput (
-    inputID uuid PRIMARY KEY,
-    inputName text NOT NULL
-    fk_roomName int  NOT NULL,
-    fk_deviceName int NOT NULL
+    inputID text PRIMARY KEY,
+    inputName text NOT NULL,
+    fk_roomName text  NOT NULL,
+    fk_deviceName text NOT NULL
 );
 STATEMENT_END
 
--- Outputs states
+/* Outputs states */
 CREATE TABLE tblOutputState (
-    outputStateID uuid PRIMARY KEY,
+    fk_outputID text PRIMARY KEY,
     state bool NOT NULL
 );
 STATEMENT_END
 
--- Inputs states
+/* Inputs states */
 CREATE TABLE tblInputState (
-    inputStateID uuid PRIMARY KEY,
+    fk_inputID text PRIMARY KEY,
     val int NOT NULL
 );
 STATEMENT_END
