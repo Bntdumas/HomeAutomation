@@ -235,12 +235,14 @@ QStringList databaseAdmin::extractDataListFromFile(const QString &Filename)
       return list;
 }
 
-bool databaseAdmin::executeSQL(const QString &query)
+bool databaseAdmin::executeSQL(const QString &queryString)
 {
-    QSqlQuery query(query);
-    const bool succeeded = query.exec();
+    QSqlQuery q;
+    const bool succeeded = q.exec(queryString);
     if (!succeeded) {
-        Q_EMIT message(tr("Failed to execute statement:  %1. \n executed statement: %2").arg(db.lastError().text()).arg(statement), DatabaseError);
+        Q_EMIT message(tr("Failed to execute statement:  %1. \n executed statement: %2")
+                       .arg(q.lastError().text())
+                       .arg(queryString), DatabaseError);
         return false;
     }
     return true;
