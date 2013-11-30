@@ -74,15 +74,19 @@ bool databaseAdmin::deleteTables()
 
 bool databaseAdmin::createDevicesTypes()
 {
+    Q_EMIT message(tr("Creating devices types..."), Info);
     const QStringList list =  extractDataListFromFile("://sql/deviceTypes");
     Q_FOREACH(const QString &deviceType, list) {
         if (deviceType.isEmpty())
             continue;
-        if (!executeSQL(QStringLiteral("INSERT INTO tblType(typeID, name) VALUES(%1, %2)").arg(QUuid::createUuid()).arg((deviceType)))) {
+        Q_EMIT message(tr("Adding device: %1").arg(deviceType), Info);
+        if (!executeSQL(QStringLiteral("INSERT INTO tblType(deviceName) VALUES('%1');")
+                        .arg((deviceType)))) {
             Q_EMIT message(tr("Failed to create type %1.").arg(deviceType), SoftwareError);
             return false;
         }
     }
+    Q_EMIT message(tr("Devices created succesfully"), Success);
     return true;
 }
 
