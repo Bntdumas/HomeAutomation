@@ -14,6 +14,9 @@ class databaseTools : public QObject
     Q_OBJECT
 
 public:
+    explicit databaseTools(QObject *parent = 0);
+
+
     /**
      * @brief Creates a database object with the correct credential, IP, etc.
      * You only need to call QSqlDatabase::open() to get a valid database connection.
