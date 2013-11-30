@@ -12,15 +12,18 @@ databaseTools::databaseTools(QObject *parent) :
 QSqlDatabase databaseTools::getDatabase(bool adminMode)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("acidalia");
-    db.setDatabaseName("customdb");
+    db.setHostName("localhost");
+    db.setDatabaseName("homeAutomation");
     if (adminMode) {
-        db.setUserName("mojito");
-        db.setPassword("J0a1m8");
+        db.setUserName("admin.user");
+        db.setPassword("abc");
     } else {
-        db.setUserName("mojito");
-        db.setPassword("J0a1m8");
+        db.setUserName("");
+        db.setPassword("");
     }
+
+    db.setConnectOptions(QStringLiteral("connect_timeout=5"));
+
     return db;
 }
 
