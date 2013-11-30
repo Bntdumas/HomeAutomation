@@ -8,5 +8,5 @@ My Home automation system. This repository contains everything i'm working on:
 - images for the interfaces
 - schematics 
 
-more informations on www.bntdumas.com
+
 
