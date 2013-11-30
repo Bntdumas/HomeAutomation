@@ -219,12 +219,12 @@ QStringList databaseAdmin::extractDataListFromFile(const QString &Filename)
       }
 
     while (!file.atEnd()) {
-        const QString line = file.readLine();
+        QString line = file.readLine();
         if (line.startsWith("#")) { //comment
             continue;
         }
 
-        list.append(line);
+        list.append(line.remove('\n'));
     }
 
       if (list.isEmpty()) {
