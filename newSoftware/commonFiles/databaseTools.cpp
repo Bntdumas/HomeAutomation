@@ -1,13 +1,13 @@
 #include "databaseTools.h"
 
 #include <QFile>
+#include <QUuid>
 
 databaseTools::databaseTools(QObject *parent) :
     QObject(parent)
 {
 
 }
-
 
 QSqlDatabase databaseTools::getDatabase(bool adminMode)
 {
@@ -26,7 +26,6 @@ QSqlDatabase databaseTools::getDatabase(bool adminMode)
 
     return db;
 }
-
 
 bool databaseTools::extractStatementsFromFile(const QString &fileName, QStringList *listToPopulate)
 {
@@ -47,4 +46,12 @@ bool databaseTools::extractStatementsFromFile(const QString &fileName, QStringLi
       }
 
       return true;
+}
+
+QString databaseTools::createUuid()
+{
+    QString uuid = QUuid::createUuid().toString();
+    uuid.remove('{');
+    uuid = uuid.left(8);
+    return uuid;
 }

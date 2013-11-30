@@ -31,6 +31,12 @@ public:
      */
     static bool extractStatementsFromFile(const QString &fileName, QStringList *listToPopulate);
 
+    /**
+     * @brief Create a text-based uuid for the database
+     * @return a 8 characters uuid
+     */
+    static QString createUuid();
+
 };
 
 #endif // DATABASETOOLS_H
