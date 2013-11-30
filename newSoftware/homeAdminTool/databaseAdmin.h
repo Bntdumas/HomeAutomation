@@ -86,7 +86,7 @@ private:
      * @param Filename: the file to open
      * @return the list of retrieved data
      */
-    QStringList extractDataListFromFile(const QString &Filename);
+    QStringList extractDataListFromFile(const QString &filename);
 
     /**
      * @brief execute the passed SQL query.

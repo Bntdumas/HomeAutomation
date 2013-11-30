@@ -209,12 +209,12 @@ bool databaseAdmin::executeStatements(const QStringList &statements)
     return true;
 }
 
-QStringList databaseAdmin::extractDataListFromFile(const QString &Filename)
+QStringList databaseAdmin::extractDataListFromFile(const QString &filename)
 {
     QStringList list;
-    QFile file(fileName);
+    QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        Q_EMIT message(tr("Could not open file %1").arg(fileName), SoftwareError);
+        Q_EMIT message(tr("Could not open file %1").arg(filename), SoftwareError);
         return QStringList();
       }
 
@@ -228,7 +228,7 @@ QStringList databaseAdmin::extractDataListFromFile(const QString &Filename)
     }
 
       if (list.isEmpty()) {
-          Q_EMIT message(tr("No items were found in the %1 file.").arg(Filename), SoftwareError);
+          Q_EMIT message(tr("No items were found in the %1 file.").arg(filename), SoftwareError);
           return QStringList();
       }
 
