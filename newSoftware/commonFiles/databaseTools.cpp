@@ -35,6 +35,7 @@ bool databaseTools::extractStatementsFromFile(const QString &fileName, QStringLi
       }
 
       QString fileContents = file.readAll();
+      fileContents.remove('\n');
       *listToPopulate = fileContents.split("STATEMENT_END");
 
       if (listToPopulate->isEmpty()) {
