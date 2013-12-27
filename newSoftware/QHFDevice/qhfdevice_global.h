@@ -1,0 +1,12 @@
+#ifndef QHFDEVICE_GLOBAL_H
+#define QHFDEVICE_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(QHFDEVICE_LIBRARY)
+#  define QHFDEVICESHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define QHFDEVICESHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // QHFDEVICE_GLOBAL_H
