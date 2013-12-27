@@ -27,4 +27,5 @@ INCLUDEPATH += $$top_srcdir/../commonFiles/
 OTHER_FILES += \
     sql/tables.sql \
     sql/houseStructure \
-    sql/deviceTypes
+    sql/deviceTypes \
+    sql/triggers.sql
