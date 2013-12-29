@@ -1,6 +1,6 @@
 #include "QHFDevice.h"
 #include "QHFDeviceThread.h"
-#include "RF2424.h"
+#include "RF24.h"
 
 #include <QDebug>
 #include <QTimer>
@@ -41,9 +41,7 @@ void QHFDevice::initModule()
     radioModule->setChannel(100);
     radioModule->setCRCLength(RF24_CRC_16);
 
-    radioModule->printDetails();
-
-    m_moduleWorker = new QHFDeviceThread();
+    m_moduleWorker = new QHFDeviceThread(0);
     m_moduleWorker->moveToThread(&m_moduleThread);
     connect(&m_moduleThread, SIGNAL(finished()), m_moduleWorker, SLOT(deleteLater()));
     connect(m_moduleWorker, SIGNAL(newData(QString,quint64)), this, SIGNAL(newData(QString,quint64)), Qt::QueuedConnection);

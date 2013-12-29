@@ -6,31 +6,11 @@
 #include <QDebug>
 #include <QtGlobal>
 
-#define PIPE_PREFIX 0xAABBCCDD00
-
-const quint64 radioModulePipes[12] =
-{
-    // Write pipes
-     0x00000000A1 + PIPE_PREFIX,
-     0x00000000A2 + PIPE_PREFIX,
-     0x00000000A3 + PIPE_PREFIX,
-     0x00000000A4 + PIPE_PREFIX,
-     0x00000000A5 + PIPE_PREFIX,
-     0x00000000A6 + PIPE_PREFIX,
-
-    // Read pipes
-     0x00000000B1 + PIPE_PREFIX,
-     0x00000000B2 + PIPE_PREFIX,
-     0x00000000B3 + PIPE_PREFIX,
-     0x00000000B4 + PIPE_PREFIX,
-     0x00000000B5 + PIPE_PREFIX,
-     0x00000000B6 + PIPE_PREFIX,
-};
-
-QHFDeviceThread::QHFDeviceThread() :
+QHFDeviceThread::QHFDeviceThread(const quint16 nodeAddress) :
     QObject(),
     m_stopRequested(false),
-    m_listeningTime(500)
+    m_listeningTime(1000),
+    m_nodeAddress(nodeAddress)
 {
 }
 
@@ -43,23 +23,21 @@ void QHFDeviceThread::mainRadioLoop(RF24 *radioModule)
 {
     qDebug() << "loop";
 
-    radioModule->openReadingPipe(0,radioModulePipes[6]);
-    radioModule->openReadingPipe(1,radioModulePipes[7]);
-    radioModule->openReadingPipe(2,radioModulePipes[8]);
-    radioModule->openReadingPipe(3,radioModulePipes[9]);
-    radioModule->openReadingPipe(4,radioModulePipes[10]);
-    radioModule->openReadingPipe(5,radioModulePipes[11]);
+
+    RF24Network network(*radioModule);
+    network.begin(90, m_nodeAddress);
+    radioModule->printDetails();
 
     while (!m_stopRequested) {
 
+        network.update();
+
         // Listen for new data
-        radioModule->startListening();
        for (int i = 0; i < 100; ++i) {
-            listenForNewData(radioModule);
+            listenForNewData(network);
         }
 
         // Write data
-        radioModule->stopListening();
         while (m_writeQueue.count())
             write(radioModule);
     }
@@ -82,31 +60,30 @@ void QHFDeviceThread::stop()
     m_stopRequested = true;
 }
 
-void QHFDeviceThread::listenForNewData(RF24 *radioModule)
+void QHFDeviceThread::listenForNewData(RF24Network networkNode)
 {
-    quint8 pipe;
-    if (radioModule->available(&pipe)) {
+    if (networkNode.available()) {
         qDebug() << "Data available!";
+        RF24NetworkHeader header;
         char buff[50];
-        int len = radioModule->getDynamicPayloadSize();
-        QByteArray data(buff, len);
-        if (!radioModule->read(buff, len)) {
-            Q_EMIT error(tr("Reading from pipe %1 failed.").arg(QString::number(pipe, 16)));
+        QByteArray data(buff, sizeof(buff));
+        if (!networkNode.read(header, buff, sizeof(buff))) {
+            Q_EMIT error(tr("Reading failed."));
         }
-        Q_EMIT newData(QString(data), PIPE_PREFIX & pipe);
-    } else {
-        delayMicroseconds(m_listeningTime * 1000 / 100);
+        qDebug() << "Header: " << header.toString();
+        Q_EMIT newData(QString(data), header.from_node);
     }
+    delayMicroseconds(m_listeningTime * 1000 / 100);
 }
 
 void QHFDeviceThread::write(RF24 *radioModule)
 {
-    for (int i = 0; i < m_writeQueue.count(); ++i) {
-        QPair<quint64, QString> data = m_writeQueue.at(i);
-        radioModule->openWritingPipe(data.first);
-        if (!radioModule->write(qPrintable(data.second), data.second.length())) {
-            Q_EMIT error(tr("Writing to pipe %1 failed.").arg(QString::number(data.first, 16)));
-        }
-        m_writeQueue.remove(i);
-    }
+//    for (int i = 0; i < m_writeQueue.count(); ++i) {
+//        QPair<quint64, QString> data = m_writeQueue.at(i);
+//        radioModule->openWritingPipe(data.first);
+//        if (!radioModule->write(qPrintable(data.second), data.second.length())) {
+//            Q_EMIT error(tr("Writing to pipe %1 failed.").arg(QString::number(data.first, 16)));
+//        }
+//        m_writeQueue.remove(i);
+//    }
 }

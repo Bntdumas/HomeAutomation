@@ -1,6 +1,9 @@
 #ifndef QHFDEVICETHREAD_H
 #define QHFDEVICETHREAD_H
 
+
+#include "RF24Network.h"
+
 #include <QObject>
 #include <QVector>
 #include <QPair>
@@ -18,7 +21,7 @@ public:
     /**
      * @brief QHFDeviceThread
      */
-    explicit QHFDeviceThread();
+    explicit QHFDeviceThread(const quint16 nodeAddress);
 
     /**
      * @brief Set the time spent listening for new data.
@@ -40,7 +43,7 @@ Q_SIGNALS:
      * @param data: the received data
      * @param pipe: the pipe on which the data is aavilable
      */
-    void newData(const QString &data, quint64 pipe);
+    void newData(const QString &data, quint64 emittingNode);
 
     /**
      * @brief Emitted if an error occured
@@ -88,16 +91,21 @@ private:
     int m_listeningTime;
 
     /**
-     * @brief Listen for new data on the pipes and emit \b if available.
-     * @param radioModule: the radio module instance
+     * @brief Address of this node on the RF24 network.
      */
-    void listenForNewData(RF24 *radioModule);
+    quint16 m_nodeAddress;
+
+    /**
+     * @brief Listen for new data on the pipes and emit \b if available.
+     * @param radioModule: the networked radio module instance
+     */
+    void listenForNewData(RF24Network networkNode);
 
     /**
      * @brief write all data from the \b m_writeQueue queue.
      * @param radioModule: the radio module instance
      */
-    void write(RF24 *radioModule);
+    void write(RF24 *radioModule);  
 
     
 };

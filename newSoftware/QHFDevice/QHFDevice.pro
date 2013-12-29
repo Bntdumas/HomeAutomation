@@ -1,5 +1,5 @@
 top_srcdir=$$PWD
-RF24_lib_dir=/home/benoit/misc-git/RF24NetworkArduinoPi
+RF24_lib_dir=/home/benoit/misc-git/RF24NetworkArduinoPi/
 
 linux-rasp-pi-g++: {
     QT       -= gui
