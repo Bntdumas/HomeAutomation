@@ -1,16 +1,17 @@
+# This sub-project
+
 QT       += core sql
 QT       -= gui
 
 top_srcdir=$$PWD
 top_builddir=$$shadowed($$top_srcdir)
-RF24_lib_dir=/home/benoit/misc-git/RF24_rPI/librf24-rpi/librf24-bcm/
 
 TARGET = roomController
 CONFIG   += console
 CONFIG   -= app_bundle
 
 TEMPLATE = app
-
+RF24_lib_dir=/home/benoit/misc-gits/RF24Network_Pi/
 
 linux-rasp-pi-g++: {
     message("Setting up room controller for Raspberry Pi")

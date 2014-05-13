@@ -7,7 +7,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = hardwareSimulator
 TEMPLATE = app
 
-
 SOURCES += $$top_srcdir/main.cpp\
            $$top_srcdir/atmelSimulator.cpp \
            $$top_srcdir/gpioDevice.cpp
