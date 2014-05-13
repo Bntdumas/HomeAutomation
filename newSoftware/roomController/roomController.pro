@@ -14,7 +14,7 @@ TEMPLATE = app
 
 linux-rasp-pi-g++: {
     message("Setting up room controller for Raspberry Pi")
-    target.path = /home/pi/homeAut/
+    target.path = /opt/homeAut/
     INSTALLS += target
     DEFINES += RASPBERRYPI
 }
