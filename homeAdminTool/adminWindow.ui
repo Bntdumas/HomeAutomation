@@ -41,35 +41,36 @@
     <property name="title">
      <string>Database</string>
     </property>
-    <addaction name="actionReset_database"/>
-    <addaction name="actionCreate_Update_tables"/>
-    <addaction name="actionCreate_Update_devices_types"/>
-    <addaction name="actionCreate_house_structure"/>
-    <addaction name="actionDrop_tables"/>
+    <addaction name="actionResetdatabase"/>
+    <addaction name="actionCreateUpdatetables"/>
+    <addaction name="actionCreateUpdatedevicestypes"/>
+    <addaction name="actionCreatehousestructure"/>
+    <addaction name="actionDroptables"/>
    </widget>
    <addaction name="menuDatabase"/>
+   <addaction name="menuBoard"/>
   </widget>
-  <action name="actionCreate_house_structure">
+  <action name="actionCreatehousestructure">
    <property name="text">
     <string>Create/Update house structure</string>
    </property>
   </action>
-  <action name="actionCreate_Update_devices_types">
+  <action name="actionCreateUpdatedevicestypes">
    <property name="text">
     <string>Create/Update devices types</string>
    </property>
   </action>
-  <action name="actionCreate_Update_tables">
+  <action name="actionCreateUpdatetables">
    <property name="text">
     <string>Create/Update tables</string>
    </property>
   </action>
-  <action name="actionDrop_tables">
+  <action name="actionDroptables">
    <property name="text">
     <string>Drop tables</string>
    </property>
   </action>
-  <action name="actionReset_database">
+  <action name="actionResetdatabase">
    <property name="text">
     <string>Reset database</string>
    </property>

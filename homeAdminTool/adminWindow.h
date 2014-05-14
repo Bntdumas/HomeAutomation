@@ -34,15 +34,15 @@ private Q_SLOTS:
      * @brief User requested updating the house structure
      * Set the house rooms and input/output devices.
      */
-    void on_actionCreate_house_structure_triggered();
+    void onActioncreateHouseStructureTriggered();
 
-    void on_actionCreate_Update_devices_types_triggered();
+    void onActioncreateUpdateDevicesTypesTriggered();
 
-    void on_actionCreate_Update_tables_triggered();
+    void onActioncreateUpdateTablesTriggered();
 
-    void on_actionDrop_tables_triggered();
+    void onActiondropTablesTriggered();
 
-    void on_actionReset_database_triggered();
+    void onActionresetDatabaseTriggered();
 
 private:
     Ui::adminWindow *ui;

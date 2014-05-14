@@ -12,6 +12,15 @@ adminWindow::adminWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->actionCompileSketch, SIGNAL(triggered()), this, SLOT(onActioncompileSketchTriggered()));
+    connect(ui->actionCreatehousestructure, SIGNAL(triggered()), this, SLOT(onActioncreateHouseStructureTriggered()));
+    connect(ui->actionCreateUpdatedevicestypes, SIGNAL(triggered()), this, SLOT(onActioncreateUpdateDevicesTypesTriggered()));
+    connect(ui->actionCreateUpdatetables, SIGNAL(triggered()), this, SLOT(onActioncreateUpdateTablesTriggered()));
+    connect(ui->actionDroptables, SIGNAL(triggered()), this, SLOT(onActiondropTablesTriggered()));
+    connect(ui->actionResetdatabase, SIGNAL(triggered()), this, SLOT(onActionresetDatabaseTriggered()));
+    connect(ui->actionUpload, SIGNAL(triggered()), this, SLOT(onActionuploadTriggered()));
+
+
     // Register types
     qRegisterMetaType<adminToolItem::messageType>("adminToolItem::messageType");
 
@@ -52,27 +61,27 @@ void adminWindow::displayLogMessage(const QString &text, const adminToolItem::me
 }
 
 
-void adminWindow::on_actionCreate_house_structure_triggered()
+void adminWindow::onActioncreateHouseStructureTriggered()
 {
     m_databaseAdmin->createHouseStructure();
 }
 
-void adminWindow::on_actionCreate_Update_devices_types_triggered()
+void adminWindow::onActioncreateUpdateDevicesTypesTriggered()
 {
     m_databaseAdmin->createDevicesTypes();
 }
 
-void adminWindow::on_actionCreate_Update_tables_triggered()
+void adminWindow::onActioncreateUpdateTablesTriggered()
 {
     m_databaseAdmin->createTables();
 }
 
-void adminWindow::on_actionDrop_tables_triggered()
+void adminWindow::onActiondropTablesTriggered()
 {
     m_databaseAdmin->deleteTables();
 }
 
-void adminWindow::on_actionReset_database_triggered()
+void adminWindow::onActionresetDatabaseTriggered()
 {
     if (!m_databaseAdmin->deleteTables())
         return;
