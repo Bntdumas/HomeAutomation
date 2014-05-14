@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>658</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatabase">
@@ -46,6 +46,14 @@
     <addaction name="actionCreateUpdatedevicestypes"/>
     <addaction name="actionCreatehousestructure"/>
     <addaction name="actionDroptables"/>
+   </widget>
+   <widget class="QMenu" name="menuBoard">
+    <property name="title">
+     <string>Board</string>
+    </property>
+    <addaction name="actionCompileSketch"/>
+    <addaction name="separator"/>
+    <addaction name="actionUpload"/>
    </widget>
    <addaction name="menuDatabase"/>
    <addaction name="menuBoard"/>
@@ -73,6 +81,16 @@
   <action name="actionResetdatabase">
    <property name="text">
     <string>Reset database</string>
+   </property>
+  </action>
+  <action name="actionCompileSketch">
+   <property name="text">
+    <string>Compile</string>
+   </property>
+  </action>
+  <action name="actionUpload">
+   <property name="text">
+    <string>Upload</string>
    </property>
   </action>
  </widget>

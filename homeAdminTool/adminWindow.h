@@ -9,6 +9,7 @@ class adminWindow;
 }
 
 class databaseAdmin;
+class atmelProgrammer;
 
 /**
  * @brief The home automation admin app.
@@ -44,11 +45,16 @@ private Q_SLOTS:
 
     void onActionresetDatabaseTriggered();
 
+    void onActionuploadTriggered();
+
+    void onActioncompileSketchTriggered();
+
 private:
     Ui::adminWindow *ui;
 
     // pages
     databaseAdmin * m_databaseAdmin;
+    atmelProgrammer *m_atmelProgrammer;
 };
 
 #endif // ADMINWINDOW_H

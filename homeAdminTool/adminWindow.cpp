@@ -2,6 +2,7 @@
 #include "ui_adminWindow.h"
 
 #include "databaseAdmin.h"
+#include "atmelProgrammer.h"
 
 #include <QDateTime>
 #include <QThread>
@@ -27,6 +28,9 @@ adminWindow::adminWindow(QWidget *parent) :
     m_databaseAdmin = new databaseAdmin();
     connect(m_databaseAdmin, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
     m_databaseAdmin->connectToDB();
+
+    m_atmelProgrammer = new atmelProgrammer(QDir("/home/benoit/Arduino/arduino-1.0.5/examples/Blink_cli"), this);
+    connect(m_atmelProgrammer, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
 }
 
 adminWindow::~adminWindow()
@@ -91,4 +95,14 @@ void adminWindow::onActionresetDatabaseTriggered()
         return;
     if (!m_databaseAdmin->createHouseStructure())
         return;
+}
+
+void adminWindow::onActionuploadTriggered()
+{
+    m_atmelProgrammer->uploadSketch();
+}
+
+void adminWindow::onActioncompileSketchTriggered()
+{
+    m_atmelProgrammer->compileSketch();
 }
