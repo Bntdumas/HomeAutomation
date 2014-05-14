@@ -2,7 +2,9 @@
 #define ADMINTOOLITEM_H
 
 #include <QObject>
-
+/**
+ * @brief The adminToolItem class is a base class for tools outputing information to the admin window.
+ */
 class adminToolItem : public QObject
 {
     Q_OBJECT
