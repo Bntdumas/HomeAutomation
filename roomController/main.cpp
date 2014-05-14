@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-#include "QHFDevice.h"
+#include "QRF24NetworkLib
 #include <QDebug>
 
 int main(int argc, char *argv[])

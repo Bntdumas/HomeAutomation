@@ -11,7 +11,6 @@ CONFIG   += console
 CONFIG   -= app_bundle
 
 TEMPLATE = app
-RF24_lib_dir=/home/benoit/misc-gits/RF24Network_Pi/
 
 linux-rasp-pi-g++: {
     message("Setting up room controller for Raspberry Pi")
@@ -27,9 +26,4 @@ linux-rasp-pi-g++: {
 
 SOURCES += $$top_srcdir/main.cpp
 
-
-linux-rasp-pi-g++: {
-    INCLUDEPATH += $$top_srcdir/../QHFDevice/
-    LIBS += -L$$top_builddir/../QHFDevice -lQHFDevice \
-            -L$$RF24_lib_dir -lrf24-bcm
-}
+include(../QRF24LibraryDependencies.pri)
