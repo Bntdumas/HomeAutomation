@@ -12,11 +12,13 @@ SOURCES += $$top_srcdir/main.cpp\
            $$top_srcdir/adminToolItem.cpp \
            $$top_srcdir/../commonFiles/databaseTools.cpp \
            $$top_srcdir/databaseAdmin.cpp
+           $$top_srcdir/atmelProgrammer.cpp \
 
 HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/adminToolItem.h \
            $$top_srcdir/../commonFiles/databaseTools.h \
            $$top_srcdir/databaseAdmin.h
+           $$top_srcdir/atmelProgrammer.h \
 
 FORMS   += $$top_srcdir/adminWindow.ui
 
