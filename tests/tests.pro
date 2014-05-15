@@ -4,6 +4,10 @@ top_srcdir=$$PWD
 
 DEFINES += TESTING
 
-#SUBDIRS +=
+linux-rasp-pi-g++: {
+    include(QRF24LibraryDependencies.pri)
+    SUBDIRS += $$QRF24LIBDIR \
+               $$top_srcdir/atmelSensors
+}
 
 CONFIG += ordered
