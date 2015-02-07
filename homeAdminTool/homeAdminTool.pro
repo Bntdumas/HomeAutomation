@@ -13,17 +13,21 @@ SOURCES += $$top_srcdir/main.cpp\
            $$top_srcdir/../commonFiles/databaseTools.cpp \
            $$top_srcdir/databaseAdmin.cpp \
            $$top_srcdir/atmelProgrammer.cpp \
-           $$top_srcdir/atmelConfigurator.cpp
+           $$top_srcdir/atmelSettingFileGenerator.cpp \
+           $$top_srcdir/atmelModuleConfigurator.cpp \
+    moduleWizard.cpp
 
 HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/adminToolItem.h \
            $$top_srcdir/../commonFiles/databaseTools.h \
            $$top_srcdir/databaseAdmin.h \
            $$top_srcdir/atmelProgrammer.h \
-           $$top_srcdir/atmelConfigurator.h
+           $$top_srcdir/atmelSettingFileGenerator.h \
+           $$top_srcdir/atmelModuleConfigurator.h \
+    moduleWizard.h
 
 FORMS   += $$top_srcdir/adminWindow.ui \
-           $$top_srcdir/atmelConfigurator.ui
+           $$top_srcdir/atmelModuleConfigurator.ui
 
 RESOURCES += $$top_srcdir/adminResources.qrc
 

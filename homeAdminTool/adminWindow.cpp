@@ -3,9 +3,11 @@
 
 #include "databaseAdmin.h"
 #include "atmelProgrammer.h"
+#include "moduleWizard.h"
 
 #include <QDateTime>
 #include <QThread>
+#include <QStringList>
 
 adminWindow::adminWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,7 +31,7 @@ adminWindow::adminWindow(QWidget *parent) :
     connect(m_databaseAdmin, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
     m_databaseAdmin->connectToDB();
 
-    m_atmelProgrammer = new atmelProgrammer(QDir("/home/benoit/Arduino/arduino-1.0.5/examples/Blink_cli"), this);
+    m_atmelProgrammer = new atmelProgrammer(QDir("/home/benoit/projects/HomeAutomation/atmelSoftware"), this);
     connect(m_atmelProgrammer, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
 }
 
@@ -105,4 +107,10 @@ void adminWindow::onActionuploadTriggered()
 void adminWindow::onActioncompileSketchTriggered()
 {
     m_atmelProgrammer->compileSketch();
+}
+
+void adminWindow::on_actionGenerate_new_board_triggered()
+{
+   QStringList deviceTypes = m_databaseAdmin->extractDataListFromFile("://sql/deviceTypes");
+   moduleWizard *wizard = new moduleWizard(deviceTypes, this);
 }

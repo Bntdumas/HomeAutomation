@@ -3,6 +3,7 @@
 #include "databaseTools.h"
 
 #include <QSqlDatabase>
+#include <QStringList>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QFile>
@@ -220,11 +221,12 @@ QStringList databaseAdmin::extractDataListFromFile(const QString &filename)
 
     while (!file.atEnd()) {
         QString line = file.readLine();
-        if (line.startsWith("#")) { //comment
+        line.remove('\n');
+        if (line.isEmpty() || line.startsWith("#")) { //comment
             continue;
         }
 
-        list.append(line.remove('\n'));
+        list.append(line);
     }
 
       if (list.isEmpty()) {

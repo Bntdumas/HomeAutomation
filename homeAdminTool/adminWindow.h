@@ -49,6 +49,8 @@ private Q_SLOTS:
 
     void onActioncompileSketchTriggered();
 
+    void on_actionGenerate_new_board_triggered();
+
 private:
     Ui::adminWindow *ui;
 

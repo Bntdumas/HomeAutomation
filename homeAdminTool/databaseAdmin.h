@@ -16,6 +16,13 @@ public:
      */
     explicit databaseAdmin(QObject *parent = 0);
 
+    /**
+     * @brief Retrieves a list of coma separated values from a file
+     * @param Filename: the file to open
+     * @return the list of retrieved data
+     */
+    QStringList extractDataListFromFile(const QString &filename);
+
 public Q_SLOTS:
     /**
      * @brief connect to the database
@@ -80,13 +87,6 @@ private:
      * @return true if succeeded
      */
     bool executeStatements(const QStringList &statements);
-
-    /**
-     * @brief Retrieves a list of coma separated values from a file
-     * @param Filename: the file to open
-     * @return the list of retrieved data
-     */
-    QStringList extractDataListFromFile(const QString &filename);
 
     /**
      * @brief execute the passed SQL query.
