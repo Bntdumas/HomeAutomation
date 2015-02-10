@@ -15,7 +15,8 @@ SOURCES += $$top_srcdir/main.cpp\
            $$top_srcdir/atmelProgrammer.cpp \
            $$top_srcdir/atmelSettingFileGenerator.cpp \
            $$top_srcdir/atmelModuleConfigurator.cpp \
-    moduleWizard.cpp
+           $$top_srcdir/moduleWizard.cpp \
+    moduleWizardPages.cpp
 
 HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/adminToolItem.h \
@@ -24,7 +25,8 @@ HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/atmelProgrammer.h \
            $$top_srcdir/atmelSettingFileGenerator.h \
            $$top_srcdir/atmelModuleConfigurator.h \
-    moduleWizard.h
+           $$top_srcdir/moduleWizard.h \
+    moduleWizardPages.h
 
 FORMS   += $$top_srcdir/adminWindow.ui \
            $$top_srcdir/atmelModuleConfigurator.ui
@@ -37,4 +39,6 @@ OTHER_FILES += \
     sql/tables.sql \
     sql/houseStructure \
     sql/deviceTypes \
-    sql/triggers.sql
+    sql/triggers.sql \
+    othersFiles/AVRProgrammers
+    othersFiles/moduleTemplate.pde

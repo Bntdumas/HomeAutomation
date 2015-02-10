@@ -24,7 +24,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="leBoardName"/>
+      <widget class="QLineEdit" name="leBoardName">
+       <property name="placeholderText">
+        <string>A description of where the module is located</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -177,7 +181,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QCheckBox" name="EnableLightSensor">
+       <widget class="QCheckBox" name="enableLightSensor">
         <property name="text">
          <string>Enable on-board light sensor</string>
         </property>
@@ -192,4 +196,5 @@
   </layout>
  </widget>
  <resources/>
+ <connections/>
 </ui>

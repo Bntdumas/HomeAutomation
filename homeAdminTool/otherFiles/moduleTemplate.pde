@@ -2,8 +2,6 @@
 #include <RF24.h>
 #include <SPI.h>
 
-#include "my_settings.h"
-
 #define ENABLE_LEDS // %LEDS_ENABLED%
 
 // start 

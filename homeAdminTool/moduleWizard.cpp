@@ -1,69 +1,50 @@
 #include "moduleWizard.h"
 
-#include "atmelModuleConfigurator.h"
+#include "moduleWizardPages.h"
 
 #include <QWizard>
 #include <QWizardPage>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QLineEdit>
+#include <QFileDialog>
+#include <QToolButton>
+#include <QStringListModel>
+#include <QComboBox>
+#include <QLabel>
+#include <QTextStream>
+#include <QMap>
+#include <QPair>
+#include <QMapIterator>
 
-moduleWizard::moduleWizard(QStringList availableTypes, QObject *parent) :
-    QObject(parent),
-    m_deviceTypes(availableTypes)
+#include <QDebug>
+
+moduleWizard::moduleWizard(QMap<QString, QString> availableTypes, QWidget *parent) :
+    QWizard(parent)
 {
-    QWizard wizard;
-    wizard.addPage(createConfigureModulePage());
-    wizard.addPage(createSaveModuleSourcePage());
-    wizard.addPage(createSelectCompilerPage());
-    wizard.addPage(createReviewInfosPage());
-    wizard.addPage(createModulePage());
+    m_configureModulePage = new configureModulePage(availableTypes, this);
+    m_saveModuleSourcePage = new setModuleSourceDirectoryPage(this);
+    m_selectProgrammerPage = new selectProgrammerPage(this);
+    m_reviewInfosPage = new reviewInfosPage(this);
+    m_donePage = new donePage(this);
 
-    wizard.setWindowTitle(tr("Atmel module creation wizard"));
-    wizard.exec();
+    setPage(Page_ConfigureModule, m_configureModulePage);
+    setPage(Page_SaveModuleSource, m_saveModuleSourcePage);
+    setPage(Page_SelectProgrammerPage, m_selectProgrammerPage);
+    setPage( Page_ReviewInfosPage, m_reviewInfosPage);
+    setPage( Page_DonePage, m_donePage);
+
+    setWindowTitle(tr("Atmel module creation wizard"));
+    setGeometry(0, 0, 500, 600);
 }
 
-
-QWizardPage* moduleWizard::createConfigureModulePage()
+QString moduleWizard::settingsFile() const
 {
-    QWizardPage *wizardPage  = new QWizardPage();
-    wizardPage->setTitle(tr("Customize your module"));
-    atmelModuleConfigurator *configurator = new atmelModuleConfigurator(m_deviceTypes);
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(configurator);
-    wizardPage->setLayout(layout);
-
-    return wizardPage;
+    return field("moduleSourcePath").toString();
 }
 
-QWizardPage* moduleWizard::createSaveModuleSourcePage()
+bool moduleWizard::uploadDirectly() const
 {
-    QWizardPage *wizardPage  = new QWizardPage();
-    wizardPage->setTitle(tr("Select the directory where the source file will be created"));
-
-    return wizardPage;
+    return field("uploadDirectly").toBool();
 }
-
-QWizardPage* moduleWizard::createSelectCompilerPage()
-{
-    QWizardPage *wizardPage  = new QWizardPage();
-    wizardPage->setTitle(tr("Select the compiler and AVR programmer to program the chip."));
-
-    return wizardPage;
-}
-
-QWizardPage* moduleWizard::createReviewInfosPage()
-{
-    QWizardPage *wizardPage  = new QWizardPage();
-    wizardPage->setTitle(tr("Review the informations you entered"));
-
-    return wizardPage;
-}
-
-QWizardPage* moduleWizard::createModulePage()
-{
-    QWizardPage *wizardPage  = new QWizardPage();
-    wizardPage->setTitle(tr("Creating the module, hold on"));
-
-    return wizardPage;
-}
-

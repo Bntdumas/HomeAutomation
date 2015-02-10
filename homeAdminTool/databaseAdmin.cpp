@@ -8,6 +8,7 @@
 #include <QSqlError>
 #include <QFile>
 #include <QUuid>
+#include <QMap>
 
 databaseAdmin::databaseAdmin(QObject *parent) :
     adminToolItem(parent)
@@ -76,14 +77,13 @@ bool databaseAdmin::deleteTables()
 bool databaseAdmin::createDevicesTypes()
 {
     Q_EMIT message(tr("Creating devices types..."), Info);
-    const QStringList list =  extractDataListFromFile("://sql/deviceTypes");
-    Q_FOREACH(const QString &deviceType, list) {
-        if (deviceType.isEmpty())
-            continue;
-        Q_EMIT message(tr("Adding device: %1").arg(deviceType), Info);
-        if (!executeSQL(QStringLiteral("INSERT INTO tblType(deviceName) VALUES('%1');")
-                        .arg((deviceType)))) {
-            Q_EMIT message(tr("Failed to create type %1.").arg(deviceType), SoftwareError);
+    QMap<QString, QString> deviceTypes = extractDeviceListFromFile("://sql/deviceTypes");
+    QMap<QString, QString>::const_iterator currentDevice;
+    for (currentDevice = deviceTypes.constBegin(); currentDevice != deviceTypes.constEnd(); ++currentDevice) {
+        Q_EMIT message(tr("Adding device: %1 as %2").arg(currentDevice.key()).arg(currentDevice.value()), Info);
+        if (!executeSQL(QStringLiteral("INSERT INTO tblType(deviceName, deviceType) VALUES('%1', '%2');")
+                        .arg(currentDevice.key()).arg(currentDevice.value()))) {
+            Q_EMIT message(tr("Failed to create type %1.").arg(currentDevice.key()), SoftwareError);
             return false;
         }
     }
@@ -210,31 +210,36 @@ bool databaseAdmin::executeStatements(const QStringList &statements)
     return true;
 }
 
-QStringList databaseAdmin::extractDataListFromFile(const QString &filename)
+QMap<QString, QString> databaseAdmin::extractDeviceListFromFile(const QString &filename)
 {
-    QStringList list;
+    QMap<QString, QString> list;
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         Q_EMIT message(tr("Could not open file %1").arg(filename), SoftwareError);
-        return QStringList();
-      }
+        return QMap<QString, QString>();
+    }
 
+    QString currentsectionName;
     while (!file.atEnd()) {
         QString line = file.readLine();
         line.remove('\n');
-        if (line.isEmpty() || line.startsWith("#")) { //comment
+        if (line == QString("# output devices")) {
+            currentsectionName = "output";
+        } else if (line == QString("# input devices")) {
+            currentsectionName = "output";
+        } else if (line == QString("# other devices")) {
+            currentsectionName = "other";
+        } else if (line.isEmpty() || line.startsWith("#")) { //comment
             continue;
+        } else {
+            list.insert(line, currentsectionName);
         }
-
-        list.append(line);
     }
-
-      if (list.isEmpty()) {
-          Q_EMIT message(tr("No items were found in the %1 file.").arg(filename), SoftwareError);
-          return QStringList();
-      }
-
-      return list;
+    if (list.isEmpty()) {
+        Q_EMIT message(tr("No items were found in the %1 file.").arg(filename), SoftwareError);
+        return QMap<QString, QString>();
+    }
+    return list;
 }
 
 bool databaseAdmin::executeSQL(const QString &queryString)

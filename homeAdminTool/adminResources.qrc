@@ -4,4 +4,8 @@
         <file>sql/deviceTypes</file>
         <file>sql/houseStructure</file>
     </qresource>
+    <qresource prefix="/AVR">
+        <file>otherFiles/AVRProgrammers</file>
+        <file>otherFiles/moduleTemplate.pde</file>
+    </qresource>
 </RCC>

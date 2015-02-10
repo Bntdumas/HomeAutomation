@@ -7,6 +7,7 @@ STATEMENT_END
 /* Device type (Lamp, temperature sensor, etc) */
 CREATE TABLE tblType (
     deviceName text PRIMARY KEY
+    deviceType text NOT NULL,
 );
 STATEMENT_END
 

@@ -21,17 +21,6 @@ public Q_SLOTS:
 
 
 private :
-    struct settingFile {
-        QString constants;
-        QString GPIOPinModeFunction;
-        QString updateOutputsFunction;
-        QString generatePayloadFunction;
-        QString payloadInput;
-        QString payloadOutput;
-        QString temperatureFunction;
-        QString lightFunction;
-    };
-    settingFile m_settingFile;
 };
 
 #endif // ATMELSETTINGFILEGENERATOR_H

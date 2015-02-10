@@ -32,7 +32,7 @@ void atmelProgrammer::compileSketch()
     connect (compilationProcess, SIGNAL(readyReadStandardError()), this, SLOT(processErrorDataAvailable()));
 }
 
-void atmelProgrammer::uploadSketch()
+void atmelProgrammer::uploadSketch(const QString &programmer)
 {
     //sudo avrdude -p m328p -c dragon_isp -P usb -e -U flash:w:firmware.hex
 
@@ -44,14 +44,14 @@ void atmelProgrammer::uploadSketch()
     const QString program = "avrdude";
     QStringList arguments;
     arguments << "-pm328p" // chip, an ATMEGA328p
-                     << "-cdragon_isp" // programmer, here an AVR Dragon
+                     << QString("-c%1").arg(programmer) // programmer (I use dragon_isp)
                      << "-Pusb" // port
                      << "-e" // Erase chip
                      << "-Uflash:w:firmware.hex"; // file to write
     QProcess *uploadProcess = new QProcess(this);
     uploadProcess->setWorkingDirectory(hexFileDirectory.absolutePath());
     Q_EMIT message(tr("Uploading hex file from %1 ").arg(hexFileDirectory.absolutePath()), Info);
-    Q_EMIT message(tr("$sudo avrdude -p m328p -c dragon_isp -P usb -e -U flash:w:firmware.hex"), Info);
+    Q_EMIT message(tr("$sudo avrdude -p m328p -c %1 -P usb -e -U flash:w:firmware.hex").arg(programmer), Info);
     uploadProcess->start(program, arguments);
 
     connect (uploadProcess, SIGNAL(finished(int)), uploadProcess, SLOT(deleteLater()));

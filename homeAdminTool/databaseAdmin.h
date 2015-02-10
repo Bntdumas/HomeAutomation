@@ -19,9 +19,9 @@ public:
     /**
      * @brief Retrieves a list of coma separated values from a file
      * @param Filename: the file to open
-     * @return the list of retrieved data
+     * @return the list of retrieved data, sorted into three types (output, input, other)
      */
-    QStringList extractDataListFromFile(const QString &filename);
+    QMap<QString, QString> extractDeviceListFromFile(const QString &filename);
 
 public Q_SLOTS:
     /**

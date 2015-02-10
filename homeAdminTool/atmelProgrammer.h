@@ -15,7 +15,6 @@ class atmelProgrammer : public adminToolItem
 public:
     explicit atmelProgrammer(const QDir &workingDirectory, QObject *parent = 0);
 
-Q_SIGNALS:
 
 public Q_SLOTS:
     /**
@@ -26,7 +25,7 @@ public Q_SLOTS:
     /**
      * @brief Uploads the sketch to the board
      */
-    void uploadSketch();
+    void uploadSketch(const QString &programmer);
 
 private Q_SLOTS:
     /**

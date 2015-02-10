@@ -8,6 +8,7 @@
 #include <QDateTime>
 #include <QThread>
 #include <QStringList>
+#include <QDebug>
 
 adminWindow::adminWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -101,7 +102,7 @@ void adminWindow::onActionresetDatabaseTriggered()
 
 void adminWindow::onActionuploadTriggered()
 {
-    m_atmelProgrammer->uploadSketch();
+    m_atmelProgrammer->uploadSketch(tr("dragon_isp"));
 }
 
 void adminWindow::onActioncompileSketchTriggered()
@@ -111,6 +112,9 @@ void adminWindow::onActioncompileSketchTriggered()
 
 void adminWindow::on_actionGenerate_new_board_triggered()
 {
-   QStringList deviceTypes = m_databaseAdmin->extractDataListFromFile("://sql/deviceTypes");
-   moduleWizard *wizard = new moduleWizard(deviceTypes, this);
+   QMap<QString, QString> deviceTypes = m_databaseAdmin->extractDeviceListFromFile("://sql/deviceTypes");
+   moduleWizard wizard(deviceTypes, this);
+   if (wizard.exec() == QDialog::Accepted) {
+       qDebug() << wizard.settingsFile() << " compile? " << wizard.uploadDirectly();
+   }
 }
