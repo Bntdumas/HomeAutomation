@@ -93,7 +93,6 @@ selectProgrammerPage::selectProgrammerPage(QWidget *parent) :
     QWizardPage(parent)
 {
     setTitle(tr("Select the programmer connected the chip module"));
-    m_comboBox = new QComboBox(this);
 
     QFile file(":/AVR/otherFiles/AVRProgrammers");
     QStringListModel *mdl = new QStringListModel(this);
