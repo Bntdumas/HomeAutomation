@@ -40,5 +40,5 @@ OTHER_FILES += \
     sql/houseStructure \
     sql/deviceTypes \
     sql/triggers.sql \
-    othersFiles/AVRProgrammers
-    othersFiles/moduleTemplate.pde
+    otherFiles/AVRProgrammers \
+    otherFiles/moduleTemplate.pde
