@@ -138,12 +138,9 @@ void reviewInfosPage::initializePage()
     infoStream << " Module configuration" << endl
                << "Name: " << field("moduleName").toString()<< endl;
 
-    QMapIterator<int, QPair<QString, QString> > mapIterator(field("allGPIO").value< QMap<int, QPair<QString, QString> > >());
-    while (mapIterator.hasNext()) {
-        mapIterator.next();
-        QPair<QString, QString> currentGPIOState = mapIterator.value();
-        infoStream << "GPIO " << mapIterator.key() << ": "  <<  currentGPIOState.first
-                   << " (" << currentGPIOState.second << ")." << endl;
+    Q_FOREACH( const atmelModuleConfigurator::GPIOPin currentPin,  field("allGPIO").value<  QList<atmelModuleConfigurator::GPIOPin> >()) {
+        infoStream << "GPIO " << currentPin.index << ": "  <<  currentPin.deviceType
+                   << " (" << currentPin.pinDirection << "). name: " << currentPin.name << endl;
     }
     infoStream << "LEDS are " << (field("LEDsEnabled").toBool()? "enabled.":"disabled.") << endl;
     infoStream << "Temperature sensor is " << (field("tempSensorEnabled").toBool()? "enabled.":"disabled.") << endl;
