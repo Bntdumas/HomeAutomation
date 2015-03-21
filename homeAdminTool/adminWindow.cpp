@@ -116,5 +116,7 @@ void adminWindow::on_actionGenerate_new_board_triggered()
    moduleWizard wizard(deviceTypes, this);
    if (wizard.exec() == QDialog::Accepted) {
        qDebug() << wizard.settingsFile() << " compile? " << wizard.uploadDirectly();
+       displayLogMessage( QString("New board settings saved on %1. Automatic compilation is %2")
+                          .arg(wizard.settingsFile()).arg(wizard.uploadDirectly() ? "enabled":"disabled"), adminToolItem::Success);
    }
 }
