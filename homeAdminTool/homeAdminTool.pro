@@ -16,7 +16,7 @@ SOURCES += $$top_srcdir/main.cpp\
            $$top_srcdir/atmelSettingFileGenerator.cpp \
            $$top_srcdir/atmelModuleConfigurator.cpp \
            $$top_srcdir/moduleWizard.cpp \
-    moduleWizardPages.cpp
+           $$top_srcdir/moduleWizardPages.cpp
 
 HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/adminToolItem.h \
@@ -26,7 +26,7 @@ HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/atmelSettingFileGenerator.h \
            $$top_srcdir/atmelModuleConfigurator.h \
            $$top_srcdir/moduleWizard.h \
-    moduleWizardPages.h
+           $$top_srcdir/moduleWizardPages.h
 
 FORMS   += $$top_srcdir/adminWindow.ui \
            $$top_srcdir/atmelModuleConfigurator.ui
