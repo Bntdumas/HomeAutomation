@@ -55,6 +55,7 @@
     <addaction name="separator"/>
     <addaction name="actionCompileSketch"/>
     <addaction name="actionUpload"/>
+    <addaction name="actionGenerate_source_file"/>
    </widget>
    <addaction name="menuDatabase"/>
    <addaction name="menuBoard"/>
@@ -97,6 +98,11 @@
   <action name="actionGenerate_new_board">
    <property name="text">
     <string>Generate new board file</string>
+   </property>
+  </action>
+  <action name="actionGenerate_source_file">
+   <property name="text">
+    <string>Generate source file</string>
    </property>
   </action>
  </widget>

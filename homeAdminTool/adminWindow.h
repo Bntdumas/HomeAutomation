@@ -51,6 +51,8 @@ private Q_SLOTS:
 
     void on_actionGenerate_new_board_triggered();
 
+    void on_actionGenerate_source_file_triggered();
+
 private:
     Ui::adminWindow *ui;
 

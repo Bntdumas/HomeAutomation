@@ -4,6 +4,7 @@
 #include "databaseAdmin.h"
 #include "atmelProgrammer.h"
 #include "moduleWizard.h"
+#include "atmelSettingFileGenerator.h"
 
 #include <QDateTime>
 #include <QThread>
@@ -23,7 +24,6 @@ adminWindow::adminWindow(QWidget *parent) :
     connect(ui->actionDroptables, SIGNAL(triggered()), this, SLOT(onActiondropTablesTriggered()));
     connect(ui->actionResetdatabase, SIGNAL(triggered()), this, SLOT(onActionresetDatabaseTriggered()));
     connect(ui->actionUpload, SIGNAL(triggered()), this, SLOT(onActionuploadTriggered()));
-
 
     // Register types
     qRegisterMetaType<adminToolItem::messageType>("adminToolItem::messageType");
@@ -119,4 +119,14 @@ void adminWindow::on_actionGenerate_new_board_triggered()
        displayLogMessage( QString("New board settings saved on %1. Automatic compilation is %2")
                           .arg(wizard.settingsFile()).arg(wizard.uploadDirectly() ? "enabled":"disabled"), adminToolItem::Success);
    }
+}
+
+void adminWindow::on_actionGenerate_source_file_triggered()
+{
+    //TODO add ini file selection diag
+    const QString settingsFile("/home/benoit/projects/build-homeAutomation-Desktop-Debug/homeAdminTool/MyModule.ini");
+
+    atmelSettingFileGenerator fileGenerator(settingsFile, this);
+    connect(&fileGenerator, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
+    fileGenerator.generateSource();
 }
