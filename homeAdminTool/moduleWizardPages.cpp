@@ -42,6 +42,11 @@ void configureModulePage::initializePage()
     // TODO load previous settings
 }
 
+bool configureModulePage::validatePage()
+{
+    return m_configurator->validate();
+}
+
 /// setModuleSourceDirectoryPage
 setModuleSourceDirectoryPage::setModuleSourceDirectoryPage(QWidget *parent) :
     QWizardPage(parent)

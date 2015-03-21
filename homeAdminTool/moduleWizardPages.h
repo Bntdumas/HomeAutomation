@@ -21,6 +21,7 @@ public:
     explicit configureModulePage(QMap<QString, QString> deviceTypes, QWidget *parent = 0);
     ~configureModulePage()  { delete m_configurator; }
     virtual void initializePage();
+    virtual bool validatePage();
 
 private:
     atmelModuleConfigurator *m_configurator;
