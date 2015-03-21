@@ -9,7 +9,7 @@ RF24 radio(8, 9); //ce cs  / 3 4  / 14 15
 RF24Network network(radio);
 
 // Time to read the network 4 times and write one time 
-const unsigned long readWriteCycle = %READ_WRITE_CIRCLE%; //ms
+const unsigned long readWriteCycle = %READ_WRITE_CYCLE%; //ms
 int currentIteration = 0;
 
 
