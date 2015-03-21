@@ -138,6 +138,8 @@ protected:
     void handleDuplicateNames(QStringList &list);
 private:
     Ui::atmelModuleConfigurator *ui;
+
+    /// device: <type, direction>
     QMap<QString, QString> m_deviceTypes;
 };
 

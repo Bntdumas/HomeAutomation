@@ -6,6 +6,9 @@
 #include <QComboBox>
 #include <QPair>
 
+
+#include <QDebug>
+
 atmelModuleConfigurator::atmelModuleConfigurator(QMap<QString, QString> devicesType, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::atmelModuleConfigurator),
@@ -51,7 +54,7 @@ atmelModuleConfigurator::~atmelModuleConfigurator()
 
 QVariant atmelModuleConfigurator::allGPIO()
 {
-    QList<GPIOPin>  gpioStatus;
+    QList< GPIOPin >  gpioStatus;
     QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
     int GPIOIndex = 0;
     GPIOWidgetPair curentPair;
@@ -62,7 +65,8 @@ QVariant atmelModuleConfigurator::allGPIO()
         currentGpioPin.name = lineEdit->text();
         currentGpioPin.index = ++GPIOIndex;
         currentGpioPin.deviceType = comboBox->currentText();
-        currentGpioPin.pinDirection = m_deviceTypes.key(currentGpioPin.deviceType);
+        currentGpioPin.pinDirection = m_deviceTypes.value(currentGpioPin.deviceType);
+        gpioStatus.append(currentGpioPin);
     }
     return qVariantFromValue(gpioStatus);
 }
@@ -110,8 +114,11 @@ QStringList atmelModuleConfigurator::getDevicesNames() const
         QLineEdit *lineEdit = curentPair.second;
         if (comboBox->currentText() == "Disabled") {
             nameList << "Disabled";
-        } else
+        } else if (lineEdit->text().isEmpty()) {
+            nameList << comboBox->currentText();
+        } else {
             nameList << lineEdit->text();
+        }
     }
     return nameList;
 }
