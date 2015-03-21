@@ -19,7 +19,7 @@ static const QString placeholderFunctions("%FUNCTIONS%");
 atmelSettingFileGenerator::atmelSettingFileGenerator(const QString &settingsFileName, QObject *parent) :
     adminToolItem(parent)
 {
-    m_settingsFile = new QSettings(settingsFileName);
+    m_settingsFile = new QSettings(settingsFileName, QSettings::IniFormat);
     
     QFile sourceFileTemplate(templateFile);
     
@@ -33,6 +33,9 @@ atmelSettingFileGenerator::atmelSettingFileGenerator(const QString &settingsFile
 const QString atmelSettingFileGenerator::generateSource()
 {
     QString sourceFilePath;
+    Q_EMIT message(QString("=== Creation of a source code for a module board ==="), Info);
+    Q_EMIT message(QString("Settings file is %1").arg(m_settingsFile->fileName()), Info);
+
     // Check that all necessary placeholders are in the template.
     Q_EMIT message(QString("Checking placeholders in template file..."), Info);
 
@@ -86,7 +89,7 @@ const QString atmelSettingFileGenerator::generateSource()
     Q_EMIT message(QString("Replacing constants parameters"), Info);
     qDebug() << m_settingsFile->value("board/readWriteCycle");
     const QString readWriteCycle = m_settingsFile->value("board/readWriteCycle").toString();
-    const QString ledEnabled = m_settingsFile->value("board/LEDS").toString();
+    const QString ledEnabled = m_settingsFile->value("board/LEDS").toBool() ? "1":"0";
 
     if (readWriteCycle.isEmpty()) {
         Q_EMIT message(QString("Couldn't read the read write cycle."), SoftwareError);
@@ -101,6 +104,11 @@ const QString atmelSettingFileGenerator::generateSource()
     m_sourceCode.replace(placeholderReadWriteCycle, readWriteCycle);
     m_sourceCode.replace(placeholderLedsEnabled, ledEnabled);
     Q_EMIT message(QString("... OK"), Success);
+
+    // set sensor pins.
+for (int i = 0; i < 8; i++) {
+
+}
 
 
     Q_EMIT message(m_sourceCode, Info);

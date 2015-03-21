@@ -27,7 +27,7 @@ configureModulePage::configureModulePage(QMap<QString, QString> deviceTypes, QWi
     layout->addWidget(m_configurator);
     setLayout(layout);
 
-    for ( int i =1;  i<9 ; ++i)
+    for ( int i =1; i<9 ; ++i)
         registerField(qPrintable(QString("GPIO%1").arg(i)), m_configurator, qPrintable(QString("GPIO%1").arg(i)));
     registerField("allGPIO", m_configurator, "allGPIO");
     registerField("LEDsEnabled", m_configurator, "LEDsEnabled");
@@ -85,6 +85,7 @@ void setModuleSourceDirectoryPage::selectDirectory()
 void setModuleSourceDirectoryPage::updateDirectory()
 {
     QString fileName(field("moduleName").toString());
+    fileName.replace(' ', '_');
     m_leModuleSourcePath->setText(m_sourceFilePath + '/' + fileName + ".ini");
 }
 
@@ -136,10 +137,11 @@ void reviewInfosPage::initializePage()
     QString moduleInfo;
     QTextStream infoStream(&moduleInfo);
     infoStream << " Module configuration" << endl
-               << "Name: " << field("moduleName").toString()<< endl;
+               << "Name: " << field("moduleName").toString() << endl;
 
-    Q_FOREACH( const atmelModuleConfigurator::GPIOPin currentPin,  field("allGPIO").value<  QList<atmelModuleConfigurator::GPIOPin> >()) {
-        infoStream << "GPIO " << currentPin.index << ": "  <<  currentPin.deviceType
+    QList< atmelModuleConfigurator::GPIOPin > gpioList = field("allGPIO").value< QList<atmelModuleConfigurator::GPIOPin> >();
+    Q_FOREACH( const atmelModuleConfigurator::GPIOPin currentPin, gpioList) {
+        infoStream << "GPIO " << currentPin.index << ": " << currentPin.deviceType
                    << " (" << currentPin.pinDirection << "). name: " << currentPin.name << endl;
     }
     infoStream << "LEDS are " << (field("LEDsEnabled").toBool()? "enabled.":"disabled.") << endl;
@@ -158,15 +160,14 @@ void reviewInfosPage::initializePage()
 
 bool reviewInfosPage::validatePage()
 {
-    QSettings settings(field("moduleSourcePath").toString(),  QSettings::IniFormat);
+    QSettings settings(field("moduleSourcePath").toString(), QSettings::IniFormat);
     settings.setValue("board/name", field("moduleName").toString());
 
-    QMapIterator<int, QPair<QString, QString> > mapIterator(field("allGPIO").value< QMap<int, QPair<QString, QString> > >());
-    while (mapIterator.hasNext()) {
-        mapIterator.next();
-        QPair<QString, QString> currentGPIOState = mapIterator.value();
-        settings.setValue(QString("board/GPIO%1/device").arg(mapIterator.key()), currentGPIOState.first);
-        settings.setValue(QString("board/GPIO%1/deviceType").arg(mapIterator.key()), currentGPIOState.second );
+    QList< atmelModuleConfigurator::GPIOPin > gpioList = field("allGPIO").value< QList<atmelModuleConfigurator::GPIOPin> >();
+    Q_FOREACH( const atmelModuleConfigurator::GPIOPin currentPin, gpioList) {
+        settings.setValue(QString("board/GPIO%1/Direction").arg(currentPin.index), currentPin.pinDirection);
+        settings.setValue(QString("board/GPIO%1/Name").arg(currentPin.index), currentPin.name );
+        settings.setValue(QString("board/GPIO%1/Type").arg(currentPin.index), currentPin.deviceType );
     }
     settings.setValue("board/LEDS", field("LEDsEnabled").toBool());
     settings.setValue("board/temperatureSensor", field("tempSensorEnabled").toBool());
