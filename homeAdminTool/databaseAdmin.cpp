@@ -226,7 +226,7 @@ QMap<QString, QString> databaseAdmin::extractDeviceListFromFile(const QString &f
         if (line == QString("# output devices")) {
             currentsectionName = "output";
         } else if (line == QString("# input devices")) {
-            currentsectionName = "output";
+            currentsectionName = "input";
         } else if (line == QString("# other devices")) {
             currentsectionName = "other";
         } else if (line.isEmpty() || line.startsWith("#")) { //comment
