@@ -32,8 +32,8 @@ moduleWizard::moduleWizard(QMap<QString, QString> availableTypes, QWidget *paren
     setPage(Page_ConfigureModule, m_configureModulePage);
     setPage(Page_SaveModuleSource, m_saveModuleSourcePage);
     setPage(Page_SelectProgrammerPage, m_selectProgrammerPage);
-    setPage( Page_ReviewInfosPage, m_reviewInfosPage);
-    setPage( Page_DonePage, m_donePage);
+    setPage(Page_ReviewInfosPage, m_reviewInfosPage);
+    setPage(Page_DonePage, m_donePage);
 
     setWindowTitle(tr("Atmel module creation wizard"));
     setGeometry(0, 0, 500, 600);
