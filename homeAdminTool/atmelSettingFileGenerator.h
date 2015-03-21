@@ -1,26 +1,33 @@
 #ifndef ATMELSETTINGFILEGENERATOR_H
 #define ATMELSETTINGFILEGENERATOR_H
+
 #include "adminToolItem.h"
+
+#include <QFile>
+
+/**
+ * Creates a pde file from the template in otherFiles/moduleTemplate.pde
+ * using predefiend settings found in the settings file passed as ctor parameter
+ */
+class QSettings;
 
 class atmelSettingFileGenerator : public adminToolItem
 {
     Q_OBJECT
-public:
-    explicit atmelSettingFileGenerator(QObject *parent = 0);QString constants(const int thisNode, const int masterNode, const bool ledEnabled) const;
+public:   
+    explicit atmelSettingFileGenerator(const QString &settingsFileName, QObject *parent = 0);
 
+public Q_SLOTS:
+    const QString generateSource();
 
-public Q_SLOTS:    
-    //void createConstants(const int thisNode, const int masterNode, const bool ledEnabled) const;
-   /* void createGPIOPinModeFunction;
-    void createUpdateOutputsFunction;
-    void createGeneratePayloadFunction;
-    void createPayloadInput;
-    void createPayloadOutput;
-    void createTemperatureFunction;
-    void createlLghtFunction;*/
+protected :
+    QString thermometerFunction(const QString &sensorName) const;
+    QString lightSensorFunction(const QString &sensorName) const;
 
+private:
+    QSettings *m_settingsFile;
+    QString m_sourceCode;
 
-private :
 };
 
 #endif // ATMELSETTINGFILEGENERATOR_H
