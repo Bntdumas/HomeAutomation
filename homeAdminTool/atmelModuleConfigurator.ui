@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>442</width>
-    <height>562</height>
+    <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -32,7 +32,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>General IO port</string>
@@ -46,7 +46,18 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="cbPort1"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QComboBox" name="cbPort1"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName1">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
@@ -56,7 +67,18 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="cbPort2"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QComboBox" name="cbPort2"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName2">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
@@ -66,7 +88,18 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QComboBox" name="cbPort3"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QComboBox" name="cbPort3"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName3">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
@@ -76,7 +109,18 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="cbPort7"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QComboBox" name="cbPort7"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName4">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
@@ -86,7 +130,18 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="cbPort5"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QComboBox" name="cbPort5"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName5">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_7">
@@ -96,7 +151,18 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QComboBox" name="cbPort4"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QComboBox" name="cbPort4"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName6">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="6" column="0">
        <widget class="QLabel" name="label_8">
@@ -106,7 +172,18 @@
        </widget>
       </item>
       <item row="6" column="1">
-       <widget class="QComboBox" name="cbPort6"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QComboBox" name="cbPort6"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName7">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item row="7" column="0">
        <widget class="QLabel" name="label_9">
@@ -116,12 +193,23 @@
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QComboBox" name="cbPort8"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QComboBox" name="cbPort8"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="portName8">
+          <property name="placeholderText">
+           <string>Device name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Module settings</string>

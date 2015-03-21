@@ -9,6 +9,9 @@ class atmelModuleConfigurator;
 }
 
 class QComboBox;
+class QLineEdit;
+
+typedef  QPair<QComboBox *, QLineEdit *>  GPIOWidgetPair;
 
 /**
  * @brief Allow the user to configure the atmel module by speficfying what's plugged on it's GPIO, and some other settings.
@@ -43,7 +46,14 @@ public:
     /**
      * @brief GPIOConf returns a map of all the defined GPIO entries.
      */
-    QVariant  allGPIO(); /// QMap<GPIO Index, QPair<GPIO Name, input|output|other>
+    QVariant  allGPIO(); /// QList<GPIOPin>
+
+    struct GPIOPin {
+        int index;
+        QString name;
+        QString deviceType;
+        QString pinDirection; //input|output|other
+    };
 
     /**
      * @brief Property getters/setters
@@ -87,6 +97,20 @@ public:
     int readWriteCycle();
     void setReadWriteCycle(int value);
 
+    /**
+     * @brief Check if the informations entered are correct, and fill up default data if needed.
+     */
+    bool validate();
+
+    /**
+     * @brief Put default values in the fields that are left empty.
+     */
+    void fillUpEmptyFields();
+
+    /**
+     * @brief returns an ordered list containing the device names from to the lineedits
+     */
+    QStringList getDevicesNames() const;
 signals:
     void moduleNameChanged(const QString &text);
 
@@ -107,9 +131,14 @@ signals:
 
 protected:
     QStringList currentlySelectedGPIO();
-    QList<QComboBox*> GPIOSelectionWidgets();
-
+    QList< QPair<QComboBox *, QLineEdit *> > GPIOSelectionWidgets() const;
+    /**
+     * @brief Rename duplicate with _2, _3, etc
+     */
+    void handleDuplicateNames(QStringList &list);
 private:
     Ui::atmelModuleConfigurator *ui;
     QMap<QString, QString> m_deviceTypes;
 };
+
+Q_DECLARE_METATYPE(atmelModuleConfigurator::GPIOPin)

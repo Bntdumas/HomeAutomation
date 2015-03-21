@@ -18,9 +18,12 @@ atmelModuleConfigurator::atmelModuleConfigurator(QMap<QString, QString> devicesT
     mdl->setStringList(m_deviceTypes.keys());
 
     const QString defaultValue = devicesType.key("other");
-    Q_FOREACH(QComboBox *currentGPIO, GPIOSelectionWidgets()) {
-        currentGPIO->setModel(mdl);
-        currentGPIO->setCurrentText(defaultValue);
+    QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
+    GPIOWidgetPair curentPair;
+    Q_FOREACH(curentPair, gpioWidgets) {
+        QComboBox * comboBox = curentPair.first;
+        comboBox->setModel(mdl);
+        comboBox->setCurrentText(defaultValue);
     }
 
     connect(ui->leBoardName, SIGNAL(textChanged(QString)), this, SIGNAL(moduleNameChanged(QString)));
@@ -48,16 +51,86 @@ atmelModuleConfigurator::~atmelModuleConfigurator()
 
 QVariant atmelModuleConfigurator::allGPIO()
 {
-    QMap<int, QPair<QString, QString> >  gpioStatus;
-    const QStringList currentDevicesStatus = currentlySelectedGPIO();
+    QList<GPIOPin>  gpioStatus;
+    QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
     int GPIOIndex = 0;
-    Q_FOREACH (const QString &currentDevice, currentDevicesStatus) {
-        QPair<QString, QString>  currentGpioStatus;
-        currentGpioStatus.first = currentDevice;
-        currentGpioStatus.second = m_deviceTypes.value(currentDevice);
-        gpioStatus.insert(++GPIOIndex, currentGpioStatus);
+    GPIOWidgetPair curentPair;
+    Q_FOREACH (curentPair, gpioWidgets) {
+        GPIOPin  currentGpioPin;
+        QComboBox * comboBox = curentPair.first;
+        QLineEdit *lineEdit = curentPair.second;
+        currentGpioPin.name = lineEdit->text();
+        currentGpioPin.index = ++GPIOIndex;
+        currentGpioPin.deviceType = comboBox->currentText();
+        currentGpioPin.pinDirection = m_deviceTypes.key(currentGpioPin.deviceType);
     }
     return qVariantFromValue(gpioStatus);
+}
+
+bool atmelModuleConfigurator::validate()
+{
+    fillUpEmptyFields();
+    QStringList namesList = getDevicesNames();
+    handleDuplicateNames(namesList);
+    int index = 0 ;
+    GPIOWidgetPair curentPair;
+    QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
+    Q_FOREACH (curentPair, gpioWidgets) {
+        QLineEdit *lineEdit = curentPair.second;
+        lineEdit->setText(namesList.at(index++));
+    }
+    return true;
+}
+
+void atmelModuleConfigurator::fillUpEmptyFields()
+{
+    QStringList nameList;
+    QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
+    GPIOWidgetPair curentPair;
+    Q_FOREACH (curentPair, gpioWidgets) {
+        QComboBox *comboBox = curentPair.first;
+        QLineEdit *lineEdit = curentPair.second;
+        if (lineEdit->text().isEmpty() && (comboBox->currentText() != "Disabled")) {
+            nameList << comboBox->currentText();
+        } else
+            nameList << lineEdit->text();
+    }
+
+    if (ui->leBoardName->text().isEmpty())
+        ui->leBoardName->setText("MyModule");
+}
+
+QStringList atmelModuleConfigurator::getDevicesNames() const
+{
+    QStringList nameList;
+    QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
+    GPIOWidgetPair curentPair;
+    Q_FOREACH (curentPair, gpioWidgets) {
+        QComboBox *comboBox = curentPair.first;
+        QLineEdit *lineEdit = curentPair.second;
+        if (comboBox->currentText() == "Disabled") {
+            nameList << "Disabled";
+        } else
+            nameList << lineEdit->text();
+    }
+    return nameList;
+}
+
+void atmelModuleConfigurator::handleDuplicateNames(QStringList &list)
+{
+    Q_FOREACH(const QString &name, list) {
+        int count = list.count(name);
+        if (count == 1)
+            continue;
+
+        int index = list.lastIndexOf(name);
+        do {
+            const QString newName = QString("%1_%2").arg(list.at(index)).arg(count);
+            list.replace(index, newName);
+            count = list.count(name);
+            index = list.lastIndexOf(name);
+        } while (index != -1 && count >= 2);
+    }
 }
 
 QString atmelModuleConfigurator::moduleName()
@@ -192,22 +265,28 @@ void atmelModuleConfigurator::setReadWriteCycle(int value)
 QStringList atmelModuleConfigurator::currentlySelectedGPIO()
 {
     QStringList list;
-    Q_FOREACH(const QComboBox *currentGPIO, GPIOSelectionWidgets()) {
-        list.append(currentGPIO->currentText());
+    QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
+    GPIOWidgetPair curentPair;
+    Q_FOREACH (curentPair, gpioWidgets) {
+        QComboBox *comboBox = curentPair.first;
+        list.append(comboBox->currentText());
     }
     return list;
 }
 
-QList<QComboBox *> atmelModuleConfigurator::GPIOSelectionWidgets()
+QList< GPIOWidgetPair > atmelModuleConfigurator::GPIOSelectionWidgets() const
 {
-    QList<QComboBox *> list;
-    list << ui->cbPort1
-         << ui->cbPort2
-         << ui->cbPort3
-         << ui->cbPort4
-         << ui->cbPort5
-         << ui->cbPort6
-         << ui->cbPort7
-         << ui->cbPort8;
+    QList< GPIOWidgetPair > list;
+
+    list << GPIOWidgetPair(ui->cbPort1, ui->portName1)
+            <<  GPIOWidgetPair(ui->cbPort2, ui->portName2)
+            <<  GPIOWidgetPair(ui->cbPort3, ui->portName3)
+            <<  GPIOWidgetPair(ui->cbPort4, ui->portName4)
+            <<  GPIOWidgetPair(ui->cbPort5, ui->portName5)
+            <<  GPIOWidgetPair(ui->cbPort6, ui->portName6)
+            <<  GPIOWidgetPair(ui->cbPort7, ui->portName7)
+            << GPIOWidgetPair(ui->cbPort8, ui->portName8);
     return list;
 }
+
+
