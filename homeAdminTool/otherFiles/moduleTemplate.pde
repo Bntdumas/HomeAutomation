@@ -2,7 +2,7 @@
 #include <RF24.h>
 #include <SPI.h>
 
-#define ENABLE_LEDS // %LEDS_ENABLED%
+#define ENABLE_LEDS %LEDS_ENABLED%
 
 // start 
 RF24 radio(8, 9); //ce cs  / 3 4  / 14 15
@@ -19,7 +19,7 @@ const int blueLed = 10;
 const int redLed = 7;
 
 // Sensors
-// %SENSORS%
+%SENSORS%
 
 // GPIO
 const int GPIO1 = A4;
@@ -38,7 +38,7 @@ void setup(void)
     pinMode(blueLed, OUTPUT);     
     pinMode(redLed, OUTPUT);     
 
-    // %PINMODE%
+%PINMODE%
     
 #if ENABLE_LEDS
     digitalWrite(blueLed, HIGH);
@@ -95,14 +95,14 @@ void loop(void)
 
 void updateOutputs(payload) 
 {
-    // %UPDATE_OUTPUTS%
+%UPDATE_OUTPUTS%
 }
 
 payloadOutput generatePayload()
 {
-    // %GENERATE_PAYLOAD%
+%GENERATE_PAYLOAD%
 }
 
 
-// %FUNCTIONS%
+%FUNCTIONS%
 
