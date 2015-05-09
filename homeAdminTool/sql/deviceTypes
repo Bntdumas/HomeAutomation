@@ -1,20 +1,33 @@
+# The list of available devices
+
+# Make sure to put the device in the right section (input/output)
+# The syntax for the device is:
+# <type>_<subtype>_<type of data>
+# type: that's what the device is.
+#    possible value: Lamp, Plug, Sensor, Switch, Potentiometer
+# subtype: A more detailled description - it's optional
+#    possible value: Up to you. "Spotlight" for a lamp, for example
+# type of data: A lamp will be on or off, a sensor might return a decimal value.
+#    possible value: bool, int, float, string
+
+
+
 # other devices
 Disabled
 
 # output devices
-Lamp_Ambiance
-Lamp_SpotLight
-Lamp_RGB
-Lamp_RoomLight
-Lamp_LED
-ComputerSwitch
-User_Screen
+Lamp_Ambiance_bool
+Lamp_SpotLight_bool
+Lamp_RGB_bool
+Lamp_RoomLight_bool
+Lamp_LED_bool
+Switch_Computer_bool
+Plug_Screen_bool
+Plug_bool
 
 # input devices
-Sensor_Temperature
-Sensor_Light
-Sensor_Humidity
-User_PushButton
-User_Potentiometer
-
-
+Sensor_Temperature_float
+Sensor_Light_int
+Sensor_Humidity_int
+User_PushButton_bool
+User_Potentiometer_bool

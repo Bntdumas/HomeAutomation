@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QMap>
 #include <QVariant>
+#include <QDebug>
 
 namespace Ui {
 class atmelModuleConfigurator;
@@ -53,6 +54,15 @@ public:
         QString name;
         QString deviceType;
         QString pinDirection; //input|output|other
+
+        bool isValid() {
+            bool dataIsNotEmpty =  (!name.isEmpty() && !deviceType.isEmpty() && !pinDirection.isEmpty());
+            bool indexIsWithinRange = index >= 0;
+            bool directionIsValid = (pinDirection == QLatin1String("input") ||
+                                     pinDirection == QLatin1String("output")||
+                                     pinDirection == QLatin1String("other"));
+            return (dataIsNotEmpty && indexIsWithinRange && directionIsValid);
+        }
     };
 
     /**

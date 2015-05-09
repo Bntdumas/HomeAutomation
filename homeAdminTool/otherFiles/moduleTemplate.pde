@@ -19,7 +19,8 @@ const int blueLed = 10;
 const int redLed = 7;
 
 // Sensors
-%SENSORS%
+const int lightSensor = A0;
+const int tempSensor = A1;
 
 // GPIO
 const int GPIO1 = A4;
@@ -32,6 +33,7 @@ const int GPIO6 = A2;
 const int GPIO7 = 0;
 const int GPIO8 = 1;
 
+%PAYLOAD_STRUCT%
 
 void setup(void)
 {
