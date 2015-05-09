@@ -12,28 +12,30 @@ SOURCES += $$top_srcdir/main.cpp\
            $$top_srcdir/adminToolItem.cpp \
            $$top_srcdir/../commonFiles/databaseTools.cpp \
            $$top_srcdir/databaseAdmin.cpp \
-           $$top_srcdir/atmelProgrammer.cpp \
-           $$top_srcdir/atmelSettingFileGenerator.cpp \
-           $$top_srcdir/moduleConfigurator.cpp \
-           $$top_srcdir/moduleWizard.cpp \
-           $$top_srcdir/moduleWizardPages.cpp
+           $$top_srcdir/Hardware/Atmel/atmelProgrammer.cpp \
+           $$top_srcdir/Hardware/Atmel/atmelSettingFileGenerator.cpp \
+           $$top_srcdir/Hardware/moduleConfigurator.cpp \
+           $$top_srcdir/Hardware/moduleWizard.cpp \
+           $$top_srcdir/Hardware/moduleWizardPages.cpp
 
 HEADERS += $$top_srcdir/adminWindow.h \
            $$top_srcdir/adminToolItem.h \
            $$top_srcdir/../commonFiles/databaseTools.h \
            $$top_srcdir/databaseAdmin.h \
-           $$top_srcdir/atmelProgrammer.h \
-           $$top_srcdir/atmelSettingFileGenerator.h \
-           $$top_srcdir/moduleConfigurator.h \
-           $$top_srcdir/moduleWizard.h \
-           $$top_srcdir/moduleWizardPages.h
+           $$top_srcdir/Hardware/Atmel/atmelProgrammer.h \
+           $$top_srcdir/Hardware/Atmel/atmelSettingFileGenerator.h \
+           $$top_srcdir/Hardware/moduleConfigurator.h \
+           $$top_srcdir/Hardware/moduleWizard.h \
+           $$top_srcdir/Hardware/moduleWizardPages.h
 
 FORMS   += $$top_srcdir/adminWindow.ui \
-           $$top_srcdir/moduleConfigurator.ui
+           $$top_srcdir/Hardware/moduleConfigurator.ui
 
 RESOURCES += $$top_srcdir/adminResources.qrc
 
-INCLUDEPATH += $$top_srcdir/../commonFiles/
+INCLUDEPATH += $$top_srcdir/../commonFiles/ \
+               $$top_srcdir/Hardware/ \
+               $$top_srcdir/Hardware/Atmel/
 
 OTHER_FILES += \
     sql/tables.sql \

@@ -49,7 +49,7 @@
    </widget>
    <widget class="QMenu" name="menuBoard">
     <property name="title">
-     <string>Board</string>
+     <string>Atmel Board</string>
     </property>
     <addaction name="actionGenerate_new_board"/>
     <addaction name="separator"/>

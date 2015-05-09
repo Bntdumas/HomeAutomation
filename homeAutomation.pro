@@ -8,7 +8,7 @@ linux-rasp-pi-g++: {
 } else {
     message("Setting up project for Desktop")
     SUBDIRS +=  $$top_srcdir/homeAdminTool \
-               $$top_srcdir/hardwareSimulator \
+              # $$top_srcdir/hardwareSimulator \
                $$top_srcdir/tests
 }
 

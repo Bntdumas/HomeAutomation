@@ -2,8 +2,8 @@
 #include <QProcess>
 #include <QDebug>
 atmelProgrammer::atmelProgrammer(const QDir &workingDirectory, QObject *parent) :
-    m_workingDirectory(workingDirectory),
-    adminToolItem(parent)
+    adminToolItem(parent),
+    m_workingDirectory(workingDirectory)
 {
 }
 
