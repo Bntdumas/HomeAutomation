@@ -2,7 +2,7 @@
 #define ATMELSETTINGFILEGENERATOR_H
 
 #include "adminToolItem.h"
-#include "atmelModuleConfigurator.h"
+#include "moduleConfigurator.h"
 
 #include <QFile>
 
@@ -29,7 +29,7 @@ protected :
     bool testPlaceholdersPresenceInTemplateFile();
 
     /// Retrieve GPIO information (index, name, type, direction) from the settings file
-    const QList<atmelModuleConfigurator::GPIOPin> getGPIOFromSettings();
+    const QList<moduleConfigurator::GPIOPin> getGPIOFromSettings();
 
     /// Replace the constants in the source code, using data form the settings file
     bool replaceConstants();
@@ -47,7 +47,7 @@ protected :
 private:
     QSettings *m_settingsFile;
     QString m_sourceCode;
-    QList< atmelModuleConfigurator::GPIOPin > m_gpioList;
+    QList< moduleConfigurator::GPIOPin > m_gpioList;
 };
 
 #endif // ATMELSETTINGFILEGENERATOR_H

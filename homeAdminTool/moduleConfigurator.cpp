@@ -1,5 +1,5 @@
-#include "atmelModuleConfigurator.h"
-#include "ui_atmelModuleConfigurator.h"
+#include "moduleConfigurator.h"
+#include "ui_moduleConfigurator.h"
 
 #include <QStringListModel>
 #include <QStringList>
@@ -9,9 +9,9 @@
 
 #include <QDebug>
 
-atmelModuleConfigurator::atmelModuleConfigurator(QMap<QString, QString> devicesType, QWidget *parent) :
+moduleConfigurator::moduleConfigurator(QMap<QString, QString> devicesType, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::atmelModuleConfigurator),
+    ui(new Ui::moduleConfigurator),
     m_deviceTypes(devicesType)
 {
     ui->setupUi(this);
@@ -47,12 +47,12 @@ atmelModuleConfigurator::atmelModuleConfigurator(QMap<QString, QString> devicesT
     connect(ui->readWriteCycle, SIGNAL(valueChanged(int)), this, SIGNAL(readWriteCycleChanged(int)));
 }
 
-atmelModuleConfigurator::~atmelModuleConfigurator()
+moduleConfigurator::~moduleConfigurator()
 {
     delete ui;
 }
 
-QVariant atmelModuleConfigurator::allGPIO()
+QVariant moduleConfigurator::allGPIO()
 {
     QList< GPIOPin >  gpioStatus;
     QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
@@ -71,7 +71,7 @@ QVariant atmelModuleConfigurator::allGPIO()
     return qVariantFromValue(gpioStatus);
 }
 
-bool atmelModuleConfigurator::validate()
+bool moduleConfigurator::validate()
 {
     fillUpEmptyFields();
     QStringList namesList = getDevicesNames();
@@ -86,7 +86,7 @@ bool atmelModuleConfigurator::validate()
     return true;
 }
 
-void atmelModuleConfigurator::fillUpEmptyFields()
+void moduleConfigurator::fillUpEmptyFields()
 {
     QStringList nameList;
     QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
@@ -104,7 +104,7 @@ void atmelModuleConfigurator::fillUpEmptyFields()
         ui->leBoardName->setText("MyModule");
 }
 
-QStringList atmelModuleConfigurator::getDevicesNames() const
+QStringList moduleConfigurator::getDevicesNames() const
 {
     QStringList nameList;
     QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
@@ -123,7 +123,7 @@ QStringList atmelModuleConfigurator::getDevicesNames() const
     return nameList;
 }
 
-void atmelModuleConfigurator::handleDuplicateNames(QStringList &list)
+void moduleConfigurator::handleDuplicateNames(QStringList &list)
 {
     Q_FOREACH(const QString &name, list) {
         int count = list.count(name);
@@ -140,136 +140,136 @@ void atmelModuleConfigurator::handleDuplicateNames(QStringList &list)
     }
 }
 
-QString atmelModuleConfigurator::moduleName()
+QString moduleConfigurator::moduleName()
 {
     return ui->leBoardName->text().isEmpty() ? "MyModule":ui->leBoardName->text() ;
 }
 
-void atmelModuleConfigurator::setModuleName(const QString &text)
+void moduleConfigurator::setModuleName(const QString &text)
 {
     ui->leBoardName->setText(text);
 }
 
-QString atmelModuleConfigurator::GPIO1()
+QString moduleConfigurator::GPIO1()
 {
     return QString(ui->cbPort1->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO1(const QString &text)
+void moduleConfigurator::setGPIO1(const QString &text)
 {
     ui->cbPort1->setCurrentText(text);
 }
 
-QString atmelModuleConfigurator::GPIO2()
+QString moduleConfigurator::GPIO2()
 {
     return QString(ui->cbPort2->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO2(const QString &text)
+void moduleConfigurator::setGPIO2(const QString &text)
 {
     ui->cbPort2->setCurrentText(text);
 }
 
-QString atmelModuleConfigurator::GPIO3()
+QString moduleConfigurator::GPIO3()
 {
     return QString(ui->cbPort3->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO3(const QString &text)
+void moduleConfigurator::setGPIO3(const QString &text)
 {
     ui->cbPort3->setCurrentText(text);
 }
 
-QString atmelModuleConfigurator::GPIO4()
+QString moduleConfigurator::GPIO4()
 {
     return QString(ui->cbPort4->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO4(const QString &text)
+void moduleConfigurator::setGPIO4(const QString &text)
 {
     ui->cbPort4->setCurrentText(text); }
 
-QString atmelModuleConfigurator::GPIO5()
+QString moduleConfigurator::GPIO5()
 {
     return QString(ui->cbPort5->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO5(const QString &text)
+void moduleConfigurator::setGPIO5(const QString &text)
 {
     ui->cbPort5->setCurrentText(text);
 }
 
-QString atmelModuleConfigurator::GPIO6()
+QString moduleConfigurator::GPIO6()
 {
     return QString(ui->cbPort6->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO6(const QString &text)
+void moduleConfigurator::setGPIO6(const QString &text)
 {
     ui->cbPort6->setCurrentText(text);
 }
 
-QString atmelModuleConfigurator::GPIO7()
+QString moduleConfigurator::GPIO7()
 {
     return QString(ui->cbPort7->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO7(const QString &text)
+void moduleConfigurator::setGPIO7(const QString &text)
 {
     ui->cbPort7->setCurrentText(text);
 }
 
-QString atmelModuleConfigurator::GPIO8()
+QString moduleConfigurator::GPIO8()
 {
     return QString(ui->cbPort8->currentText());
 }
 
-void atmelModuleConfigurator::setGPIO8(const QString &text)
+void moduleConfigurator::setGPIO8(const QString &text)
 {
     ui->cbPort8->setCurrentText(text);
 }
 
-bool atmelModuleConfigurator::LEDsEnabled()
+bool moduleConfigurator::LEDsEnabled()
 {
    return  ui->enableLED->isChecked();
 }
 
-void atmelModuleConfigurator::setLEDsEnabled(bool flag)
+void moduleConfigurator::setLEDsEnabled(bool flag)
 {
     ui->enableLED->setChecked(flag);
 }
 
-bool atmelModuleConfigurator::tempSensorEnabled()
+bool moduleConfigurator::tempSensorEnabled()
 {
      return  ui->enableThermometer->isChecked();
 }
 
-void atmelModuleConfigurator::setTempSensorEnabled(bool flag)
+void moduleConfigurator::setTempSensorEnabled(bool flag)
 {
     ui->enableThermometer->setChecked(flag);
 }
 
-bool atmelModuleConfigurator::lightSensorEnabled()
+bool moduleConfigurator::lightSensorEnabled()
 {
      return  ui->enableLightSensor->isChecked();
 }
 
-void atmelModuleConfigurator::setLightSensorEnabled(bool flag)
+void moduleConfigurator::setLightSensorEnabled(bool flag)
 {
     ui->enableLightSensor->setChecked(flag);
 }
 
-int atmelModuleConfigurator::readWriteCycle()
+int moduleConfigurator::readWriteCycle()
 {
      return  ui->readWriteCycle->value();
 }
 
-void atmelModuleConfigurator::setReadWriteCycle(int value)
+void moduleConfigurator::setReadWriteCycle(int value)
 {
     ui->readWriteCycle->setValue(value);
 }
 
-QStringList atmelModuleConfigurator::currentlySelectedGPIO()
+QStringList moduleConfigurator::currentlySelectedGPIO()
 {
     QStringList list;
     QList< GPIOWidgetPair > gpioWidgets = GPIOSelectionWidgets();
@@ -281,7 +281,7 @@ QStringList atmelModuleConfigurator::currentlySelectedGPIO()
     return list;
 }
 
-QList< GPIOWidgetPair > atmelModuleConfigurator::GPIOSelectionWidgets() const
+QList< GPIOWidgetPair > moduleConfigurator::GPIOSelectionWidgets() const
 {
     QList< GPIOWidgetPair > list;
 

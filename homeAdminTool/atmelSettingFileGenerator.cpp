@@ -43,7 +43,7 @@ const QString atmelSettingFileGenerator::generateSource()
 
     //retrieve GPIO list
     m_gpioList = getGPIOFromSettings();
-    if (gpioList.count() != 8) {
+    if (m_gpioList.count() != 8) {
         return QString();
     }
 
@@ -105,11 +105,11 @@ bool atmelSettingFileGenerator::testPlaceholdersPresenceInTemplateFile()
     return true;
 }
 
-const QList<atmelModuleConfigurator::GPIOPin> atmelSettingFileGenerator::getGPIOFromSettings()
+const QList<moduleConfigurator::GPIOPin> atmelSettingFileGenerator::getGPIOFromSettings()
 {
-    QList<atmelModuleConfigurator::GPIOPin> pins;
+    QList<moduleConfigurator::GPIOPin> pins;
     for (int i = 1; i <= 8; i++) {
-        atmelModuleConfigurator::GPIOPin currentPin;
+        moduleConfigurator::GPIOPin currentPin;
         const QString gpioID = QString("GPIO" + QString::number(i));
         currentPin.index = i;
         currentPin.pinDirection = m_settingsFile->value("board/" + gpioID + "/Direction").toString();
@@ -118,7 +118,7 @@ const QList<atmelModuleConfigurator::GPIOPin> atmelSettingFileGenerator::getGPIO
 
         if (!currentPin.isValid()) {
             Q_EMIT message(QString("Couldn't read the GPIO information for port number %1.").arg(i), SoftwareError);
-            return QList<atmelModuleConfigurator::GPIOPin>();
+            return QList<moduleConfigurator::GPIOPin>();
         }
         pins.append(currentPin);
     }
@@ -151,7 +151,7 @@ bool atmelSettingFileGenerator::setPinModes()
 {
     // pinMode(redLed, OUTPUT);
     QStringList pinModes;
-    Q_FOREACH( atmelModuleConfigurator::GPIOPin pin, m_gpioList) {
+    Q_FOREACH( moduleConfigurator::GPIOPin pin, m_gpioList) {
         const QString input("INPUT");
         const QString output("OUTPUT");
         const QString instruction("    pinMode(GPIO%1, %2);");
@@ -185,17 +185,17 @@ bool atmelSettingFileGenerator::generatePayload()
     QTextStream stream(&payloadStruct);
     stream << "struct payloadStruct" << endl << '{';
 
-    if ( m_settingsFile->value("board/LEDS").toBool() ?)
+    if (m_settingsFile->value("board/LEDS").toBool())
     stream << "float embedded_light;" << endl;
     stream << "float embedded_temperature;" << endl;
 
-    Q_FOREACH( atmelModuleConfigurator::GPIOPin pin, m_gpioList) {
+    Q_FOREACH( moduleConfigurator::GPIOPin pin, m_gpioList) {
         const QString dataType = dataTypeForDevice(pin.deviceType);
         if (dataType.isEmpty()) {
             Q_EMIT message(QString("Couldn't parse the data type for device \"%1\".").arg(pin.name), SoftwareError);
             return false;
         }
-        stream << dataTypeForDevice << ' ' << pin.name << ';' << endl;
+        stream << dataType << ' ' << pin.name << ';' << endl;
     }
     stream <<  endl << "};";
 }

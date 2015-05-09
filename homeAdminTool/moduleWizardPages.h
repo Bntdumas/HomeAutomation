@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWizardPage>
-#include  "atmelModuleConfigurator.h"
+#include  "moduleConfigurator.h"
 
 class QLineEdit;
 class QLabel;
@@ -24,7 +24,7 @@ public:
     virtual bool validatePage();
 
 private:
-    atmelModuleConfigurator *m_configurator;
+    moduleConfigurator *m_configurator;
 
 };
 

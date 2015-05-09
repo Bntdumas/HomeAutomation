@@ -6,7 +6,7 @@
 #include <QDebug>
 
 namespace Ui {
-class atmelModuleConfigurator;
+class moduleConfigurator;
 }
 
 class QComboBox;
@@ -17,7 +17,7 @@ typedef  QPair<QComboBox *, QLineEdit *>  GPIOWidgetPair;
 /**
  * @brief Allow the user to configure the atmel module by speficfying what's plugged on it's GPIO, and some other settings.
  */
-class atmelModuleConfigurator : public QWidget
+class moduleConfigurator : public QWidget
 {
     Q_OBJECT
 
@@ -41,8 +41,8 @@ class atmelModuleConfigurator : public QWidget
     Q_PROPERTY(int readWriteCycle READ readWriteCycle WRITE setReadWriteCycle NOTIFY readWriteCycleChanged)
 
 public:
-    explicit atmelModuleConfigurator(QMap<QString, QString> devicesType, QWidget *parent = 0);
-    ~atmelModuleConfigurator();
+    explicit moduleConfigurator(QMap<QString, QString> devicesType, QWidget *parent = 0);
+    ~moduleConfigurator();
 
     /**
      * @brief GPIOConf returns a map of all the defined GPIO entries.
@@ -147,10 +147,10 @@ protected:
      */
     void handleDuplicateNames(QStringList &list);
 private:
-    Ui::atmelModuleConfigurator *ui;
+    Ui::moduleConfigurator *ui;
 
     /// device: <type, direction>
     QMap<QString, QString> m_deviceTypes;
 };
 
-Q_DECLARE_METATYPE(atmelModuleConfigurator::GPIOPin)
+Q_DECLARE_METATYPE(moduleConfigurator::GPIOPin)

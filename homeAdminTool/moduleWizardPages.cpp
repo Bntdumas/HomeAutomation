@@ -1,6 +1,6 @@
 #include "moduleWizardPages.h"
 
-#include "atmelModuleConfigurator.h"
+#include "moduleConfigurator.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -19,7 +19,7 @@
 
 /// configureModulePage
 configureModulePage::configureModulePage(QMap<QString, QString> deviceTypes, QWidget *parent) :
-    QWizardPage(parent), m_configurator(new atmelModuleConfigurator(deviceTypes))
+    QWizardPage(parent), m_configurator(new moduleConfigurator(deviceTypes))
 {
     setTitle(tr("Customize your module"));
 
@@ -139,8 +139,8 @@ void reviewInfosPage::initializePage()
     infoStream << " Module configuration" << endl
                << "Name: " << field("moduleName").toString() << endl;
 
-    QList< atmelModuleConfigurator::GPIOPin > gpioList = field("allGPIO").value< QList<atmelModuleConfigurator::GPIOPin> >();
-    Q_FOREACH( const atmelModuleConfigurator::GPIOPin currentPin, gpioList) {
+    QList< moduleConfigurator::GPIOPin > gpioList = field("allGPIO").value< QList<moduleConfigurator::GPIOPin> >();
+    Q_FOREACH( const moduleConfigurator::GPIOPin currentPin, gpioList) {
         infoStream << "GPIO " << currentPin.index << ": " << currentPin.deviceType
                    << " (" << currentPin.pinDirection << "). name: " << currentPin.name << endl;
     }
@@ -163,8 +163,8 @@ bool reviewInfosPage::validatePage()
     QSettings settings(field("moduleSourcePath").toString(), QSettings::IniFormat);
     settings.setValue("board/name", field("moduleName").toString());
 
-    QList< atmelModuleConfigurator::GPIOPin > gpioList = field("allGPIO").value< QList<atmelModuleConfigurator::GPIOPin> >();
-    Q_FOREACH( const atmelModuleConfigurator::GPIOPin currentPin, gpioList) {
+    QList< moduleConfigurator::GPIOPin > gpioList = field("allGPIO").value< QList<moduleConfigurator::GPIOPin> >();
+    Q_FOREACH( const moduleConfigurator::GPIOPin currentPin, gpioList) {
         settings.setValue(QString("board/GPIO%1/Direction").arg(currentPin.index), currentPin.pinDirection);
         settings.setValue(QString("board/GPIO%1/Name").arg(currentPin.index), currentPin.name );
         settings.setValue(QString("board/GPIO%1/Type").arg(currentPin.index), currentPin.deviceType );
