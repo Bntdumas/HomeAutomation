@@ -36,21 +36,13 @@ private Q_SLOTS:
      * Set the house rooms and input/output devices.
      */
     void onActioncreateHouseStructureTriggered();
-
     void onActioncreateUpdateDevicesTypesTriggered();
-
     void onActioncreateUpdateTablesTriggered();
-
     void onActiondropTablesTriggered();
-
     void onActionresetDatabaseTriggered();
-
     void onActionuploadTriggered();
-
     void onActioncompileSketchTriggered();
-
     void on_actionGenerate_new_board_triggered();
-
     void on_actionGenerate_source_file_triggered();
 
 private:
@@ -58,7 +50,6 @@ private:
 
     // pages
     databaseAdmin * m_databaseAdmin;
-    atmelProgrammer *m_atmelProgrammer;
 };
 
 #endif // ADMINWINDOW_H

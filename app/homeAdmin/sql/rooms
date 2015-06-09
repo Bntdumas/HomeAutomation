@@ -15,21 +15,21 @@
 * Lamp_RoomLight, Ceiling lamp
 * Lamp_RoomLight, Night shelf lamp
 
-@Kitchen
+@ Kitchen
 * Lamp_RoomLight, Ceiling lamp
 * Lamp_RoomLight, Foot lamp
 * Lamp_Ambiance, Window lamp
 
-@Lobby
+@ Lobby
 * Lamp_RoomLight, Ceiling lamp
 * Lamp_Ambiance, Coffee table lamp
 
-@Office
+@ Office
 * Lamp_RoomLight, Main lamp
 * Lamp_Ambiance, Keyboard key lamp
 * Lamp_Spotlight, Workshop lights
 
-@LivingRoom
+@ LivingRoom
 * Lamp_RoomLight, Ceiling lamp
 * Lamp_RoomLight, Armchair sphere light
 * Lamp_Spotlight, Armchair Reading light

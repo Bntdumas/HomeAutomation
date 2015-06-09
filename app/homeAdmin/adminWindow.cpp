@@ -2,9 +2,7 @@
 #include "ui_adminWindow.h"
 
 #include "databaseAdmin.h"
-#include "atmelProgrammer.h"
 #include "moduleWizard.h"
-#include "atmelSettingFileGenerator.h"
 
 #include <QDateTime>
 #include <QThread>
@@ -32,8 +30,8 @@ adminWindow::adminWindow(QWidget *parent) :
     connect(m_databaseAdmin, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
     m_databaseAdmin->connectToDB();
 
-    m_atmelProgrammer = new atmelProgrammer(QDir("/home/benoit/projects/HomeAutomation/atmelSoftware"), this);
-    connect(m_atmelProgrammer, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
+    //m_atmelProgrammer = new atmelProgrammer(QDir("/home/benoit/projects/HomeAutomation/atmelSoftware"), this);
+    //connect(m_atmelProgrammer, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
 }
 
 adminWindow::~adminWindow()
@@ -102,12 +100,12 @@ void adminWindow::onActionresetDatabaseTriggered()
 
 void adminWindow::onActionuploadTriggered()
 {
-    m_atmelProgrammer->uploadSketch(tr("dragon_isp"));
+   // m_atmelProgrammer->uploadSketch(tr("dragon_isp"));
 }
 
 void adminWindow::onActioncompileSketchTriggered()
 {
-    m_atmelProgrammer->compileSketch();
+  //  m_atmelProgrammer->compileSketch();
 }
 
 void adminWindow::on_actionGenerate_new_board_triggered()
@@ -126,7 +124,7 @@ void adminWindow::on_actionGenerate_source_file_triggered()
     //TODO add ini file selection diag
     const QString settingsFile("/home/benoit/projects/build-homeAutomation-Desktop-Debug/homeAdminTool/MyModule.ini");
 
-    atmelSettingFileGenerator fileGenerator(settingsFile, this);
+    /*atmelSettingFileGenerator fileGenerator(settingsFile, this);
     connect(&fileGenerator, SIGNAL(message(QString, adminToolItem::messageType)), this, SLOT(displayLogMessage(QString, adminToolItem::messageType)));
-    fileGenerator.generateSource();
+    fileGenerator.generateSource();*/
 }

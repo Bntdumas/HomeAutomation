@@ -1,0 +1,16 @@
+Home Automation
+=============
+
+Home automation is cool.
+The thing is, it is also very expensive to buy ready-made modules. Especially if you want to automate large parts of your house.
+
+The good news is that you can find everything you need to create your own home ayutomation system for cheap on internet,
+if you don't mind putting a bit of work into it.
+
+This is what motivates me to create my own home automatisation system.
+
+The design goes like this:
+- All the house data is stored in a postgres database.
+- The main application hosts a TCP server that communicates both ways with the hardware modules via wifi (using the inexpensive ESP8266 modules from EspressIf)
+- This main application then writes data to the database.
+- Each client can connect to the database and get/write data on it
