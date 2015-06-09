@@ -1,0 +1,18 @@
+<!-- Defines the physical devices present in the house
+ use this syntax:
+ <ROOMNAME>
+    <DEVICE name="ROOMNAME" chipID="CHIPID" pin="PIN">
+ <ROOMNAME>
+ 
+ - ROOMNAME is a human readable name for the Room (Ex. Kitchen)
+ - DEVICE is a input/output device from the "devicesTypes" file (Ex. Lamp_RoomLight)
+ - DEVICENAME is a human readable name for the Device (Ex. "Kitchen ceiling light")
+ - CHIPID is the esp8266 unique identifier
+ - PIN is the pin on which the device is connected on the esp8266
+-->
+
+<Bedroom>
+    <Lamp_RoomLight name="Ceiling lamp" chipID="TODO" pin="TODO">
+    <Lamp_RoomLight type="Night shelf lamp" chipID="TODO" pin="TODO">
+</Bedroom>
+
