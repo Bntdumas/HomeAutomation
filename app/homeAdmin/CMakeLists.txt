@@ -7,12 +7,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(homeAdmin_HDRS
-    adminToolItem.h
     adminWindow.h
+    adminToolItem.h
 )
 
 set(homeAdmin_SRCS
-    adminToolItem.cpp
     adminWindow.cpp
     main.cpp
 )

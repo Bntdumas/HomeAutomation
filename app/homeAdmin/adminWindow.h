@@ -31,25 +31,8 @@ private Q_SLOTS:
      */
     void displayLogMessage(const QString &text, const adminToolItem::messageType type);
 
-    /**
-     * @brief User requested updating the house structure
-     * Set the house rooms and input/output devices.
-     */
-    void onActioncreateHouseStructureTriggered();
-    void onActioncreateUpdateDevicesTypesTriggered();
-    void onActioncreateUpdateTablesTriggered();
-    void onActiondropTablesTriggered();
-    void onActionresetDatabaseTriggered();
-    void onActionuploadTriggered();
-    void onActioncompileSketchTriggered();
-    void on_actionGenerate_new_board_triggered();
-    void on_actionGenerate_source_file_triggered();
-
 private:
     Ui::adminWindow *ui;
-
-    // pages
-    databaseAdmin * m_databaseAdmin;
 };
 
 #endif // ADMINWINDOW_H

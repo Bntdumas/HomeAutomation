@@ -37,28 +37,6 @@
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuDatabase">
-    <property name="title">
-     <string>Database</string>
-    </property>
-    <addaction name="actionResetdatabase"/>
-    <addaction name="actionCreateUpdatetables"/>
-    <addaction name="actionCreateUpdatedevicestypes"/>
-    <addaction name="actionCreatehousestructure"/>
-    <addaction name="actionDroptables"/>
-   </widget>
-   <widget class="QMenu" name="menuBoard">
-    <property name="title">
-     <string>Atmel Board</string>
-    </property>
-    <addaction name="actionGenerate_new_board"/>
-    <addaction name="separator"/>
-    <addaction name="actionCompileSketch"/>
-    <addaction name="actionUpload"/>
-    <addaction name="actionGenerate_source_file"/>
-   </widget>
-   <addaction name="menuDatabase"/>
-   <addaction name="menuBoard"/>
   </widget>
   <action name="actionCreatehousestructure">
    <property name="text">
