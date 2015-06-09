@@ -5,6 +5,6 @@ cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_AUTOMOC true)
 
-find_package(Qt5 5.3.1 CONFIG REQUIRED Core Gui Widgets Network Sql)
+find_package(Qt5 5.3.1 CONFIG REQUIRED Core Gui Widgets Network)
 
 add_subdirectory(app)
