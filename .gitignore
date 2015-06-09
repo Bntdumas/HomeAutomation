@@ -174,4 +174,6 @@ moc_*
 Makefile
 ServerApp #binary
 *~
+build/
+old/
 
