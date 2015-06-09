@@ -9,8 +9,9 @@ linux-rasp-pi-g++: {
     message("Setting up project for Desktop")
     SUBDIRS +=  $$top_srcdir/homeAdminTool \
               # $$top_srcdir/hardwareSimulator \
-               $$top_srcdir/tests
+                $$top_srcdir/homeNetwork \
+                $$top_srcdir/homeServer \
+                $$top_srcdir/tests
 }
 
 CONFIG += ordered
-
