@@ -11,3 +11,6 @@ linux-rasp-pi-g++: {
 }
 
 CONFIG += ordered
+
+SUBDIRS += $$top_srcdir/clientSimulator \
+           $$top_srcdir/networkModule
