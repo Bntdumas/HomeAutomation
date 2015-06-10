@@ -1,3 +1,46 @@
+<!-- Defines possible devices
+ use this syntax, inside input, output on misc:
+    <DEVICE subtype="SUBTYPE" deviceID="DEVICEID" >
+
+ - DEVICE is the type of device, it corresponds the enum "deviceType" in houseDataStructure.h
+ - SUBTYPE
+-->
+
+<deviceTypes>
+    <misc>
+        <Disabledd deviceID = "0"/>
+    </misc>
+    <output>
+        <Lamp>
+            <Ambiance deviceID = "1"/>
+            <SpotLight deviceID = "2"/>
+            <RoomLight deviceID = "3"/>
+            <LED deviceID = "4"/>
+        </Lamp>
+        <Switch>
+            <Computer deviceID = "5">
+        <Switch/>
+
+        <Plug>
+            <Screen deviceID = "6">
+            <Plug deviceID = "7">
+        <Plug/>
+
+    </output>
+    <input>
+        <Sensor>
+            <Temperature deviceID = "8"/>
+            <Light deviceID = "9"/>
+            <Humidity deviceID = "10"/>
+        </Sensor>
+        <User>
+            <Button deviceID = "11"/>
+            <Potentiometer deviceID = "12"/>
+        </User>
+    </input>
+</DeviceTypes>
+
+
 <!-- Defines the physical devices present in the house
  use this syntax:
  <ROOMNAME>
@@ -12,7 +55,7 @@
 -->
 
 <Bedroom>
-    <Lamp_RoomLight name="Ceiling lamp" chipID="TODO" pin="TODO">
-    <Lamp_RoomLight type="Night shelf lamp" chipID="TODO" pin="TODO">
+    <device deviceTypeID="3" name="Ceiling lamp" chipID="TODO" pin="TODO"/>
+    <device deviceTypeID="3" name="Night shelf lamp" chipID="TODO" pin="TODO"/>
 </Bedroom>
 
