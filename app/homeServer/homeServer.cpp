@@ -39,10 +39,6 @@ homeServer::homeServer(QObject *parent) :
     connect(m_pollingTimer, &QTimer::timeout, this, &homeServer::pollingTimerTimeout);
 }
 
-homeServer::~homeServer()
-{
-}
-
 void homeServer::createTCPServer()
 {
     m_receivedLines = 0;
@@ -107,7 +103,6 @@ void homeServer::connectionRemoved()
 {
     QTcpSocket *deletedSocket = qobject_cast<QTcpSocket*>(sender());
     if (!deletedSocket) {
-        //qWarning("Client left, but couldn't get the socket handle.");
         return;
     }
         Q_EMIT message(tr("Client left  %1").arg(deletedSocket->peerAddress().toString()), utils::Info);
@@ -117,8 +112,6 @@ void homeServer::pollingTimerTimeout()
 {
     sendAll(CMD_DATA);
     m_state = !m_state;
-   // sendAll(QString("CMD:GPIO:4:%1").arg(m_state));
-    //sendAll(CMD_RESET);
 }
 
 const QString homeServer::takeNextMessageForClient(QTcpSocket *client)
