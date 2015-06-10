@@ -105,7 +105,7 @@ void homeServer::connectionRemoved()
     if (!deletedSocket) {
         return;
     }
-        Q_EMIT message(tr("Client left  %1").arg(deletedSocket->peerAddress().toString()), utils::Info);
+    Q_EMIT message(tr("Client left  %1").arg(deletedSocket->peerAddress().toString()), utils::Info);
 }
 
 void homeServer::pollingTimerTimeout()
@@ -162,7 +162,7 @@ bool homeServer::processCommand(QTcpSocket *client, const QString &command)
 
 QString homeServer::getValue(const QString &command)
 {
-  /*  if (command.count(SEP_NAME_VALUE) == 1) {
+    /*  if (command.count(SEP_NAME_VALUE) == 1) {
         return command.split(SEP_NAME_VALUE).last();
     }*/
     return QString();
@@ -212,7 +212,7 @@ bool homeServer::send(QTcpSocket * client, const QString &message)
 
 void homeServer::dataAvailable()
 {
-  //  qDebug() << Q_FUNC_INFO;
+    //  qDebug() << Q_FUNC_INFO;
     
     QTcpSocket *client = qobject_cast<QTcpSocket *>(sender());
     if (client == 0) {
