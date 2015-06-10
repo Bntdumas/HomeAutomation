@@ -1,14 +1,16 @@
 #include "adminWindow.h"
 #include "ui_adminWindow.h"
+#include "homeServer.h"
 
 #include <QDateTime>
 
 adminWindow::adminWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::adminWindow)
+    ,m_server(Q_NULLPTR)
 {
     ui->setupUi(this);    // Register types
-    qRegisterMetaType<adminToolItem::messageType>("adminToolItem::messageType");
+    qRegisterMetaType<utils::messageType>("utils::messageType");
 }
 
 adminWindow::~adminWindow()
@@ -16,24 +18,39 @@ adminWindow::~adminWindow()
     delete ui;
 }
 
-void adminWindow::displayLogMessage(const QString &text, const adminToolItem::messageType type)
+void adminWindow::displayLogMessage(const QString &text, const utils::messageType type)
 {
     switch (type) {
-    case adminToolItem::Info:
+    case utils::Info:
         ui->txtLog->setTextColor(Qt::darkGray);
         break;
 
-    case adminToolItem::Success:
+    case utils::Success:
         ui->txtLog->setTextColor(Qt::darkGreen);
         break;
 
-    case adminToolItem::Warning:
+    case utils::Warning:
         ui->txtLog->setTextColor(Qt::darkYellow);
         break;
 
-    case adminToolItem::SoftwareError:
+    case utils::SoftwareError:
         ui->txtLog->setTextColor(Qt::darkRed);
+        break;
+
+    case utils::NetworkError:
+        ui->txtLog->setTextColor(Qt::darkMagenta);
         break;
     }
     ui->txtLog->append(QStringLiteral("%1: %2").arg(QDateTime::currentDateTime().toString(QStringLiteral("hh:mm:ss"))).arg(text));
+}
+
+void adminWindow::on_action_re_start_triggered()
+{
+    if (m_server) {
+        delete m_server;
+    }
+
+    m_server = new homeServer(this);
+    connect(m_server, &homeServer::message, this, &adminWindow::displayLogMessage);
+    m_server->createTCPServer();
 }

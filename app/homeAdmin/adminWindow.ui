@@ -37,50 +37,17 @@
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuServer">
+    <property name="title">
+     <string>Server</string>
+    </property>
+    <addaction name="action_re_start"/>
+   </widget>
+   <addaction name="menuServer"/>
   </widget>
-  <action name="actionCreatehousestructure">
+  <action name="action_re_start">
    <property name="text">
-    <string>Create/Update house structure</string>
-   </property>
-  </action>
-  <action name="actionCreateUpdatedevicestypes">
-   <property name="text">
-    <string>Create/Update devices types</string>
-   </property>
-  </action>
-  <action name="actionCreateUpdatetables">
-   <property name="text">
-    <string>Create/Update tables</string>
-   </property>
-  </action>
-  <action name="actionDroptables">
-   <property name="text">
-    <string>Drop tables</string>
-   </property>
-  </action>
-  <action name="actionResetdatabase">
-   <property name="text">
-    <string>Reset database</string>
-   </property>
-  </action>
-  <action name="actionCompileSketch">
-   <property name="text">
-    <string>Compile</string>
-   </property>
-  </action>
-  <action name="actionUpload">
-   <property name="text">
-    <string>Upload</string>
-   </property>
-  </action>
-  <action name="actionGenerate_new_board">
-   <property name="text">
-    <string>Generate new board file</string>
-   </property>
-  </action>
-  <action name="actionGenerate_source_file">
-   <property name="text">
-    <string>Generate source file</string>
+    <string>(re)start</string>
    </property>
   </action>
  </widget>

@@ -10,6 +10,7 @@ class adminWindow;
 
 class databaseAdmin;
 class atmelProgrammer;
+class homeServer;
 
 /**
  * @brief The home automation admin app.
@@ -29,10 +30,14 @@ private Q_SLOTS:
      * @param The message text
      * @param The message type
      */
-    void displayLogMessage(const QString &text, const adminToolItem::messageType type);
+    void displayLogMessage(const QString &text, const utils::messageType type);
+
+    void on_action_re_start_triggered();
 
 private:
     Ui::adminWindow *ui;
+    homeServer *m_server;
+
 };
 
 #endif // ADMINWINDOW_H
