@@ -1,6 +1,6 @@
 #include "houseDataStructure.h"
 
-bool houseDataStructure::subTypeCompatible(houseDataStructure::deviceType type, houseDataStructure::deviceSubType subType)
+bool houseDataStructure::subTypeCompatible(houseDataStructure::DeviceType type, houseDataStructure::DeviceSubType subType)
 {
     switch (type) {
     case Lamp:
@@ -27,7 +27,7 @@ bool houseDataStructure::subTypeCompatible(houseDataStructure::deviceType type, 
     }
 }
 
-bool houseDataStructure::typeCompatible(houseDataStructure::deviceDirection direction, houseDataStructure::deviceType type)
+bool houseDataStructure::typeCompatible(houseDataStructure::DeviceDirection direction, houseDataStructure::DeviceType type)
 {
     switch (direction) {
     case Input:
@@ -82,7 +82,7 @@ bool houseDataStructure::removeRoom(const QString &roomName)
 }
 
 bool houseDataStructure::addDevice(const QString &roomName, const QString &deviceName,
-                                   houseDataStructure::deviceDirection direction, houseDataStructure::deviceType type, houseDataStructure::deviceSubType subType,
+                                   houseDataStructure::DeviceDirection direction, houseDataStructure::DeviceType type, houseDataStructure::DeviceSubType subType,
                                    double value, int chipID, int esp8266Pin)
 {
     // chip id valid?

@@ -25,7 +25,7 @@ private:
 /*
     bool addRoom(const QString &roomName);
     bool removeRoom(const QString &roomName);
-    bool addDevice(const QString &roomName, const QString &deviceName, deviceDirection direction, deviceType type, deviceSubType subType,
+    bool addDevice(const QString &roomName, const QString &deviceName, DeviceDirection direction, DeviceType type, DeviceSubType subType,
                    float value, int chipID, int esp8266Pin);
 
     bool removeDevice(const QString &roomName, const QString &deviceName);
@@ -76,9 +76,9 @@ void dataStructureTest::testAddRemoveRoom()
 void dataStructureTest::testAddRemoveDevice_data()
 {
     QTest::addColumn<QString>("deviceName");
-    QTest::addColumn<houseDataStructure::deviceDirection>("direction");
-    QTest::addColumn<houseDataStructure::deviceType>("type");
-    QTest::addColumn<houseDataStructure::deviceSubType>("subType");
+    QTest::addColumn<houseDataStructure::DeviceDirection>("direction");
+    QTest::addColumn<houseDataStructure::DeviceType>("type");
+    QTest::addColumn<houseDataStructure::DeviceSubType>("subType");
     QTest::addColumn<double>("value");
     QTest::addColumn<int>("chipID");
     QTest::addColumn<int>("esp8266Pin");
@@ -128,9 +128,9 @@ void dataStructureTest::testAddRemoveDevice_data()
 void dataStructureTest::testAddRemoveDevice()
 {
     QFETCH(QString, deviceName);
-    QFETCH(houseDataStructure::deviceDirection, direction);
-    QFETCH(houseDataStructure::deviceType, type);
-    QFETCH(houseDataStructure::deviceSubType, subType);
+    QFETCH(houseDataStructure::DeviceDirection, direction);
+    QFETCH(houseDataStructure::DeviceType, type);
+    QFETCH(houseDataStructure::DeviceSubType, subType);
     QFETCH(double, value);
     QFETCH(int, chipID);
     QFETCH(int, esp8266Pin);
@@ -140,9 +140,6 @@ void dataStructureTest::testAddRemoveDevice()
 
     houseDataStructure houseData;
     QVERIFY(houseData.addRoom(roomName));
-/*(const QString &roomName, const QString &deviceName,
-    houseDataStructure::deviceDirection direction, houseDataStructure::deviceType type, houseDataStructure::deviceSubType subType,
-    float value, int chipID, int esp8266Pin)*/
 
     bool addDevice =  houseData.addDevice(roomName, deviceName, direction, type, subType, value, chipID, esp8266Pin);
     bool deviceExists =  houseData.deviceExists(roomName, deviceName);

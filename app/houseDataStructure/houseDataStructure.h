@@ -22,13 +22,13 @@ public:
      * @brief These enums contains the differents types of devices available in the house.
      *  When modifying these, you need to make sure to update @subTypeCompatible() and @typeCompatible() with the new data in order to separate the elements into sections.
      */
-    enum deviceDirection {
+    enum DeviceDirection {
         Input = 0
         ,Output
         ,Disabled
     };
 
-    enum deviceType {
+    enum DeviceType {
         Lamp = 0
         ,Switch
         ,Plug
@@ -37,7 +37,7 @@ public:
         ,TypeOther
     };
 
-    enum deviceSubType {
+    enum DeviceSubType {
         None = 0
         ,Ambiance
         ,SpotLight
@@ -58,8 +58,8 @@ public:
      * @brief methods to test if the passed enums are compatibles
      * eg a lamp or a plug cannot be an input, and a lamp cannot be a temperature sensor
      */
-    bool subTypeCompatible(deviceType type, deviceSubType subType);
-    bool typeCompatible(deviceDirection direction, deviceType type);
+    bool subTypeCompatible(DeviceType type, DeviceSubType subType);
+    bool typeCompatible(DeviceDirection direction, DeviceType type);
 
     /**
      * @brief Adds an empty room to the house
@@ -79,7 +79,7 @@ public:
      * @return true if device succesfully added.
      * @note the device name must be unique per room
      */
-    bool addDevice(const QString &roomName, const QString &deviceName, deviceDirection direction, deviceType type, deviceSubType subType,
+    bool addDevice(const QString &roomName, const QString &deviceName, DeviceDirection direction, DeviceType type, DeviceSubType subType,
                    double value, int chipID, int esp8266Pin);
 
     /**
@@ -130,14 +130,14 @@ private:
      */
     struct Device {
         QString name;
-        deviceDirection direction;
-        deviceType type;
-        deviceSubType subType;
+        DeviceDirection direction;
+        DeviceType type;
+        DeviceSubType subType;
         float value;
         int chipID;
         int esp8266Pin;
 
-        Device(const QString &name, deviceDirection direction, deviceType type, deviceSubType subType,
+        Device(const QString &name, DeviceDirection direction, DeviceType type, DeviceSubType subType,
                float value, int chipID, int esp8266Pin):
             name(name)
           ,direction(direction)
@@ -240,9 +240,9 @@ private:
     roomList m_rooms;
 };
 
-Q_DECLARE_METATYPE(houseDataStructure::deviceDirection)
-Q_DECLARE_METATYPE(houseDataStructure::deviceType)
-Q_DECLARE_METATYPE(houseDataStructure::deviceSubType)
+Q_DECLARE_METATYPE(houseDataStructure::DeviceDirection)
+Q_DECLARE_METATYPE(houseDataStructure::DeviceType)
+Q_DECLARE_METATYPE(houseDataStructure::DeviceSubType)
 
 #endif // HOUSEDATASTRUCTURE_H
 
