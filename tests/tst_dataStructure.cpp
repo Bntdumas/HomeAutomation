@@ -84,39 +84,31 @@ void dataStructureTest::testAddRemoveDevice_data()
     QTest::addColumn<int>("esp8266Pin");
     QTest::addColumn<bool>("ExpectedSuccess");
 
-    /*
-     * To add in houseDataStructure
-     * - test if chip id valid
-     * - test if direction, types and subtypes are compatibles
-     * - test if gpio for pin n is already used
-     * - value can be left blank
-     */
-
-    QTest::newRow("Valid Input")   << QStringLiteral("Temperature exterior") << houseDataStructure::Input
+    QTest::newRow("Valid Input")   << QStringLiteral("Valid Input") << houseDataStructure::Input
                                    <<  houseDataStructure::Sensor << houseDataStructure::Temperature
                                     << 2.5 << 123456 << 5 << true;
 
-    QTest::newRow("Valid Output")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+    QTest::newRow("Valid Output")   << QStringLiteral("Valid Output") << houseDataStructure::Output
                                     <<  houseDataStructure::Lamp << houseDataStructure::LED
                                      << 1.0 << 123456 << 4 << true;
 
-    QTest::newRow("invalid Input (wrong type for direction)")   << QStringLiteral("Temperature exterior") << houseDataStructure::Input
+    QTest::newRow("invalid Input (wrong type for direction)")   << QStringLiteral("invalid Input (wrong type for direction)") << houseDataStructure::Input
                                                                 <<  houseDataStructure::Lamp << houseDataStructure::LED
-                                                                 << 22.5 << 123456 << 5 << true;
+                                                                 << 22.5 << 123456 << 5 << false;
 
-    QTest::newRow("invalid Output (wrong type for direction)")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+    QTest::newRow("invalid Output (wrong type for direction)")   << QStringLiteral("invalid Output (wrong type for direction)") << houseDataStructure::Output
                                                                  <<  houseDataStructure::Sensor << houseDataStructure::Temperature
-                                                                  << 1.0 << 123456 << 4 << true;
+                                                                  << 1.0 << 123456 << 4 << false;
 
-    QTest::newRow("invalid Input (wrong subtype for type)")   << QStringLiteral("Temperature exterior") << houseDataStructure::Input
+    QTest::newRow("invalid Input (wrong subtype for type)")   << QStringLiteral("invalid Input (wrong subtype for type)") << houseDataStructure::Input
                                                               <<  houseDataStructure::User << houseDataStructure::Temperature
                                                                << 22.5 << 123456 << 5 << false;
 
-    QTest::newRow("invalid Output (wrong subtype for type)")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+    QTest::newRow("invalid Output (wrong subtype for type)")   << QStringLiteral("invalid Output (wrong subtype for type") << houseDataStructure::Output
                                                                <<  houseDataStructure::Plug << houseDataStructure::Temperature
                                                                 << 1.0 << 123456 << 4 << false;
 
-    QTest::newRow("invalid chip ID")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+    QTest::newRow("invalid chip ID")   << QStringLiteral("invalid chip ID") << houseDataStructure::Output
                                        <<  houseDataStructure::Lamp << houseDataStructure::LED
                                         << 1.0 << -1 << 4 << false;
 
