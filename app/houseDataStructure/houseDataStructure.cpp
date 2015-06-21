@@ -1,5 +1,51 @@
 #include "houseDataStructure.h"
 
+bool houseDataStructure::subTypeCompatible(houseDataStructure::deviceType type, houseDataStructure::deviceSubType subType)
+{
+    switch (type) {
+    case Lamp:
+        return (subType == Ambiance ||
+                subType == SpotLight ||
+                subType == RoomLight ||
+                subType == LED);
+    case Switch:
+        return (subType == Computer);
+    case Plug:
+        return (subType == Screen ||
+                subType == NormalPlug);
+    case Sensor:
+        return (subType == Temperature ||
+                subType == Light ||
+                subType == Humidity);
+    case User:
+        return (subType == Button ||
+                subType == Potentiometer);
+    case TypeOther:
+        return (subType == SubTypeOther);
+    default:
+        return false;
+    }
+}
+
+bool houseDataStructure::typeCompatible(houseDataStructure::deviceDirection direction, houseDataStructure::deviceType type)
+{
+    switch (direction) {
+    case Input:
+        return (type == User ||
+                type == Sensor ||
+                type == TypeOther);
+    case Output:
+        return (type == Lamp ||
+                type == Switch ||
+                type == Plug ||
+                type == TypeOther);
+    case Disabled:
+        return true;
+    default:
+        return false;
+    }
+}
+
 bool houseDataStructure::addRoom(const QString &roomName)
 {
     if (roomName.isEmpty()) {
@@ -37,8 +83,31 @@ bool houseDataStructure::removeRoom(const QString &roomName)
 
 bool houseDataStructure::addDevice(const QString &roomName, const QString &deviceName,
                                    houseDataStructure::deviceDirection direction, houseDataStructure::deviceType type, houseDataStructure::deviceSubType subType,
-                                   float value, int chipID, int esp8266Pin)
+                                   double value, int chipID, int esp8266Pin)
 {
+    // chip id valid?
+    if (chipID <= 1000) {
+        Q_EMIT message(tr("houseDataStructure: The chip ID \"%1\" is invalid").arg(chipID), utils::SoftwareError);
+        return false;
+    }
+
+    if (gpioInUse(chipID, esp8266Pin)) {
+        Q_EMIT message(tr("houseDataStructure: The pin \"%1\" is already in use in the chip  n\"%2\"").arg(esp8266Pin, chipID), utils::SoftwareError);
+        return false;
+    }
+
+    // test types compatibility
+    if (!typeCompatible(direction, type)) {
+        Q_EMIT message(tr("houseDataStructure: The type \"%1\" is not valid in regard to the pin direction \"%2\"").arg(type, direction), utils::SoftwareError);
+        return false;
+    }
+
+    if (!subTypeCompatible(type, subType)) {
+        Q_EMIT message(tr("houseDataStructure: The sub type \"%1\" is not valid in regard to the type \"%2\"").arg(subType, type), utils::SoftwareError);
+        return false;
+    }
+
+
     // retrieve room
     if (!roomExists(roomName)) {
         Q_EMIT message(tr("houseDataStructure: The room to remove \"%1\" does not exists").arg(roomName), utils::SoftwareError);
@@ -61,6 +130,7 @@ bool houseDataStructure::addDevice(const QString &roomName, const QString &devic
         return false;
     }
     currentRoom->devices.append(dev);
+    return true;
 }
 
 bool houseDataStructure::removeDevice(const QString &roomName, const QString &deviceName)
@@ -142,4 +212,16 @@ bool houseDataStructure::roomExists(const QString &roomName)
 bool houseDataStructure::deviceExists(const QString &roomName, const QString &deviceName)
 {
     return deviceIndex(roomName, deviceName) != -1;
+}
+
+bool houseDataStructure::gpioInUse(int chipID, int pin)
+{
+    Q_FOREACH(const Room *currentRoom, m_rooms) {
+        Q_FOREACH(const Device *currentDevice, currentRoom->devices) {
+            if (currentDevice->chipID == chipID && currentDevice->esp8266Pin == pin ) {
+                return true;
+            }
+        }
+    }
+    return false;
 }

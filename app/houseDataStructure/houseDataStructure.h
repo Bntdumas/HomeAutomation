@@ -18,9 +18,13 @@ public:
     ~houseDataStructure() {}
 
 
+    /**
+     * @brief These enums contains the differents types of devices available in the house.
+     *  When modifying these, you need to make sure to update @subTypeCompatible() and @typeCompatible() with the new data in order to separate the elements into sections.
+     */
     enum deviceDirection {
         Input = 0
-        ,Ouput
+        ,Output
         ,Disabled
     };
 
@@ -51,6 +55,13 @@ public:
     };
 
     /**
+     * @brief methods to test if the passed enums are compatibles
+     * eg a lamp or a plug cannot be an input, and a lamp cannot be a temperature sensor
+     */
+    bool subTypeCompatible(deviceType type, deviceSubType subType);
+    bool typeCompatible(deviceDirection direction, deviceType type);
+
+    /**
      * @brief Adds an empty room to the house
      * @return true if device succesfully added.
      */
@@ -69,7 +80,7 @@ public:
      * @note the device name must be unique per room
      */
     bool addDevice(const QString &roomName, const QString &deviceName, deviceDirection direction, deviceType type, deviceSubType subType,
-                   float value, int chipID, int esp8266Pin);
+                   double value, int chipID, int esp8266Pin);
 
     /**
      * @brief Remove a device from a room
@@ -96,6 +107,8 @@ public:
      */
     bool roomExists(const QString &roomName);
     bool deviceExists(const QString &roomName, const QString &deviceName);
+
+    bool gpioInUse(int chipID, int pin);
 
     /**
       * Methods for unit testing
