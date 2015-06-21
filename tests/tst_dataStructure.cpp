@@ -18,6 +18,8 @@ private Q_SLOTS:
     void testAddRemoveDevice_data();
     void testAddRemoveDevice();
 
+    void testDeviceDoublons();
+
 private:
 
 };
@@ -146,6 +148,34 @@ void dataStructureTest::testAddRemoveDevice()
 
     QVERIFY(!houseData.deviceExists(roomName, deviceName));
     QCOMPARE(houseData.deviceIndex(roomName, deviceName), -1);
+}
+
+void dataStructureTest::testDeviceDoublons()
+{
+
+    const QString roomName = QStringLiteral("bedroom");
+    houseDataStructure houseData;
+
+    QVERIFY(houseData.addRoom(roomName));
+
+    // same name
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("device"), houseDataStructure::Output, houseDataStructure::Lamp,
+                                          houseDataStructure::LED, 1.0, 12354, 5));
+    QVERIFY(!houseData.addDevice(roomName, QStringLiteral("device"), houseDataStructure::Input, houseDataStructure::Sensor,
+                                          houseDataStructure::Temperature, 1.0, 12354, 4));
+
+
+    // same GPIO pin on same chip
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceA"), houseDataStructure::Output, houseDataStructure::Lamp,
+                                          houseDataStructure::LED, 1.0, 12354, 2));
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceC"), houseDataStructure::Output, houseDataStructure::Lamp,
+                                          houseDataStructure::LED, 1.0, 12354, 3));
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceB"), houseDataStructure::Output, houseDataStructure::Lamp,
+                                          houseDataStructure::LED, 1.0, 12355, 2));
+    QVERIFY(!houseData.addDevice(roomName, QStringLiteral("deviceD"), houseDataStructure::Output, houseDataStructure::Lamp,
+                                          houseDataStructure::LED, 1.0, 12354, 2));
+
+
 }
 
 

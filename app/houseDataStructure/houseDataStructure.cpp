@@ -85,6 +85,12 @@ bool houseDataStructure::addDevice(const QString &roomName, const QString &devic
                                    houseDataStructure::DeviceDirection direction, houseDataStructure::DeviceType type, houseDataStructure::DeviceSubType subType,
                                    double value, int chipID, int esp8266Pin)
 {
+    // already have a device with this name in this room
+    if (deviceExists(roomName, deviceName)) {
+        Q_EMIT message(tr("houseDataStructure: The device \"%1\" already exists in room \"%2\"").arg(deviceName, roomName), utils::SoftwareError);
+        return false;
+    }
+
     // chip id valid?
     if (chipID <= 1000) {
         Q_EMIT message(tr("houseDataStructure: The chip ID \"%1\" is invalid").arg(chipID), utils::SoftwareError);
