@@ -5,7 +5,7 @@
 #include <QObject>
 
 /**
- * @brief This class holds the current state of the house
+ * @brief This class communicates with the house data structure
  */
 
 class HOUSEDATAHANDLERSHARED_EXPORT houseDataHandler: public QObject
