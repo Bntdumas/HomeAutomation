@@ -25,7 +25,7 @@ class HOMENETWORKSHARED_EXPORT homeServer: public QObject
     Q_OBJECT
 public:
     explicit homeServer(QObject *parent = Q_NULLPTR);
-    ~homeServer();
+    ~homeServer() {}
 
 public:
     /**
