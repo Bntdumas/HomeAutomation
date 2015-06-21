@@ -2,10 +2,16 @@
 
 bool houseDataStructure::addRoom(const QString &roomName)
 {
+    if (roomName.isEmpty()) {
+        Q_EMIT message(tr("houseDataStructure: The room must have a name."), utils::SoftwareError);
+        return false;
+    }
+
     if (roomExists(roomName)) {
         Q_EMIT message(tr("houseDataStructure: The room to add \"%1\" already exists").arg(roomName), utils::SoftwareError);
         return false;
     }
+
     Room *newRoom = new Room(roomName);
     m_rooms.append(newRoom);
     Q_EMIT message(tr("houseDataStructure: The room \"%1\" was added to the house structure").arg(roomName), utils::Success);

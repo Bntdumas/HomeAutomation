@@ -1,141 +1,128 @@
 #include <QString>
 #include <QtTest>
 #include <QCoreApplication>
-#include <QTcpSocket>
 
-#include "homeNetwork.h"
-#include "clientSimulator.h"
+#include "houseDataStructure.h"
 
-class NetworkModuleTest : public QObject
+class dataStructureTest : public QObject
 {
     Q_OBJECT
 
 public:
-    NetworkModuleTest();
+    dataStructureTest() {};
 
 private Q_SLOTS:
-    void init();
-    void cleanup();
+    void testAddRoom_data();
+    void testAddRemoveRoom();
 
-    // using local simulator
-    void testSendLotsOfLines();
-
-    //using real esp8266 module connected via wifi
-    void testWifiConnection();
-    void testCommands();
-
+    void testAddRemoveDevice_data();
+    void testAddRemoveDevice();
 
 private:
-    homeNetwork *m_server;
-    clientSimulator *m_client;
 
-    void initSimulator();
-    void waitForRealClientConnected(int numberOfExpectedClients);
 };
 
-NetworkModuleTest::NetworkModuleTest()
+/*
+    bool addRoom(const QString &roomName);
+    bool removeRoom(const QString &roomName);
+    bool addDevice(const QString &roomName, const QString &deviceName, deviceDirection direction, deviceType type, deviceSubType subType,
+                   float value, int chipID, int esp8266Pin);
+
+    bool removeDevice(const QString &roomName, const QString &deviceName);
+    int chipIDForDevice(const QString &roomName, const QString &deviceName);
+
+    int roomIndex(const QString &name);
+    int deviceIndex(const QString &roomName, const QString &name);
+
+    bool roomExists(const QString &roomName);
+    bool deviceExists(const QString &roomName, const QString &deviceName);
+
+ * */
+
+void dataStructureTest::testAddRoom_data()
 {
+    QTest::addColumn<QString>("string");
+    QTest::addColumn<bool>("ExpectedSuccess");
+
+    QTest::newRow("valid room")   << QStringLiteral("bedroom") << true;
+    QTest::newRow("invalid room") << QStringLiteral("") << false;
 }
 
-void NetworkModuleTest::init()
+void dataStructureTest::testAddRemoveRoom()
 {
-    m_server = new homeNetwork();
-    QVERIFY(m_server->isListening());
+    QFETCH(QString, string);
+    QFETCH(bool, ExpectedSuccess);
+
+    houseDataStructure houseData;
+
+    bool addRoom =  houseData.addRoom(string);
+    bool roomExists =  houseData.roomExists(string);
+    bool roomIndex =  houseData.roomIndex(string) == (ExpectedSuccess ? 0:-1);
+    bool roomCount =  houseData.roomCount() == (ExpectedSuccess ? 1:0);
+    bool removeRoom =  houseData.removeRoom(string);
+
+
+    QVERIFY(ExpectedSuccess ? addRoom:!addRoom);
+    QVERIFY(ExpectedSuccess ? roomExists:!roomExists);
+    QVERIFY(roomIndex);
+    QVERIFY(roomCount);
+    QVERIFY(ExpectedSuccess ? removeRoom:!removeRoom);
+
+    QVERIFY(!houseData.roomExists(string));
+    QCOMPARE(houseData.roomIndex(string), -1);
+    QCOMPARE(!houseData.roomCount(), 1);
 }
 
-void NetworkModuleTest::cleanup()
+void dataStructureTest::testAddRemoveDevice_data()
 {
-    delete m_server;
+    QTest::addColumn<QString>("deviceName");
+    QTest::addColumn<houseDataStructure::deviceDirection>("direction");
+    QTest::addColumn<houseDataStructure::deviceType>("type");
+    QTest::addColumn<houseDataStructure::deviceSubType>("subType");
+    QTest::addColumn<float>("value");
+    QTest::addColumn<int>("chipID");
+    QTest::addColumn<int>("esp8266Pin");
+    QTest::addColumn<bool>("ExpectedSuccess");
+
+    QTest::newRow("valid device")   << QStringLiteral("lamp") << true;
+    QTest::newRow("invalid device") << QStringLiteral("") << false;
 }
 
-// simple test,
-void NetworkModuleTest::testSendLotsOfLines()
+void dataStructureTest::testAddRemoveDevice()
 {
-    initSimulator();
+    QFETCH(QString, deviceName);
+    QFETCH(houseDataStructure::deviceDirection, direction);
+    QFETCH(houseDataStructure::deviceType, type);
+    QFETCH(houseDataStructure::deviceSubType, subType);
+    QFETCH(float, value);
+    QFETCH(int, chipID);
+    QFETCH(int, esp8266Pin);
+    QFETCH(bool, ExpectedSuccess);
 
-    const int messageToSend = 100;
-    //have the client send lots of lines and make sure the server got them all
-    for (int i = 0; i < messageToSend; ++i) {
-       QVERIFY(m_client->sendID());
-       QCoreApplication::instance()->processEvents();
-    }
+    const QString roomName = QStringLiteral("bedroom");
 
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.start(3000);
-    while (timer.isActive())
-        QCoreApplication::instance()->processEvents();
+    houseDataStructure houseData;
+    QVERIFY(houseData.addRoom(roomName));
+/*(const QString &roomName, const QString &deviceName,
+    houseDataStructure::deviceDirection direction, houseDataStructure::deviceType type, houseDataStructure::deviceSubType subType,
+    float value, int chipID, int esp8266Pin)*/
 
-    QCOMPARE(m_server->receivedLines(), messageToSend);
+    bool addDevice =  houseData.addDevice(roomName, deviceName, direction, type, subType, value, chipID, esp8266Pin);
+    bool deviceExists =  houseData.deviceExists(roomName, deviceName);
+    bool deviceIndex =  houseData.deviceIndex(roomName, deviceName) == (ExpectedSuccess ? 0:-1);
+    bool removedevice =  houseData.removeDevice(roomName, deviceName);
 
-    delete m_client;
-    m_client = 0;
+
+    QVERIFY(ExpectedSuccess ? addDevice:!addDevice);
+    QVERIFY(ExpectedSuccess ? deviceExists:!deviceExists);
+    QVERIFY(deviceIndex);
+    QVERIFY(ExpectedSuccess ? removedevice:!removedevice);
+
+    QVERIFY(!houseData.deviceExists(roomName, deviceName));
+    QCOMPARE(houseData.deviceIndex(roomName, deviceName), -1);
 }
 
-void NetworkModuleTest::testWifiConnection()
-{
-  //  waitForRealClientConnected(3);
-}
 
-void NetworkModuleTest::testCommands()
-{
-    waitForRealClientConnected(3);
-    m_server->resetLineCounter();
-    const int messageToSend = 100;
-    for (int i = 0; i < messageToSend; i++) {
-        m_server->sendAll("DATA");
-    }
+QTEST_MAIN(dataStructureTest)
 
-    QTimer timer;
-    timer.setSingleShot(true);
-    timer.start(90000);
-
-    while (timer.isActive())
-        QCoreApplication::instance()->processEvents();
-
-    QCOMPARE(m_server->receivedLines(), messageToSend * 3);
-}
-
-void NetworkModuleTest::initSimulator()
-{
-    QTimer timer;
-    timer.setSingleShot(true);
-    m_client = new clientSimulator();
-    QSignalSpy spyNewData(m_client->socket(), SIGNAL(stateChanged(QAbstractSocket::SocketState)));
-
-    // connect to server, timeout 3 seconds
-    m_client->connectToServer();
-    timer.start(3000);
-
-    while (!m_client->isConnected() && timer.isActive())
-        QCoreApplication::instance()->processEvents();
-
-    //QAbstractSocket::HostLookupState
-    //QAbstractSocket::ConnectingState
-    //QAbstractSocket::ConnectedState
-    QVERIFY(spyNewData.count() == 3);
-    QVERIFY(m_client->isConnected());
-    QCOMPARE(m_server->connectedClients(), 1);
-}
-
-void NetworkModuleTest::waitForRealClientConnected(int numberOfExpectedClients)
-{
-    QTimer timer;
-    timer.setSingleShot(true);
-    qDebug() << "######## NOW RESET THE MODULES ########";
-    timer.start(3000);
-    while (timer.isActive())
-        QCoreApplication::instance()->processEvents();
-
-    // wait for 5seconds, that should give enough time for clients to connect
-    timer.start(5000);
-    while (timer.isActive())
-        QCoreApplication::instance()->processEvents();
-
-
-    QCOMPARE(m_server->connectedClients(), numberOfExpectedClients);
-}
-
-QTEST_MAIN(NetworkModuleTest)
-
-#include "tst_NetworkModuleTest.moc"
+#include "tst_dataStructure.moc"

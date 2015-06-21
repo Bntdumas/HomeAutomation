@@ -84,6 +84,25 @@ public:
      */
     int chipIDForDevice(const QString &roomName, const QString &deviceName);
 
+
+    /**
+     * @brief get the index of the room/device in the structure lists
+     */
+    int roomIndex(const QString &name);
+    int deviceIndex(const QString &roomName, const QString &name);
+
+    /**
+     * @brief test if the object exists in memory.
+     */
+    bool roomExists(const QString &roomName);
+    bool deviceExists(const QString &roomName, const QString &deviceName);
+
+    /**
+      * Methods for unit testing
+      */
+    int roomCount() { return m_rooms.count();}
+
+
 Q_SIGNALS:
     /**
      * @brief Debug messages
@@ -194,11 +213,6 @@ private:
         return !(left == right);
     }*/
 
-    /**
-     * @brief get the index of the room/device in the structure lists
-     */
-    int roomIndex(const QString &name);
-    int deviceIndex(const QString &roomName, const QString &name);
 
     /**
      * @brief get the pointer of the room/device in the structure lists
@@ -207,17 +221,15 @@ private:
     Device *devicePointer(const QString &roomName, const QString &deviceName);
 
     /**
-     * @brief test if the object exists in memory.
-     */
-    bool roomExists(const QString &roomName);
-    bool deviceExists(const QString &roomName, const QString &deviceName);
-
-    /**
       * Storage
       */
     typedef QList<Room *> roomList;
     roomList m_rooms;
 };
+
+Q_DECLARE_METATYPE(houseDataStructure::deviceDirection)
+Q_DECLARE_METATYPE(houseDataStructure::deviceType)
+Q_DECLARE_METATYPE(houseDataStructure::deviceSubType)
 
 #endif // HOUSEDATASTRUCTURE_H
 
