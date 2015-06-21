@@ -12,7 +12,7 @@ public:
     dataStructureTest() {};
 
 private Q_SLOTS:
-    void testAddRoom_data();
+    void testAddRemoveRoom_data();
     void testAddRemoveRoom();
 
     void testAddRemoveDevice_data();
@@ -39,7 +39,7 @@ private:
 
  * */
 
-void dataStructureTest::testAddRoom_data()
+void dataStructureTest::testAddRemoveRoom_data()
 {
     QTest::addColumn<QString>("string");
     QTest::addColumn<bool>("ExpectedSuccess");
@@ -79,13 +79,50 @@ void dataStructureTest::testAddRemoveDevice_data()
     QTest::addColumn<houseDataStructure::deviceDirection>("direction");
     QTest::addColumn<houseDataStructure::deviceType>("type");
     QTest::addColumn<houseDataStructure::deviceSubType>("subType");
-    QTest::addColumn<float>("value");
+    QTest::addColumn<double>("value");
     QTest::addColumn<int>("chipID");
     QTest::addColumn<int>("esp8266Pin");
     QTest::addColumn<bool>("ExpectedSuccess");
 
-    QTest::newRow("valid device")   << QStringLiteral("lamp") << true;
-    QTest::newRow("invalid device") << QStringLiteral("") << false;
+    /*
+     * To add in houseDataStructure
+     * - test if chip id valid
+     * - test if direction, types and subtypes are compatibles
+     * - test if gpio for pin n is already used
+     * - value can be left blank
+     */
+
+    QTest::newRow("Valid Input")   << QStringLiteral("Temperature exterior") << houseDataStructure::Input
+                                   <<  houseDataStructure::Sensor << houseDataStructure::Temperature
+                                    << 2.5 << 123456 << 5 << true;
+
+    QTest::newRow("Valid Output")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+                                    <<  houseDataStructure::Lamp << houseDataStructure::LED
+                                     << 1.0 << 123456 << 4 << true;
+
+    QTest::newRow("invalid Input (wrong type for direction)")   << QStringLiteral("Temperature exterior") << houseDataStructure::Input
+                                                                <<  houseDataStructure::Lamp << houseDataStructure::LED
+                                                                 << 22.5 << 123456 << 5 << true;
+
+    QTest::newRow("invalid Output (wrong type for direction)")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+                                                                 <<  houseDataStructure::Sensor << houseDataStructure::Temperature
+                                                                  << 1.0 << 123456 << 4 << true;
+
+    QTest::newRow("invalid Input (wrong subtype for type)")   << QStringLiteral("Temperature exterior") << houseDataStructure::Input
+                                                              <<  houseDataStructure::User << houseDataStructure::Temperature
+                                                               << 22.5 << 123456 << 5 << false;
+
+    QTest::newRow("invalid Output (wrong subtype for type)")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+                                                               <<  houseDataStructure::Plug << houseDataStructure::Temperature
+                                                                << 1.0 << 123456 << 4 << false;
+
+    QTest::newRow("invalid chip ID")   << QStringLiteral("Living room lamp") << houseDataStructure::Output
+                                       <<  houseDataStructure::Lamp << houseDataStructure::LED
+                                        << 1.0 << -1 << 4 << false;
+
+    QTest::newRow("invalid name")   << QStringLiteral("") << houseDataStructure::Output
+                                    <<  houseDataStructure::Lamp << houseDataStructure::LED
+                                     << 1.0 << 123456 << 4 << false;
 }
 
 void dataStructureTest::testAddRemoveDevice()
@@ -94,7 +131,7 @@ void dataStructureTest::testAddRemoveDevice()
     QFETCH(houseDataStructure::deviceDirection, direction);
     QFETCH(houseDataStructure::deviceType, type);
     QFETCH(houseDataStructure::deviceSubType, subType);
-    QFETCH(float, value);
+    QFETCH(double, value);
     QFETCH(int, chipID);
     QFETCH(int, esp8266Pin);
     QFETCH(bool, ExpectedSuccess);
