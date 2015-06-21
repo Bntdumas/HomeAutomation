@@ -9,8 +9,9 @@ if you don't mind putting a bit of work into it.
 
 This is what motivates me to create my own home automatisation system.
 
-The design goes like this:
-- All the house data is stored in a postgres database.
+The design goes roughly like this:
+- All the house data is stored in a Qt application, running on a computer used as a server.
+- Every client communicates via TCP sockets to the server, a client being an user interface or a hardware module.
 - The main application hosts a TCP server that communicates both ways with the hardware modules via wifi (using the inexpensive ESP8266 modules from EspressIf)
-- This main application then writes data to the database.
-- Each client can connect to the database and get/write data on it
+- The TCP frames are text based, using XML for easy parsing.
+
