@@ -51,10 +51,10 @@ bool clientSimulator::sendOK()
 
 bool clientSimulator::sendData(bool random)
 {
-    float temp = random ? (qrand() % 30 + 250) / 10 : 22.5;
-    int gpio1 = random ? qrand() % 2:1;
-    int gpio2 = random ? qrand() % 2:0;
-    int gpio3 = random ? qrand() % 2:1;
+    float temp = random ? ((qrand() % 30 + 250) / 10) : 22.5;
+    int gpio1 = random ? (qrand() % 2):1;
+    int gpio2 = random ? (qrand() % 2):0;
+    int gpio3 = random ? (qrand() % 2):1;
     bool sendFirst = send(QString(QStringLiteral("$TEMP:%1").arg(temp)));
     bool sendSecond = send(QString(QStringLiteral("$GPIO:1,%1;2,%2;3,%3;")).arg(gpio1).arg(gpio2).arg(gpio3));
     return sendFirst && sendSecond;
