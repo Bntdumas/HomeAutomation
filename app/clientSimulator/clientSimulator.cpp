@@ -49,8 +49,14 @@ bool clientSimulator::sendOK()
     return send(QStringLiteral("<ok/>"));
 }
 
+bool clientSimulator::sendError()
+{
+    return send(QStringLiteral("<error/>"));
+}
+
 bool clientSimulator::sendData(bool random)
 {
+    qDebug() << Q_FUNC_INFO;
     float temp = random ? ((qrand() % 30 + 250) / 10) : 22.5;
     int gpio1 = random ? (qrand() % 2):1;
     int gpio2 = random ? (qrand() % 2):0;
@@ -63,7 +69,23 @@ bool clientSimulator::sendData(bool random)
 
 void clientSimulator::slotReadyRead()
 {
-    qDebug() << Q_FUNC_INFO;
+    QTcpSocket *client = qobject_cast<QTcpSocket *>(sender());
+    if (client == 0) {
+        return;
+    }
+
+    QString msg = tr(client->readAll().constData());
+    msg.remove(QStringLiteral("\n"));
+
+    if(msg == QStringLiteral("DATA"))
+        sendData(false);
+    else if(msg.startsWith(QStringLiteral("CMD:")))
+        sendOK();
+    else if(msg == QStringLiteral("RST"))
+        sendOK();
+    else
+        sendError();
+
 }
 
 bool clientSimulator::send(const QString &msg)

@@ -28,6 +28,7 @@ public:
 public Q_SLOTS:
     bool sendID();
     bool sendOK();
+    bool sendError();
     bool sendData(bool random);
 
 private Q_SLOTS:
