@@ -11,9 +11,7 @@
 #include <QHostAddress>
 
 /**
- * @brief The userServer class handles communication with the users.
- *  It uses a TCP server to get new connections.
- *  It can send and receive data from the modules, but do not store anything.
+ * @brief The moduleServer class communicates with the users (via Qt apps).
  */
 
 class QTcpServer;
@@ -29,8 +27,8 @@ public:
     ~userServer() {}
 
 private:
-    virtual void processLine(QTcpSocket *client, const QString &line);
-    virtual bool processCommand(QTcpSocket *client, const QString &command);
+    virtual void processLine(QTcpSocket *client, const QString &line) {/*TODO*/;}
+    virtual bool processCommand(QTcpSocket *client, const QString &command) {/*TODO*/;}
 
 };
 
