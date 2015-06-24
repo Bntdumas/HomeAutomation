@@ -1,6 +1,6 @@
 #include "adminWindow.h"
 #include "ui_adminWindow.h"
-#include "homeServer.h"
+#include "moduleServer.h"
 
 #include <QDateTime>
 
@@ -50,7 +50,7 @@ void adminWindow::on_action_re_start_triggered()
         delete m_server;
     }
 
-    m_server = new homeServer(this);
-    connect(m_server, &homeServer::message, this, &adminWindow::displayLogMessage);
+    m_server = new moduleServer(this);
+    connect(m_server, &moduleServer::message, this, &adminWindow::displayLogMessage);
     m_server->createTCPServer();
 }

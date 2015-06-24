@@ -1,4 +1,4 @@
-#include "homeServer.h"
+#include "tcpServer.h"
 
 #include "utils.h"
 
@@ -14,32 +14,20 @@ namespace {
     // server settings
     static const int TCP_PORT = 5003;
     static const int MAX_MESSAGE_LENGTH = 500;
-
-    // frame string keywords
-    static const QString CMD_DATA = QStringLiteral("DATA");
-    static const QString CMD_ID = QStringLiteral("ID");
-    static const QString CMD_OK = QStringLiteral("OK");
-    static const QString CMD_ERR = QStringLiteral("ERROR");
-    static const QString CMD_TEMP = QStringLiteral("TEMP");
-    static const QString CMD_GPIO = QStringLiteral("GPIO");
-    static const QString CMD_RESET = QStringLiteral("RST");
-
-    // frame string separators
     static const QString SEP_END_LINE = QStringLiteral("\n");
 }
 
-homeServer::homeServer(QObject *parent) :
+tcpServer::tcpServer(QObject *parent) :
     QObject(parent)
-  ,m_state(false)
-  ,m_tcpServer(Q_NULLPTR)
+    ,m_tcpServer(Q_NULLPTR)
 {
     m_pollingTimer = new QTimer(this);
     m_pollingTimer->setInterval(500);
     m_pollingTimer->setSingleShot(false);
-    connect(m_pollingTimer, &QTimer::timeout, this, &homeServer::pollingTimerTimeout);
+    connect(m_pollingTimer, &QTimer::timeout, this, &tcpServer::pollingTimerTimeout);
 }
 
-void homeServer::createTCPServer()
+void tcpServer::createTCPServer()
 {
     m_receivedLines = 0;
 
@@ -49,7 +37,7 @@ void homeServer::createTCPServer()
     }
 
     m_tcpServer = new QTcpServer(this);
-    connect(m_tcpServer, &QTcpServer::newConnection, this, &homeServer::newConnection);
+    connect(m_tcpServer, &QTcpServer::newConnection, this, &tcpServer::newConnection);
 
     if (m_tcpServer->listen(QHostAddress::Any, TCP_PORT)) {
         Q_EMIT message(tr("TCP server started on port %1").arg(TCP_PORT), utils::Success);
@@ -60,17 +48,12 @@ void homeServer::createTCPServer()
     m_pollingTimer->start();
 }
 
-bool homeServer::isListening()
+bool tcpServer::isListening()
 {
     return m_tcpServer->isListening();
 }
 
-void homeServer::resetModules()
-{
-    sendAll(CMD_RESET);
-}
-
-void homeServer::newConnection()
+void tcpServer::newConnection()
 {
     QTcpSocket *newSocket =  m_tcpServer->nextPendingConnection();
     if (newSocket) {
@@ -92,14 +75,14 @@ void homeServer::newConnection()
         }
 
         m_clientsList.insert(newSocket, 0);
-        connect(newSocket, &QTcpSocket::disconnected, this, &homeServer::connectionRemoved);
-        connect(newSocket, &QTcpSocket::readyRead, this, &homeServer::dataAvailable);
+        connect(newSocket, &QTcpSocket::disconnected, this, &tcpServer::connectionRemoved);
+        connect(newSocket, &QTcpSocket::readyRead, this, &tcpServer::dataAvailable);
         
         Q_EMIT message(tr("New client  %1").arg(newSocket->peerAddress().toString()), utils::Info);
     }
 }
 
-void homeServer::connectionRemoved()
+void tcpServer::connectionRemoved()
 {
     QTcpSocket *deletedSocket = qobject_cast<QTcpSocket*>(sender());
     if (!deletedSocket) {
@@ -108,13 +91,7 @@ void homeServer::connectionRemoved()
     Q_EMIT message(tr("Client left  %1").arg(deletedSocket->peerAddress().toString()), utils::Info);
 }
 
-void homeServer::pollingTimerTimeout()
-{
-    sendAll(CMD_DATA);
-    m_state = !m_state;
-}
-
-const QString homeServer::takeNextMessageForClient(QTcpSocket *client)
+const QString tcpServer::takeNextMessageForClient(QTcpSocket *client)
 {
     //make a working copy of the list
     for (int i = m_messageWaitingList.count()-1; i > 0; --i) {
@@ -127,50 +104,9 @@ const QString homeServer::takeNextMessageForClient(QTcpSocket *client)
     return QString();
 }
 
-void homeServer::processLine(QTcpSocket *client, const QString &line)
+QTcpSocket *tcpServer::clientForIP(const QHostAddress IP)
 {
-    // eventually separate the commands into several subcommands
-    /*if (line.contains(SEP_SUB_COMMAND)) {
-        Q_FOREACH(const QString &command, line.split(SEP_SUB_COMMAND)) {
-            processCommand(client, command);
-        }
-    } else {
-        processCommand(client, line);
-    }*/
-}
-
-bool homeServer::processCommand(QTcpSocket *client, const QString &command)
-{
-    QString commandCopy = command;
-    /*if (!commandCopy.startsWith(SEP_COMMAND_START)) {
-        Q_EMIT message(tr("Got a command without starting character:  %1").arg(commandCopy), utils::Warning);
-        return false;
-    }*/
-    // remove first character
-    commandCopy.remove(0, 1);
-
-    //test keywords
-    if (commandCopy.startsWith(CMD_ID)) {
-        int id = getValue(command).toInt();
-        m_clientsList.insert(client, id);
-        Q_EMIT message(tr("%1 sent me his ID (%2)").arg(client->peerAddress().toString()).arg(id), utils::Info);
-        Q_EMIT newModuleConnected(id);
-        return true;
-    } //else if ()
-    return false;
-}
-
-QString homeServer::getValue(const QString &command)
-{
-    /*  if (command.count(SEP_NAME_VALUE) == 1) {
-        return command.split(SEP_NAME_VALUE).last();
-    }*/
-    return QString();
-}
-
-QTcpSocket *homeServer::clientForIP(const QHostAddress IP)
-{
-    QMap<QTcpSocket*, int>::iterator i;
+    QMap<QTcpSocket*, QVariant>::iterator i;
     for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
         QTcpSocket *client = i.key();
         if (client->isValid()) {
@@ -182,7 +118,7 @@ QTcpSocket *homeServer::clientForIP(const QHostAddress IP)
     return Q_NULLPTR;
 }
 
-bool homeServer::send(QTcpSocket * client, const QString &message)
+bool tcpServer::send(QTcpSocket * client, const QString &message, bool skipIfAlreadyInQueue)
 {
     // if the client didn't answer the last message
     if (m_clientWaitingForAnswer.contains(client)) {
@@ -190,9 +126,7 @@ bool homeServer::send(QTcpSocket * client, const QString &message)
         messageToResend.first = client;
         messageToResend.second = message;
 
-        // add the message in the waiting list
-        // if it's a "DATA" message, and there's already one in the waiting list, don't add one
-        if (message == CMD_DATA) {
+        if (skipIfAlreadyInQueue) {
             Q_FOREACH(const messageClientPair &messageInList, m_messageWaitingList) {
                 if (messageInList == messageToResend)
                     return false;
@@ -201,7 +135,6 @@ bool homeServer::send(QTcpSocket * client, const QString &message)
         m_messageWaitingList.append(messageToResend);
         return false;
     } else {
-
         // Prepare frame ID
         m_clientWaitingForAnswer.append(client);
         int bytesWritten = client->write(message.toLatin1());
@@ -209,8 +142,7 @@ bool homeServer::send(QTcpSocket * client, const QString &message)
     }
 }
 
-
-void homeServer::dataAvailable()
+void tcpServer::dataAvailable()
 {
     //  qDebug() << Q_FUNC_INFO;
     
@@ -238,13 +170,13 @@ void homeServer::dataAvailable()
     }
 }
 
-bool homeServer::sendAll(const QString &message)
+bool tcpServer::sendAll(const QString &message)
 {
     bool ret = true;
     if (m_clientsList.isEmpty()) {
         return false;
     }
-    QMap<QTcpSocket*, int>::iterator i;
+    QMap<QTcpSocket*, QVariant>::iterator i;
     for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
         QTcpSocket *client = i.key();
         if (!(client->isValid() && send(client, message))) {

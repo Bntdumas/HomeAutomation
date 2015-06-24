@@ -1,5 +1,5 @@
-#ifndef HOMENETWORK_H
-#define HOMENETWORK_H
+#ifndef TCPSERVER_H
+#define TCPSERVER_H
 
 #include "homeServer_global.h"
 #include "utils.h"
@@ -10,9 +10,8 @@
 
 
 /**
- * @brief The homeServer class handles communication with the wifi enabled modules.
- *  It uses a TCP server to get new connections.
- *  It can send and receive data from the modules, but do not store anything.
+ * @brief The tcpServer is a base class that sets up the base for tcp communication
+ * with either the hardware modules or the users
  */
 
 class QTcpServer;
@@ -20,12 +19,12 @@ class QTcpSocket;
 class QTimer;
 class QFile;
 
-class HOMENETWORKSHARED_EXPORT homeServer: public QObject
+class HOMESERVERSHARED_EXPORT tcpServer: public QObject
 {
     Q_OBJECT
 public:
-    explicit homeServer(QObject *parent = Q_NULLPTR);
-    ~homeServer() {}
+    explicit tcpServer(QObject *parent = Q_NULLPTR);
+    ~tcpServer() {}
 
 public:
     /**
@@ -40,13 +39,12 @@ public:
     int receivedLines() {return m_receivedLines;}
     int resetLineCounter() {m_receivedLines = 0;}
     int connectedClients() {return m_clientsList.count();}
-    void resetModules();
 
 Q_SIGNALS:
     /**
-     * @brief When a new module is connected, emit a signal with it's chip ID.
+     * @brief When a new module is connected, emit a signal with the client ID.
      */
-    void newModuleConnected(const int chipID);
+    void newModuleConnected(const QVariant &clientID);
 
     /**
      * @brief Debug messages
@@ -56,36 +54,50 @@ Q_SIGNALS:
 public Q_SLOTS:
     /**
      * @brief Sends a string based message to the specified client
+     * @param skipIfAlreadyInQueue: if the message is already scheduled to be sent later on, do not put it in the list again
      */
-    bool send(QTcpSocket *client, const QString &message);
+    bool send(QTcpSocket *client, const QString &message, bool skipIfAlreadyInQueue = false);
     bool sendAll(const QString &message);
 
 private Q_SLOTS:
     void dataAvailable();
     void newConnection();
     void connectionRemoved();
-    void pollingTimerTimeout();
+
+protected Q_SLOTS:
+    virtual void pollingTimerTimeout() {} //default does nothing
+
+protected:
+    /**
+     * @brief Processing methods, a line can contain several commands.
+     *  they need to be reimplemented
+     */
+    virtual void processLine(QTcpSocket *client, const QString &line) = 0;
+    virtual bool processCommand(QTcpSocket *client, const QString &command) = 0;
+
+    QTcpSocket *clientForIP(const QHostAddress IP);
+
+    /**
+     * @brief remove a message from the waiting list and returns it.
+     */
+    const QString takeNextMessageForClient(QTcpSocket* client);
+
+
+    /**
+     * @brief The list of the connected modules, the variant corresponds to the client ID.
+     */
+    QMap<QTcpSocket*, QVariant> m_clientsList;
 
 private:
     QTcpServer *m_tcpServer;
     QTcpSocket *m_tcpSocket;
-    
-    /**
-     * @brief The list of the connected modules, the int corresponds to the chip ID.
-     *  the chip ID is sent by the module on connection
-     */
-    QMap<QTcpSocket*, int> m_clientsList;
+
 
     /**
      * @brief For each frame sent to a client, a reponse needs to be sent back
      *  this list contains clients that did not answer a message yet
      */
     QList< QTcpSocket* > m_clientWaitingForAnswer;
-
-    /**
-     * @brief remove a message from teh waiting list and returns it.
-     */
-    const QString takeNextMessageForClient(QTcpSocket* client);
     
     /** @brief keep a list of the message that needs to be re-sent to a particular socket (module).
       */
@@ -102,21 +114,7 @@ private:
      */
     int m_receivedLines;
 
-    /**
-     * @brief Processing methods, a line can contain several commands.
-     */
-    void processLine(QTcpSocket *client, const QString &line);
-    bool processCommand(QTcpSocket *client, const QString &command);
-
-
-    /** @brief  get the value out of a command syntax
-    * <STRING><SEP_NAME_VALUE><VALUE>
-    */
-    QString getValue(const QString &command);
-    QTcpSocket *clientForIP(const QHostAddress IP);
-    bool m_state;
-
 };
 
-#endif // HOMENETWORK_H
+#endif // TCPSERVER_H
 

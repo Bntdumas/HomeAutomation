@@ -3,7 +3,7 @@
 #include <QCoreApplication>
 #include <QTcpSocket>
 
-#include "homeServer.h"
+#include "moduleServer.h"
 
 class networkModuleWithHardwareTest : public QObject
 {
@@ -22,7 +22,7 @@ private Q_SLOTS:
 
 
 private:
-    homeServer *m_server;
+    moduleServer *m_server;
     void waitForRealClientConnected(int numberOfExpectedClients);
 };
 
@@ -32,7 +32,7 @@ networkModuleWithHardwareTest::networkModuleWithHardwareTest()
 
 void networkModuleWithHardwareTest::init()
 {
-    m_server = new homeServer();
+    m_server = new moduleServer();
     m_server->createTCPServer();
     QVERIFY(m_server->isListening());
 }

@@ -10,7 +10,7 @@ class adminWindow;
 
 class databaseAdmin;
 class atmelProgrammer;
-class homeServer;
+class moduleServer;
 
 /**
  * @brief The home automation admin app.
@@ -36,7 +36,7 @@ private Q_SLOTS:
 
 private:
     Ui::adminWindow *ui;
-    homeServer *m_server;
+    moduleServer *m_server;
 
 };
 

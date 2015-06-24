@@ -3,7 +3,7 @@
 #include <QCoreApplication>
 #include <QTcpSocket>
 
-#include "homeServer.h"
+#include "moduleServer.h"
 #include "clientSimulator.h"
 
 class networkModuleSimulationTest : public QObject
@@ -20,7 +20,7 @@ private Q_SLOTS:
     void testSendLotsOfLines();
 
 private:
-    homeServer *m_server;
+    moduleServer *m_server;
     clientSimulator *m_client;
 
     void initSimulator();
@@ -28,7 +28,7 @@ private:
 
 void networkModuleSimulationTest::init()
 {
-    m_server = new homeServer();
+    m_server = new moduleServer();
     m_server->createTCPServer();
     QVERIFY(m_server->isListening());
 }
