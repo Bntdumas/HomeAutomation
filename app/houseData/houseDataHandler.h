@@ -1,14 +1,14 @@
 #ifndef HOUSEDATAHANDLER_H
 #define HOUSEDATAHANDLER_H
 
-#include "houseDataHandler_global.h"
+#include "houseData_global.h"
 #include <QObject>
 
 /**
  * @brief This class communicates with the house data structure
  */
 
-class HOUSEDATAHANDLERSHARED_EXPORT houseDataHandler: public QObject
+class HOUSEDATASHARED_EXPORT houseDataHandler: public QObject
 {
     Q_OBJECT
 public:

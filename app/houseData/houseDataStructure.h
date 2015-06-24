@@ -4,13 +4,15 @@
 #include <QObject>
 #include <QList>
 
+#include "houseData_global.h"
+
 #include "utils.h"
 
 /**
  * @brief This class holds the current state of the house
  */
 
-class houseDataStructure: public QObject
+class HOUSEDATASHARED_EXPORT houseDataStructure: public QObject
 {
     Q_OBJECT
 public:
