@@ -44,7 +44,6 @@ void tcpServer::createTCPServer()
     } else {
         Q_EMIT message(tr("the server could not start on port %1 (%2)").arg(TCP_PORT).arg(m_tcpServer->errorString()), utils::NetworkError);
     }
-
 }
 
 bool tcpServer::isListening()
@@ -93,10 +92,11 @@ void tcpServer::connectionRemoved()
 const QString tcpServer::takeNextMessageForClient(QTcpSocket *client)
 {
     //make a working copy of the list
-    for (int i = m_messageWaitingList.count()-1; i > 0; --i) {
-        messageClientPair item = m_messageWaitingList.at(i);
+    for (int i = m_messageWaitingList.count(); i > 0; --i) {
+        const int itemIndex = i-1; // count is 1 based, but index is 0 based
+        messageClientPair item = m_messageWaitingList.at(itemIndex);
         if (item.first == client) {
-            m_messageWaitingList.removeAt(i);
+            m_messageWaitingList.removeAt(itemIndex);
             return item.second;
         }
     }
@@ -154,8 +154,9 @@ void tcpServer::dataAvailable()
         QString msg = tr(client->readLine(MAX_MESSAGE_LENGTH).constData());
         msg.remove(SEP_END_LINE);
         Q_EMIT message(tr("Line from %1: %2").arg(client->peerAddress().toString()).arg(msg), utils::Info);
-
         m_receivedLines++;
+        //qDebug() << msg << m_receivedLines;
+
         m_clientWaitingForAnswer.removeAll(client);
 
         //send eventual next message in line
