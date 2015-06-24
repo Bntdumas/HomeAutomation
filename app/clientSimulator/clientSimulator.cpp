@@ -41,12 +41,12 @@ void clientSimulator::parseMessage(const QString &msg)
 
 bool clientSimulator::sendID()
 {
-    return send(QStringLiteral("123456"));
+    return send(QStringLiteral("<chipID value=\"123456\"/>"));
 }
 
 bool clientSimulator::sendOK()
 {
-    return send(QStringLiteral("OK"));
+    return send(QStringLiteral("<ok/>"));
 }
 
 bool clientSimulator::sendData(bool random)
@@ -55,8 +55,9 @@ bool clientSimulator::sendData(bool random)
     int gpio1 = random ? (qrand() % 2):1;
     int gpio2 = random ? (qrand() % 2):0;
     int gpio3 = random ? (qrand() % 2):1;
-    bool sendFirst = send(QString(QStringLiteral("$TEMP:%1").arg(temp)));
-    bool sendSecond = send(QString(QStringLiteral("$GPIO:1,%1;2,%2;3,%3;")).arg(gpio1).arg(gpio2).arg(gpio3));
+    bool sendFirst = send(QString(QStringLiteral("<sensor temperature=\"%1\"/>").arg(temp)));
+    bool sendSecond = send(QString(QStringLiteral("<gpio1 value=\"%1\"/><gpio2 value=\"%2\"/><gpio3 value=\"%3\"/>"))
+                           .arg(gpio1).arg(gpio2).arg(gpio3));
     return sendFirst && sendSecond;
 }
 
