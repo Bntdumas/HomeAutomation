@@ -41,12 +41,12 @@ void clientSimulator::parseMessage(const QString &msg)
 
 bool clientSimulator::sendID()
 {
-    return send(QStringLiteral("esp8266\n"));
+    return send(QStringLiteral("123456"));
 }
 
 bool clientSimulator::sendOK()
 {
-    return send(QStringLiteral("OK\n"));
+    return send(QStringLiteral("OK"));
 }
 
 bool clientSimulator::sendData(bool random)
@@ -67,5 +67,6 @@ void clientSimulator::slotReadyRead()
 
 bool clientSimulator::send(const QString &msg)
 {
-    return m_socket->write(msg.toLatin1()) == msg.length();
+    const QString line = msg + QStringLiteral("\n");
+    return m_socket->write(line.toLatin1()) == line.length();
 }
