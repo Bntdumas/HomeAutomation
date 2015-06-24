@@ -3,14 +3,12 @@
 
 #include <QObject>
 
-class TCPLineParser : public QObject
+class tcpLineParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit TCPLineParser(QObject *parent = 0);
+    explicit tcpLineParser(QObject *parent = 0);
 
-
-public slots:
 };
 
 #endif // TCPLINEPARSER_H
