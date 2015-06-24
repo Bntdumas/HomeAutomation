@@ -88,6 +88,12 @@ protected:
      */
     QMap<QTcpSocket*, QVariant> m_clientsList;
 
+
+    /**
+     * @brief This timer allows querying clients for data at regular interval
+     */
+    QTimer *m_pollingTimer;
+
 private:
     QTcpServer *m_tcpServer;
     QTcpSocket *m_tcpSocket;
@@ -104,10 +110,6 @@ private:
     typedef QPair<QTcpSocket*, QString> messageClientPair;
     QList< messageClientPair > m_messageWaitingList;
 
-    /**
-     * @brief This timer allows querying clients for data at regular interval
-     */
-    QTimer *m_pollingTimer;
 
     /**
      * @brief for testing, the number of completes lines received by the server.
