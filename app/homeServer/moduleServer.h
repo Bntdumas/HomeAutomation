@@ -21,6 +21,10 @@ class QTcpSocket;
 class QTimer;
 class QFile;
 
+/**
+ * @brief The moduleServer class communicates with the ESP8266 wifi modules.
+ */
+
 class HOMESERVERSHARED_EXPORT moduleServer: public tcpServer
 {
     Q_OBJECT
