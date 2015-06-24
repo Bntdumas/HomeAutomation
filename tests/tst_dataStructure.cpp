@@ -24,23 +24,6 @@ private:
 
 };
 
-/*
-    bool addRoom(const QString &roomName);
-    bool removeRoom(const QString &roomName);
-    bool addDevice(const QString &roomName, const QString &deviceName, DeviceDirection direction, DeviceType type, DeviceSubType subType,
-                   float value, int chipID, int esp8266Pin);
-
-    bool removeDevice(const QString &roomName, const QString &deviceName);
-    int chipIDForDevice(const QString &roomName, const QString &deviceName);
-
-    int roomIndex(const QString &name);
-    int deviceIndex(const QString &roomName, const QString &name);
-
-    bool roomExists(const QString &roomName);
-    bool deviceExists(const QString &roomName, const QString &deviceName);
-
- * */
-
 void dataStructureTest::testAddRemoveRoom_data()
 {
     QTest::addColumn<QString>("string");
