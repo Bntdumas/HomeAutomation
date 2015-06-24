@@ -31,6 +31,7 @@ void networkModuleSimulationTest::init()
     m_server = new moduleServer();
     m_server->createTCPServer();
     QVERIFY(m_server->isListening());
+    m_server->setAutomaticPolling(false);
 }
 
 void networkModuleSimulationTest::cleanup()
@@ -43,20 +44,21 @@ void networkModuleSimulationTest::testSendLotsOfLines()
 {
     initSimulator();
 
-    const int messageToSend = 100;
-    //have the client send lots of lines and make sure the server got them all
-    for (int i = 0; i < messageToSend; ++i) {
-       QVERIFY(m_client->sendID());
+    const int messagesToSend = 100;
+    // Send lots of commands to the client and make sure they all come back.
+    for (int i = 0; i < messagesToSend; ++i) {
+       m_server->resetModules();
        QCoreApplication::instance()->processEvents();
     }
 
     QTimer timer;
     timer.setSingleShot(true);
-    timer.start(3000);
+    timer.start(2000);
+
     while (timer.isActive())
         QCoreApplication::instance()->processEvents();
 
-    QCOMPARE(m_server->receivedLines(), messageToSend);
+    QCOMPARE(m_server->receivedLines(), messagesToSend);
 
     delete m_client;
     m_client = 0;
