@@ -32,7 +32,7 @@ public:
     explicit moduleServer(QObject *parent = Q_NULLPTR);
     ~moduleServer() {}
 
-    void resetModules();
+    bool resetModules();
 
 private Q_SLOTS:
     void pollingTimerTimeout() Q_DECL_OVERRIDE;

@@ -34,9 +34,10 @@ moduleServer::moduleServer(QObject *parent) :
 {
 }
 
-void moduleServer::resetModules()
+bool moduleServer::resetModules()
 {
-    sendAll(CMD_RESET);
+    return sendAll(CMD_RESET);
+}
 }
 
 void moduleServer::pollingTimerTimeout()
