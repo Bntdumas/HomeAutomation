@@ -33,6 +33,7 @@ public:
     ~moduleServer() {}
 
     bool resetModules();
+    void setAutomaticPolling(bool state);
 
 private Q_SLOTS:
     void pollingTimerTimeout() Q_DECL_OVERRIDE;

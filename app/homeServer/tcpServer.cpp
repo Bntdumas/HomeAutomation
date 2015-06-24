@@ -45,7 +45,6 @@ void tcpServer::createTCPServer()
         Q_EMIT message(tr("the server could not start on port %1 (%2)").arg(TCP_PORT).arg(m_tcpServer->errorString()), utils::NetworkError);
     }
 
-    m_pollingTimer->start();
 }
 
 bool tcpServer::isListening()

@@ -38,6 +38,14 @@ bool moduleServer::resetModules()
 {
     return sendAll(CMD_RESET);
 }
+
+void moduleServer::setAutomaticPolling(bool state)
+{
+    if (state) {
+        m_pollingTimer->start();
+    } else {
+        m_pollingTimer->stop();
+    }
 }
 
 void moduleServer::pollingTimerTimeout()
