@@ -18,6 +18,8 @@ private Q_SLOTS:
     void cleanup();
 
     void testSendLotsOfLines();
+    void testSendIDRequest();
+    void testSendDataRequest();
 
 private:
     moduleServer *m_server;
@@ -50,10 +52,10 @@ void networkModuleSimulationTest::testSendLotsOfLines()
 
     initSimulator();
 
-    const int messagesToSend = 100;
+    const int messagesToSend = 10;
     // Send lots of commands to the client and make sure they all come back.
     for (int i = 0; i < messagesToSend; ++i) {
-       m_server->resetModules();
+       QVERIFY(m_server->resetModules());
        QCoreApplication::instance()->processEvents();
     }
 
@@ -70,12 +72,68 @@ void networkModuleSimulationTest::testSendLotsOfLines()
     m_client = 0;
 }
 
+void networkModuleSimulationTest::testSendIDRequest()
+{
+    initSimulator();
+
+    QSignalSpy spyID(m_server, &moduleServer::newModuleConnected);
+
+    QVERIFY(m_server->requestIDFromModules());
+    QVERIFY(m_server->requestIDFromModule(123456));
+
+    QTimer timer;
+    timer.setSingleShot(true);
+    timer.start(10);
+
+    while (timer.isActive())
+        QCoreApplication::instance()->processEvents();
+
+    QCOMPARE(spyID.count(), 2);
+    QList<QVariant> arguments = spyID.takeFirst();
+    QVERIFY(arguments.at(0).toInt() == 123456);
+    arguments = spyID.takeLast();
+    QVERIFY(arguments.at(0).toInt() == 123456);
+
+    delete m_client;
+    m_client = 0;
+}
+
+void networkModuleSimulationTest::testSendDataRequest()
+{
+    initSimulator();
+
+    QSignalSpy spyID(m_server, &moduleServer::gpioChanged);
+
+    QVERIFY(m_server->requestDataFromModules());
+    QVERIFY(m_server->requestDataFromModule(123456));
+
+    QTimer timer;
+    timer.setSingleShot(true);
+    timer.start(10);
+
+    while (timer.isActive())
+        QCoreApplication::instance()->processEvents();
+
+    QCOMPARE(spyID.count(), 2);
+    QList<QVariant> arguments = spyID.takeFirst();
+
+    for (int i =0; i < 5; ++i) {
+        QCOMPARE(arguments.at(0).toInt(), 123456);
+        QCOMPARE(arguments.at(1).toInt(), i);
+        QCOMPARE(arguments.at(2).toInt(), 1);
+    }
+
+    delete m_client;
+    m_client = 0;
+}
+
 void networkModuleSimulationTest::initSimulator()
 {
     QTimer timer;
     timer.setSingleShot(true);
     m_client = new clientSimulator();
-    QSignalSpy spyNewData(m_client->socket(), SIGNAL(stateChanged(QAbstractSocket::SocketState)));
+    QSignalSpy spyNewData(m_client->socket(), &QTcpSocket::stateChanged);
+    QSignalSpy spyInitID(m_server, &moduleServer::newModuleConnected);
 
     // connect to server, timeout 3 seconds
     m_client->connectToServer();
@@ -90,6 +148,17 @@ void networkModuleSimulationTest::initSimulator()
     QVERIFY(spyNewData.count() == 3);
     QVERIFY(m_client->isConnected());
     QCOMPARE(m_server->connectedClients(), 1);
+    m_server->resetLineCounter();
+
+    // wait for the simulator to send his ID
+    timer.start(10);
+    while (timer.isActive())
+        QCoreApplication::instance()->processEvents();
+
+    // make sure the simulator sent his ID
+    QCOMPARE(spyInitID.count(), 1);
+    QList<QVariant> arguments = spyInitID.takeFirst();
+    QVERIFY(arguments.at(0).toInt() == 123456);
 }
 
 QTEST_MAIN(networkModuleSimulationTest)
