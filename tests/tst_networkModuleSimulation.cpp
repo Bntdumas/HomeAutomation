@@ -53,7 +53,7 @@ void networkModuleSimulationTest::testSendLotsOfLines()
 
     QTimer timer;
     timer.setSingleShot(true);
-    timer.start(2000);
+    timer.start(500);
 
     while (timer.isActive())
         QCoreApplication::instance()->processEvents();
