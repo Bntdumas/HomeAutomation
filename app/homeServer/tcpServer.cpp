@@ -131,13 +131,18 @@ QTcpSocket *tcpServer::clientFromIP(const QHostAddress IP)
     return Q_NULLPTR;
 }
 
-bool tcpServer::send(QTcpSocket * client, const QString &message, bool skipIfAlreadyInQueue)
+bool tcpServer::send(QTcpSocket * client, const QString &msg, bool skipIfAlreadyInQueue)
 {
+    if (!client) {
+        Q_EMIT message(tr("Trying to send a frame to an invalid client"), utils::SoftwareError);
+        return false;
+    }
+
     // if the client didn't answer the last message
     if (m_clientWaitingForAnswer.contains(client)) {
         messageClientPair messageToResend;
         messageToResend.first = client;
-        messageToResend.second = message;
+        messageToResend.second = msg;
 
         if (skipIfAlreadyInQueue) {
             Q_FOREACH(const messageClientPair &messageInList, m_messageWaitingList) {
@@ -150,8 +155,8 @@ bool tcpServer::send(QTcpSocket * client, const QString &message, bool skipIfAlr
     } else {
         // Prepare frame ID
         m_clientWaitingForAnswer.append(client);
-        int bytesWritten = client->write(message.toLatin1());
-        return bytesWritten == message.length();
+        int bytesWritten = client->write(msg.toLatin1());
+        return bytesWritten == msg.length();
     }
 }
 

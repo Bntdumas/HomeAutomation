@@ -56,7 +56,7 @@ public Q_SLOTS:
      * @brief Sends a string based message to the specified client
      * @param skipIfAlreadyInQueue: if the message is already scheduled to be sent later on, do not put it in the list again
      */
-    bool send(QTcpSocket *client, const QString &message, bool skipIfAlreadyInQueue = false);
+    bool send(QTcpSocket *client, const QString &msg, bool skipIfAlreadyInQueue = false);
     bool sendAll(const QString &message);
 
 private Q_SLOTS:
