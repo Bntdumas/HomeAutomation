@@ -10,6 +10,6 @@ set(homeAdmin_SRCS
     main.cpp
 )
 
-add_executable(homeAdmin ${homeAdmin_SRCS})
+add_executable(homeAdmin ${homeAdmin_SRCS} ${homeAdmin_HDRS})
 target_link_libraries(homeAdmin Qt5::Widgets homeServer)
 

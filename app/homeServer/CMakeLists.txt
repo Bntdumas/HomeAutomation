@@ -15,5 +15,5 @@ set(homeServer_SRCS
     userServer.cpp
 )
 
-add_library(homeServer SHARED ${homeServer_SRCS})
+add_library(homeServer SHARED ${homeServer_SRCS} ${homeServer_HDRS})
 target_link_libraries(homeServer Qt5::Network)
