@@ -57,7 +57,7 @@ void tcpServer::newConnection()
     if (newSocket) {
 
         // if we already have a client with this IP remove all occurences of it.
-        QTcpSocket *previousClient = clientForIP(newSocket->peerAddress());
+        QTcpSocket *previousClient = clientFromIP(newSocket->peerAddress());
         if (previousClient != Q_NULLPTR) {
             m_clientsList.remove(previousClient);
             m_clientWaitingForAnswer.removeAll(previousClient);
@@ -103,7 +103,7 @@ const QString tcpServer::takeNextMessageForClient(QTcpSocket *client)
     return QString();
 }
 
-QTcpSocket *tcpServer::clientForIP(const QHostAddress IP)
+QTcpSocket *tcpServer::clientFromIP(const QHostAddress IP)
 {
     QMap<QTcpSocket*, QVariant>::iterator i;
     for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {

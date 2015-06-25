@@ -75,7 +75,7 @@ protected:
     virtual void processLine(QTcpSocket *client, const QString &line) = 0;
     virtual bool processCommand(QTcpSocket *client, const QString &command) = 0;
 
-    QTcpSocket *clientForIP(const QHostAddress IP);
+    QTcpSocket *clientFromIP(const QHostAddress IP);
 
     /**
      * @brief remove a message from the waiting list and returns it.
