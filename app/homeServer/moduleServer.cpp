@@ -89,37 +89,42 @@ void moduleServer::pollingTimerTimeout()
     m_state = !m_state;
 }
 
-void moduleServer::processLine(QTcpSocket *client, const QString &line)
+bool moduleServer::processLine(QTcpSocket *client, const QByteArray &line)
 {
-    // eventually separate the commands into several subcommands
-    /*if (line.contains(SEP_SUB_COMMAND)) {
-        Q_FOREACH(const QString &command, line.split(SEP_SUB_COMMAND)) {
-            processCommand(client, command);
-        }
-    } else {
-        processCommand(client, line);
-    }*/
-}
-
-bool moduleServer::processCommand(QTcpSocket *client, const QString &command)
-{
-    QString commandCopy = command;
-    /*if (!commandCopy.startsWith(SEP_COMMAND_START)) {
-        Q_EMIT message(tr("Got a command without starting character:  %1").arg(commandCopy), utils::Warning);
+    QXmlStreamReader xml(line);
+    bool ok;
+    const int moduleID = clientIDFromIP(client->peerAddress()).toInt(&ok);
+    if (!ok) {
+        Q_EMIT message(tr("moduleServer: client matching errpr: I could not get the module ID as int from %1 ")
+                       .arg(clientIDFromIP(client->peerAddress()).toString()), utils::Warning);
         return false;
-    }*/
-    // remove first character
-    commandCopy.remove(0, 1);
+    }
 
-    //test keywords
-    if (commandCopy.startsWith(CMD_ID)) {
-        int id = getValue(command).toInt();
-        m_clientsList.insert(client, qVariantFromValue(id));
-        Q_EMIT message(tr("%1 sent me his ID (%2)").arg(client->peerAddress().toString()).arg(id), utils::Info);
-        Q_EMIT newModuleConnected(id);
-        return true;
-    } //else if ()
-    return false;
+    while (!xml.atEnd()) {
+            xml.readNext();
+            if (xml.hasError()) {
+                Q_EMIT message(tr("moduleServer: XML parsing error: %1").arg(xml.errorString()), utils::Warning);
+                return false;
+            }
+            if (xml.tokenType() == QXmlStreamReader::StartElement) {
+
+
+
+                const QString msgType = xml.name().toString();
+                if (msgType == MODULE_ID) {
+                    processIDElement(client, xml);
+                } else if (msgType == MODULE_GPIO) {
+                    processGPIOElement(moduleID, xml);
+                } else if (msgType == MODULE_SENSOR) {
+                } else if (msgType == MODULE_OK) {
+                } else if (msgType == MODULE_ERROR) {
+
+                } else {
+                    Q_EMIT message(tr("moduleServer: XML parsing error: the element %1 was not recognized")
+                                   .arg(msgType), utils::Warning);
+                }
+            }
+      }
 }
 
 QString moduleServer::getValue(const QString &command)
@@ -138,4 +143,45 @@ bool moduleServer::sendCommandToModule(int moduleID, const QString &command)
         return false;
     }
     return send(client, command, true);
+}
+
+void moduleServer::processIDElement(QTcpSocket *client, const QXmlStreamReader &reader)
+{
+    qDebug() << Q_FUNC_INFO;
+    if (reader.attributes().count() != 1) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: the chip ID message should contain only one attribute")
+                       .arg(reader.errorString()), utils::Warning);
+        return;
+    }
+    bool ok;
+    int id = reader.attributes().first().value().toInt(&ok);
+    if (!ok) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: I could not convert %1 to int ")
+                       .arg(reader.attributes().first().value().toString()), utils::Warning);
+        return;
+    }
+    m_clientsList.insert(client, qVariantFromValue(id));
+    Q_EMIT message(tr("%1 sent me his ID (%2)").arg(clientIDFromIP(client->peerAddress()).toString()).arg(id), utils::Info);
+    Q_EMIT newModuleConnected(id);
+}
+
+void moduleServer::processGPIOElement(int moduleID, const QXmlStreamReader &reader)
+{
+    if (reader.attributes().count() != 2) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: the gpio message should contain only 2 attributes")
+                       .arg(reader.errorString()), utils::Warning);
+        return;
+    }
+    bool okPin, okValue;
+    int pin = reader.attributes().first().value().toInt(&okPin);
+    int value = reader.attributes().last().value().toInt(&okValue);
+    if (!okPin || !okValue) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: I could not convert %1 or %2 to int ")
+                       .arg(reader.attributes().first().value().toString(), reader.attributes().last().value().toString()), utils::Warning);
+        return;
+    }
+    bool state = value != 0;
+
+    Q_EMIT gpioChanged(moduleID, pin, state);
+    qDebug() << "gpio changed: " << moduleID << pin << state;
 }

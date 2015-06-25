@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QMap>
 #include <QHostAddress>
+#include <QXmlStreamReader>
 
 
 /**
@@ -38,8 +39,6 @@ public:
     /**
       * These methods send pre-made commands to the module(s)
       */
-
-
     bool resetModules();
     bool resetModule(int moduleID);
 
@@ -51,15 +50,24 @@ public:
 
     bool setModuleGPIO(int moduleID, int gpioPin, bool state);
 
+Q_SIGNALS:
+    void gpioChanged(int moduleID, int gpioPin, bool state);
+    void okReceived(int moduleID);
+    void errorReceived(int moduleID, const QString &msg);
 
 private Q_SLOTS:
     void pollingTimerTimeout() Q_DECL_OVERRIDE;
 
 private:
-    void processLine(QTcpSocket *client, const QString &line) Q_DECL_OVERRIDE;
-    bool processCommand(QTcpSocket *client, const QString &command) Q_DECL_OVERRIDE;
+    bool processLine(QTcpSocket *client, const QByteArray &line) Q_DECL_OVERRIDE;
     QString getValue(const QString &command);
     bool sendCommandToModule(int moduleID, const QString &command);
+
+    /**
+     * @brief methods to process the xml elements from a received line
+     */
+    void processIDElement(QTcpSocket *client, const QXmlStreamReader &reader);
+    void processGPIOElement(int moduleID, const QXmlStreamReader &reader);
 
     bool m_state;
 
