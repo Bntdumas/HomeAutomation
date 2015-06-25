@@ -18,9 +18,6 @@ namespace {
     // frame string keywords
     static const QString CMD_DATA = QStringLiteral("DATA");
     static const QString CMD_ID = QStringLiteral("ID");
-    static const QString CMD_OK = QStringLiteral("OK");
-    static const QString CMD_ERR = QStringLiteral("ERROR");
-    static const QString CMD_TEMP = QStringLiteral("TEMP");
     static const QString CMD_GPIO = QStringLiteral("GPIO");
     static const QString CMD_RESET = QStringLiteral("RST");
 
@@ -31,8 +28,7 @@ namespace {
 moduleServer::moduleServer(QObject *parent) :
     tcpServer(parent)
     ,m_state(false)
-{
-}
+{}
 
 bool moduleServer::resetModules()
 {

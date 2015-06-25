@@ -53,7 +53,7 @@ public:
 
 
 private Q_SLOTS:
-    void pollingTimerTimeout() Q_DECL_OVERRIDE;
+        void pollingTimerTimeout() Q_DECL_OVERRIDE;
 
 private:
     void processLine(QTcpSocket *client, const QString &line) Q_DECL_OVERRIDE;
