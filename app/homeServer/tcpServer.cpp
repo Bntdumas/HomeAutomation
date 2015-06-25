@@ -117,6 +117,20 @@ QTcpSocket *tcpServer::clientFromID(const QVariant &clientID)
     return Q_NULLPTR;
 }
 
+QVariant tcpServer::clientIDFromIP(const QHostAddress IP)
+{
+    QMap<QTcpSocket*, QVariant>::iterator i;
+    for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
+        QTcpSocket *client = i.key();
+        if (client->isValid()) {
+            if (client->peerAddress() == IP) {
+                return i.value();
+            }
+        }
+    }
+    return QVariant();
+}
+
 QTcpSocket *tcpServer::clientFromIP(const QHostAddress IP)
 {
     QMap<QTcpSocket*, QVariant>::iterator i;

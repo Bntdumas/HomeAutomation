@@ -69,13 +69,9 @@ protected Q_SLOTS:
 
 protected:
     /**
-     * @brief Processing methods, a line can contain several commands.
-     *  they need to be reimplemented
+     * @brief Processing method
      */
     virtual bool processLine(QTcpSocket *client, const QByteArray &line) = 0;
-    virtual bool processCommand(QTcpSocket *client, const QString &command) = 0;
-
-    QTcpSocket *clientFromIP(const QHostAddress IP);
 
     /**
      * @brief remove a message from the waiting list and returns it.
@@ -95,9 +91,12 @@ protected:
     QTimer *m_pollingTimer;
 
     /**
-     * @brief returns a pointer to the socket for a client ID, NULL otherwise
+     * @brief convert between clients ID, IP and sockets
      */
     QTcpSocket *clientFromID(const QVariant &clientID);
+    QVariant clientIDFromIP(const QHostAddress IP);
+    QTcpSocket *clientFromIP(const QHostAddress IP);
+
 
 private:
     QTcpServer *m_tcpServer;
