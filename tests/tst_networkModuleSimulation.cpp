@@ -42,6 +42,12 @@ void networkModuleSimulationTest::cleanup()
 // simple test,
 void networkModuleSimulationTest::testSendLotsOfLines()
 {
+    /*
+     * This test starts a server and a client, then sends 100 requests for the client to reset.
+     * For each reset command sent, we want an answer, so we expect 100 answers
+     */
+
+
     initSimulator();
 
     const int messagesToSend = 100;
