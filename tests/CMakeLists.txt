@@ -1,5 +1,7 @@
 include_directories(../app/commonFiles ../app/clientSimulator ../app/homeServer ../app/houseData)
 
+enable_testing()
+
 macro(add_unittest _name _source)
   set(_test ${_source})
   add_executable(${_name} ${_source})
