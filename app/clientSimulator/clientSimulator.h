@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QAbstractSocket>
-#include "clientsimulator_global.h"
+#include "clientSimulator_global.h"
 
 /**
  * @brief This is a module that simulates the tcp connection with an esp8266 module.
