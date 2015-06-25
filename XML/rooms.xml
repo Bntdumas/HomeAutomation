@@ -8,7 +8,7 @@
 
 <deviceTypes>
     <misc>
-        <Disabledd deviceID = "0"/>
+        <Disabled deviceID = "0"/>
     </misc>
     <output>
         <Lamp>
