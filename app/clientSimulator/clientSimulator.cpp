@@ -12,6 +12,7 @@ clientSimulator::clientSimulator(QObject *parent) : QObject(parent)
 {
     m_socket = new QTcpSocket(this);
     connect(m_socket, &QTcpSocket::readyRead, this, &clientSimulator::slotReadyRead);
+    connect(m_socket, &QTcpSocket::connected, this, &clientSimulator::sendID);
 }
 
 clientSimulator::~clientSimulator()
@@ -56,14 +57,15 @@ bool clientSimulator::sendError()
 
 bool clientSimulator::sendData(bool random)
 {
-    qDebug() << Q_FUNC_INFO;
     float temp = random ? ((qrand() % 30 + 250) / 10) : 22.5;
-    int gpio1 = random ? (qrand() % 2):1;
-    int gpio2 = random ? (qrand() % 2):0;
-    int gpio3 = random ? (qrand() % 2):1;
+    QString gpioFrame;
+    for (int i = 0; i < 5; ++i) {
+        int state = random ? (qrand() % 2):1;
+        gpioFrame.append(QString(QStringLiteral("<gpio pin=\"%1\" value=\"%2\"/>").arg(i, state)));
+    }
+
     bool sendFirst = send(QString(QStringLiteral("<sensor temperature=\"%1\"/>").arg(temp)));
-    bool sendSecond = send(QString(QStringLiteral("<gpio1 value=\"%1\"/><gpio2 value=\"%2\"/><gpio3 value=\"%3\"/>"))
-                           .arg(gpio1).arg(gpio2).arg(gpio3));
+    bool sendSecond = send(gpioFrame);
     return sendFirst && sendSecond;
 }
 
@@ -83,6 +85,8 @@ void clientSimulator::slotReadyRead()
         sendOK();
     else if(msg == QStringLiteral("RST"))
         sendOK();
+    else if(msg == QStringLiteral("ID"))
+        sendID();
     else
         sendError();
 
