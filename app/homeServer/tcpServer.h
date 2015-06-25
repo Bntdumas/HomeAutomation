@@ -72,7 +72,7 @@ protected:
      * @brief Processing methods, a line can contain several commands.
      *  they need to be reimplemented
      */
-    virtual void processLine(QTcpSocket *client, const QString &line) = 0;
+    virtual bool processLine(QTcpSocket *client, const QByteArray &line) = 0;
     virtual bool processCommand(QTcpSocket *client, const QString &command) = 0;
 
     QTcpSocket *clientFromIP(const QHostAddress IP);
