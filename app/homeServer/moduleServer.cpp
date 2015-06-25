@@ -70,7 +70,7 @@ bool moduleServer::requestIDFromModule(int moduleID)
 bool moduleServer::setModuleGPIO(int moduleID, int gpioPin, bool state)
 {
     //GPIO:<pin>,<state>
-    const QString command = QString(QStringLiteral("%1:%2,%3")).arg(CMD_GPIO, gpioPin, state);
+    const QString command = QString(QStringLiteral("%1:%2,%3")).arg(CMD_GPIO).arg(gpioPin).arg(state);
     sendCommandToModule(moduleID, command);
 }
 
@@ -107,9 +107,6 @@ bool moduleServer::processLine(QTcpSocket *client, const QByteArray &line)
                 return false;
             }
             if (xml.tokenType() == QXmlStreamReader::StartElement) {
-
-
-
                 const QString msgType = xml.name().toString();
                 if (msgType == MODULE_ID) {
                     processIDElement(client, xml);
@@ -147,7 +144,6 @@ bool moduleServer::sendCommandToModule(int moduleID, const QString &command)
 
 void moduleServer::processIDElement(QTcpSocket *client, const QXmlStreamReader &reader)
 {
-    qDebug() << Q_FUNC_INFO;
     if (reader.attributes().count() != 1) {
         Q_EMIT message(tr("moduleServer: XML parsing error: the chip ID message should contain only one attribute")
                        .arg(reader.errorString()), utils::Warning);
@@ -177,7 +173,7 @@ void moduleServer::processGPIOElement(int moduleID, const QXmlStreamReader &read
     int value = reader.attributes().last().value().toInt(&okValue);
     if (!okPin || !okValue) {
         Q_EMIT message(tr("moduleServer: XML parsing error: I could not convert %1 or %2 to int ")
-                       .arg(reader.attributes().first().value().toString(), reader.attributes().last().value().toString()), utils::Warning);
+                       .arg(reader.attributes().first().value().toString()).arg(reader.attributes().last().value().toString()), utils::Warning);
         return;
     }
     bool state = value != 0;

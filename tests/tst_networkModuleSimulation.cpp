@@ -48,14 +48,12 @@ void networkModuleSimulationTest::testSendLotsOfLines()
      * This test starts a server and a client, then sends 100 requests for the client to reset.
      * For each reset command sent, we want an answer, so we expect 100 answers
      */
-
-
     initSimulator();
 
     const int messagesToSend = 10;
     // Send lots of commands to the client and make sure they all come back.
     for (int i = 0; i < messagesToSend; ++i) {
-       QVERIFY(m_server->resetModules());
+       m_server->resetModules();
        QCoreApplication::instance()->processEvents();
     }
 
@@ -79,12 +77,15 @@ void networkModuleSimulationTest::testSendIDRequest()
     QSignalSpy spyID(m_server, &moduleServer::newModuleConnected);
 
     QVERIFY(m_server->requestIDFromModules());
-    QVERIFY(m_server->requestIDFromModule(123456));
-
     QTimer timer;
     timer.setSingleShot(true);
     timer.start(10);
+    while (timer.isActive())
+        QCoreApplication::instance()->processEvents();
 
+
+    QVERIFY(m_server->requestIDFromModule(123456));
+    timer.start(10);
     while (timer.isActive())
         QCoreApplication::instance()->processEvents();
 
@@ -102,20 +103,22 @@ void networkModuleSimulationTest::testSendDataRequest()
 {
     initSimulator();
 
-    QSignalSpy spyID(m_server, &moduleServer::gpioChanged);
+    QSignalSpy spyGPIOChanged(m_server, &moduleServer::gpioChanged);
 
     QVERIFY(m_server->requestDataFromModules());
-    QVERIFY(m_server->requestDataFromModule(123456));
-
     QTimer timer;
     timer.setSingleShot(true);
     timer.start(10);
-
     while (timer.isActive())
         QCoreApplication::instance()->processEvents();
 
-    QCOMPARE(spyID.count(), 2);
-    QList<QVariant> arguments = spyID.takeFirst();
+    QVERIFY(m_server->requestDataFromModule(123456));
+    timer.start(10);
+    while (timer.isActive())
+        QCoreApplication::instance()->processEvents();
+
+    QCOMPARE(spyGPIOChanged.count(), 2);
+    QList<QVariant> arguments = spyGPIOChanged.takeFirst();
 
     for (int i =0; i < 5; ++i) {
         QCOMPARE(arguments.at(0).toInt(), 123456);
@@ -148,7 +151,6 @@ void networkModuleSimulationTest::initSimulator()
     QVERIFY(spyNewData.count() == 3);
     QVERIFY(m_client->isConnected());
     QCOMPARE(m_server->connectedClients(), 1);
-    m_server->resetLineCounter();
 
     // wait for the simulator to send his ID
     timer.start(10);
@@ -159,6 +161,8 @@ void networkModuleSimulationTest::initSimulator()
     QCOMPARE(spyInitID.count(), 1);
     QList<QVariant> arguments = spyInitID.takeFirst();
     QVERIFY(arguments.at(0).toInt() == 123456);
+
+    m_server->resetLineCounter();
 }
 
 QTEST_MAIN(networkModuleSimulationTest)

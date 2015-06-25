@@ -58,12 +58,11 @@ bool clientSimulator::sendError()
 bool clientSimulator::sendData(bool random)
 {
     float temp = random ? ((qrand() % 30 + 250) / 10) : 22.5;
-    QString gpioFrame;
+    QString gpioFrame();
     for (int i = 0; i < 5; ++i) {
         int state = random ? (qrand() % 2):1;
-        gpioFrame.append(QString(QStringLiteral("<gpio pin=\"%1\" value=\"%2\"/>").arg(i, state)));
+        gpioFrame.append(QString(QStringLiteral("<pin=\"%1\"/> <value=\"%2\"/>").arg(i).arg(state)));
     }
-
     bool sendFirst = send(QString(QStringLiteral("<sensor temperature=\"%1\"/>").arg(temp)));
     bool sendSecond = send(gpioFrame);
     return sendFirst && sendSecond;
@@ -78,6 +77,8 @@ void clientSimulator::slotReadyRead()
 
     QString msg = tr(client->readAll().constData());
     msg.remove(QStringLiteral("\n"));
+
+    qDebug() << Q_FUNC_INFO << msg;
 
     if(msg == QStringLiteral("DATA"))
         sendData(false);
