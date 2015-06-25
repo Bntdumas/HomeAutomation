@@ -94,6 +94,11 @@ protected:
      */
     QTimer *m_pollingTimer;
 
+    /**
+     * @brief returns a pointer to the socket for a client ID, NULL otherwise
+     */
+    QTcpSocket *clientFromID(const QVariant &clientID);
+
 private:
     QTcpServer *m_tcpServer;
     QTcpSocket *m_tcpSocket;

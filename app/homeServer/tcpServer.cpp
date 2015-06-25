@@ -103,6 +103,20 @@ const QString tcpServer::takeNextMessageForClient(QTcpSocket *client)
     return QString();
 }
 
+QTcpSocket *tcpServer::clientFromID(const QVariant &clientID)
+{
+    QMap<QTcpSocket*, QVariant>::iterator i;
+    for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
+        QTcpSocket *client = i.key();
+        if (client->isValid()) {
+            if (i.value() == clientID) {
+                return client;
+            }
+        }
+    }
+    return Q_NULLPTR;
+}
+
 QTcpSocket *tcpServer::clientFromIP(const QHostAddress IP)
 {
     QMap<QTcpSocket*, QVariant>::iterator i;
