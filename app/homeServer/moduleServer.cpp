@@ -15,11 +15,18 @@ namespace {
     static const int TCP_PORT = 5003;
     static const int MAX_MESSAGE_LENGTH = 500;
 
-    // frame string keywords
+    // frame building string keywords (to be sent to the modules)
     static const QString CMD_DATA = QStringLiteral("DATA");
     static const QString CMD_ID = QStringLiteral("ID");
     static const QString CMD_GPIO = QStringLiteral("GPIO");
     static const QString CMD_RESET = QStringLiteral("RST");
+
+    // frame keyword from the modules
+    static const QString MODULE_ID = QStringLiteral("chipID");
+    static const QString MODULE_GPIO = QStringLiteral("gpio");
+    static const QString MODULE_SENSOR = QStringLiteral("sensor");
+    static const QString MODULE_OK = QStringLiteral("ok");
+    static const QString MODULE_ERROR = QStringLiteral("error");
 
     // frame string separators
     static const QString SEP_END_LINE = QStringLiteral("\n");
