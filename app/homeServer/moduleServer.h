@@ -32,8 +32,25 @@ public:
     explicit moduleServer(QObject *parent = Q_NULLPTR);
     ~moduleServer() {}
 
-    bool resetModules();
+
     void setAutomaticPolling(bool state);
+
+    /**
+      * These methods send pre-made commands to the module(s)
+      */
+
+
+    bool resetModules();
+    bool resetModule(int moduleID);
+
+    bool requestDataFromModules();
+    bool requestDataFromModule(int moduleID);
+
+    bool requestIDFromModules();
+    bool requestIDFromModule(int moduleID);
+
+    bool setModuleGPIO(int moduleID, int gpioPin, bool state);
+
 
 private Q_SLOTS:
     void pollingTimerTimeout() Q_DECL_OVERRIDE;
@@ -42,6 +59,7 @@ private:
     void processLine(QTcpSocket *client, const QString &line) Q_DECL_OVERRIDE;
     bool processCommand(QTcpSocket *client, const QString &command) Q_DECL_OVERRIDE;
     QString getValue(const QString &command);
+    bool sendCommandToModule(int moduleID, const QString &command);
 
     bool m_state;
 

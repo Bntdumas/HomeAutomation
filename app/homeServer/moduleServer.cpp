@@ -39,6 +39,36 @@ bool moduleServer::resetModules()
     return sendAll(CMD_RESET);
 }
 
+bool moduleServer::resetModule(int moduleID)
+{
+    return sendCommandToModule(moduleID, CMD_RESET);
+}
+
+bool moduleServer::requestDataFromModules()
+{
+    return sendAll(CMD_DATA);
+}
+
+bool moduleServer::requestDataFromModule(int moduleID)
+{
+   return sendCommandToModule(moduleID, CMD_DATA);
+}
+
+bool moduleServer::requestIDFromModules()
+{
+    return sendAll(CMD_ID);
+}
+
+bool moduleServer::requestIDFromModule(int moduleID)
+{
+    return sendCommandToModule(moduleID, CMD_ID);
+}
+
+bool moduleServer::setModuleGPIO(int moduleID, int gpioPin, bool state)
+{
+
+}
+
 void moduleServer::setAutomaticPolling(bool state)
 {
     if (state) {
@@ -93,4 +123,14 @@ QString moduleServer::getValue(const QString &command)
         return command.split(SEP_NAME_VALUE).last();
     }*/
     return QString();
+}
+
+bool moduleServer::sendCommandToModule(int moduleID, const QString &command)
+{
+    QTcpSocket *client = clientFromID(moduleID);
+    if (!client) {
+        Q_EMIT message(tr("The client with ID %1 could not be found in the client list.").arg(moduleID), utils::SoftwareError);
+        return false;
+    }
+    return send(client, command, true);
 }
