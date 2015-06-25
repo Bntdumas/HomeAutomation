@@ -62,7 +62,9 @@ bool moduleServer::requestIDFromModule(int moduleID)
 
 bool moduleServer::setModuleGPIO(int moduleID, int gpioPin, bool state)
 {
-
+    //GPIO:<pin>,<state>
+    const QString command = QString(QStringLiteral("%1:%2,%3")).arg(CMD_GPIO, gpioPin, state);
+    sendCommandToModule(moduleID, command);
 }
 
 void moduleServer::setAutomaticPolling(bool state)
