@@ -61,53 +61,53 @@ void dataStructureTest::testAddRemoveRoom()
 void dataStructureTest::testAddRemoveDevice_data()
 {
     QTest::addColumn<QString>("deviceName");
-    QTest::addColumn<houseDataStructure::DeviceDirection>("direction");
-    QTest::addColumn<houseDataStructure::DeviceType>("type");
-    QTest::addColumn<houseDataStructure::DeviceSubType>("subType");
+    QTest::addColumn<Devices::DeviceDirection>("direction");
+    QTest::addColumn<Devices::DeviceType>("type");
+    QTest::addColumn<Devices::DeviceSubType>("subType");
     QTest::addColumn<double>("value");
     QTest::addColumn<int>("chipID");
     QTest::addColumn<int>("esp8266Pin");
     QTest::addColumn<bool>("ExpectedSuccess");
 
-    QTest::newRow("Valid Input")   << QStringLiteral("Valid Input") << houseDataStructure::Input
-                                   <<  houseDataStructure::Sensor << houseDataStructure::Temperature
+    QTest::newRow("Valid Input")   << QStringLiteral("Valid Input") << Devices::Input
+                                   <<  Devices::Sensor << Devices::Temperature
                                     << 2.5 << 123456 << 5 << true;
 
-    QTest::newRow("Valid Output")   << QStringLiteral("Valid Output") << houseDataStructure::Output
-                                    <<  houseDataStructure::Lamp << houseDataStructure::LED
+    QTest::newRow("Valid Output")   << QStringLiteral("Valid Output") << Devices::Output
+                                    <<  Devices::Lamp << Devices::LED
                                      << 1.0 << 123456 << 4 << true;
 
-    QTest::newRow("invalid Input (wrong type for direction)")   << QStringLiteral("invalid Input (wrong type for direction)") << houseDataStructure::Input
-                                                                <<  houseDataStructure::Lamp << houseDataStructure::LED
+    QTest::newRow("invalid Input (wrong type for direction)")   << QStringLiteral("invalid Input (wrong type for direction)") << Devices::Input
+                                                                <<  Devices::Lamp << Devices::LED
                                                                  << 22.5 << 123456 << 5 << false;
 
-    QTest::newRow("invalid Output (wrong type for direction)")   << QStringLiteral("invalid Output (wrong type for direction)") << houseDataStructure::Output
-                                                                 <<  houseDataStructure::Sensor << houseDataStructure::Temperature
+    QTest::newRow("invalid Output (wrong type for direction)")   << QStringLiteral("invalid Output (wrong type for direction)") << Devices::Output
+                                                                 <<  Devices::Sensor << Devices::Temperature
                                                                   << 1.0 << 123456 << 4 << false;
 
-    QTest::newRow("invalid Input (wrong subtype for type)")   << QStringLiteral("invalid Input (wrong subtype for type)") << houseDataStructure::Input
-                                                              <<  houseDataStructure::User << houseDataStructure::Temperature
+    QTest::newRow("invalid Input (wrong subtype for type)")   << QStringLiteral("invalid Input (wrong subtype for type)") << Devices::Input
+                                                              <<  Devices::User << Devices::Temperature
                                                                << 22.5 << 123456 << 5 << false;
 
-    QTest::newRow("invalid Output (wrong subtype for type)")   << QStringLiteral("invalid Output (wrong subtype for type") << houseDataStructure::Output
-                                                               <<  houseDataStructure::Plug << houseDataStructure::Temperature
+    QTest::newRow("invalid Output (wrong subtype for type)")   << QStringLiteral("invalid Output (wrong subtype for type") << Devices::Output
+                                                               <<  Devices::Plug << Devices::Temperature
                                                                 << 1.0 << 123456 << 4 << false;
 
-    QTest::newRow("invalid chip ID")   << QStringLiteral("invalid chip ID") << houseDataStructure::Output
-                                       <<  houseDataStructure::Lamp << houseDataStructure::LED
+    QTest::newRow("invalid chip ID")   << QStringLiteral("invalid chip ID") << Devices::Output
+                                       <<  Devices::Lamp << Devices::LED
                                         << 1.0 << -1 << 4 << false;
 
-    QTest::newRow("invalid name")   << QStringLiteral("") << houseDataStructure::Output
-                                    <<  houseDataStructure::Lamp << houseDataStructure::LED
+    QTest::newRow("invalid name")   << QStringLiteral("") << Devices::Output
+                                    <<  Devices::Lamp << Devices::LED
                                      << 1.0 << 123456 << 4 << false;
 }
 
 void dataStructureTest::testAddRemoveDevice()
 {
     QFETCH(QString, deviceName);
-    QFETCH(houseDataStructure::DeviceDirection, direction);
-    QFETCH(houseDataStructure::DeviceType, type);
-    QFETCH(houseDataStructure::DeviceSubType, subType);
+    QFETCH(Devices::DeviceDirection, direction);
+    QFETCH(Devices::DeviceType, type);
+    QFETCH(Devices::DeviceSubType, subType);
     QFETCH(double, value);
     QFETCH(int, chipID);
     QFETCH(int, esp8266Pin);
@@ -142,21 +142,21 @@ void dataStructureTest::testDeviceDoublons()
     QVERIFY(houseData.addRoom(roomName));
 
     // same name
-    QVERIFY(houseData.addDevice(roomName, QStringLiteral("device"), houseDataStructure::Output, houseDataStructure::Lamp,
-                                          houseDataStructure::LED, 1.0, 12354, 5));
-    QVERIFY(!houseData.addDevice(roomName, QStringLiteral("device"), houseDataStructure::Input, houseDataStructure::Sensor,
-                                          houseDataStructure::Temperature, 1.0, 12354, 4));
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("device"), Devices::Output, Devices::Lamp,
+                                          Devices::LED, 1.0, 12354, 5));
+    QVERIFY(!houseData.addDevice(roomName, QStringLiteral("device"), Devices::Input, Devices::Sensor,
+                                          Devices::Temperature, 1.0, 12354, 4));
 
 
     // same GPIO pin on same chip
-    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceA"), houseDataStructure::Output, houseDataStructure::Lamp,
-                                          houseDataStructure::LED, 1.0, 12354, 2));
-    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceC"), houseDataStructure::Output, houseDataStructure::Lamp,
-                                          houseDataStructure::LED, 1.0, 12354, 3));
-    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceB"), houseDataStructure::Output, houseDataStructure::Lamp,
-                                          houseDataStructure::LED, 1.0, 12355, 2));
-    QVERIFY(!houseData.addDevice(roomName, QStringLiteral("deviceD"), houseDataStructure::Output, houseDataStructure::Lamp,
-                                          houseDataStructure::LED, 1.0, 12354, 2));
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceA"), Devices::Output, Devices::Lamp,
+                                          Devices::LED, 1.0, 12354, 2));
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceC"), Devices::Output, Devices::Lamp,
+                                          Devices::LED, 1.0, 12354, 3));
+    QVERIFY(houseData.addDevice(roomName, QStringLiteral("deviceB"), Devices::Output, Devices::Lamp,
+                                          Devices::LED, 1.0, 12355, 2));
+    QVERIFY(!houseData.addDevice(roomName, QStringLiteral("deviceD"), Devices::Output, Devices::Lamp,
+                                          Devices::LED, 1.0, 12354, 2));
 
 
 }

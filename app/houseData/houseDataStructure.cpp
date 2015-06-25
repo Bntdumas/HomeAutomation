@@ -1,51 +1,5 @@
 #include "houseDataStructure.h"
 
-bool houseDataStructure::subTypeCompatible(houseDataStructure::DeviceType type, houseDataStructure::DeviceSubType subType)
-{
-    switch (type) {
-    case Lamp:
-        return (subType == Ambiance ||
-                subType == SpotLight ||
-                subType == RoomLight ||
-                subType == LED);
-    case Switch:
-        return (subType == Computer);
-    case Plug:
-        return (subType == Screen ||
-                subType == NormalPlug);
-    case Sensor:
-        return (subType == Temperature ||
-                subType == Light ||
-                subType == Humidity);
-    case User:
-        return (subType == Button ||
-                subType == Potentiometer);
-    case TypeOther:
-        return (subType == SubTypeOther);
-    default:
-        return false;
-    }
-}
-
-bool houseDataStructure::typeCompatible(houseDataStructure::DeviceDirection direction, houseDataStructure::DeviceType type)
-{
-    switch (direction) {
-    case Input:
-        return (type == User ||
-                type == Sensor ||
-                type == TypeOther);
-    case Output:
-        return (type == Lamp ||
-                type == Switch ||
-                type == Plug ||
-                type == TypeOther);
-    case Disabled:
-        return true;
-    default:
-        return false;
-    }
-}
-
 bool houseDataStructure::addRoom(const QString &roomName)
 {
     if (roomName.isEmpty()) {
@@ -62,6 +16,7 @@ bool houseDataStructure::addRoom(const QString &roomName)
     m_rooms.append(newRoom);
     Q_EMIT message(tr("houseDataStructure: The room \"%1\" was added to the house structure").arg(roomName), utils::Success);
 }
+
 
 bool houseDataStructure::removeRoom(const QString &roomName)
 {
@@ -82,7 +37,7 @@ bool houseDataStructure::removeRoom(const QString &roomName)
 }
 
 bool houseDataStructure::addDevice(const QString &roomName, const QString &deviceName,
-                                   houseDataStructure::DeviceDirection direction, houseDataStructure::DeviceType type, houseDataStructure::DeviceSubType subType,
+                                   Devices::DeviceDirection direction, Devices::DeviceType type, Devices::DeviceSubType subType,
                                    double value, int chipID, int esp8266Pin)
 {
     // already have a device with this name in this room
@@ -103,12 +58,12 @@ bool houseDataStructure::addDevice(const QString &roomName, const QString &devic
     }
 
     // test types compatibility
-    if (!typeCompatible(direction, type)) {
+    if (!Devices::typeCompatible(direction, type)) {
         Q_EMIT message(tr("houseDataStructure: The type \"%1\" is not valid in regard to the pin direction \"%2\"").arg(type, direction), utils::SoftwareError);
         return false;
     }
 
-    if (!subTypeCompatible(type, subType)) {
+    if (!Devices::subTypeCompatible(type, subType)) {
         Q_EMIT message(tr("houseDataStructure: The sub type \"%1\" is not valid in regard to the type \"%2\"").arg(subType, type), utils::SoftwareError);
         return false;
     }
