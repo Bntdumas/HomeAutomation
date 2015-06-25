@@ -37,7 +37,7 @@ public:
       */
     bool isListening();
     int receivedLines() {return m_receivedLines;}
-    int resetLineCounter() {m_receivedLines = 0;}
+    void resetLineCounter() {m_receivedLines = 0;}
     int connectedClients() {return m_clientsList.count();}
 
 Q_SIGNALS:
