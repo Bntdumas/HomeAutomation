@@ -53,12 +53,11 @@ function tcpService.sendOK()
 end
 
 function tcpService.sendID()
-    tcpService.send("<chipid id= \""..node.chipid().."\"/>")
+    tcpService.send("<chipID value= \""..node.chipid().."\"/>")
 end
 
-
 function tcpService.send(msg)
-    socketTCP:send("<module>"..msg.."</module>\n")
+    socketTCP:send("<module_data>"..msg.."</module_data>\n")
 end
 
 
