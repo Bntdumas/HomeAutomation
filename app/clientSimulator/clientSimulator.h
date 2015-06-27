@@ -22,8 +22,12 @@ public:
     bool isConnected();
     QTcpSocket *socket() { return m_socket; }
 
-    void processCommand(const QString &cmd);
-    void parseMessage(const QString &msg);
+    /**
+     * @brief for testing
+     */
+    void setCorrupted(bool flag) {m_corrupted = flag;}
+
+    void sendIDOnConnect(bool flag);
 
 public Q_SLOTS:
     bool sendID();
@@ -38,6 +42,7 @@ private:
     QTcpSocket *m_socket;
     bool send(const QString &msg);
 
+    bool m_corrupted;
 
 };
 

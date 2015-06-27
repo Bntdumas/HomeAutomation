@@ -30,14 +30,12 @@ bool clientSimulator::isConnected()
     return m_socket->state() == QAbstractSocket::ConnectedState;
 }
 
-void clientSimulator::processCommand(const QString &cmd)
+void clientSimulator::sendIDOnConnect(bool flag)
 {
-
-}
-
-void clientSimulator::parseMessage(const QString &msg)
-{
-
+    if (!flag)
+        disconnect(m_socket, &QTcpSocket::connected, this, &clientSimulator::sendID);
+    else
+        connect(m_socket, &QTcpSocket::connected, this, &clientSimulator::sendID);
 }
 
 bool clientSimulator::sendID()
@@ -57,15 +55,20 @@ bool clientSimulator::sendError()
 
 bool clientSimulator::sendData(bool random)
 {
-    float temp = random ? ((qrand() % 30 + 250) / 10) : 22.5;
-    QString gpioFrame();
+    QString gpioValues;
     for (int i = 0; i < 5; ++i) {
         int state = random ? (qrand() % 2):1;
-        gpioFrame.append(QString(QStringLiteral("<pin=\"%1\"/> <value=\"%2\"/>").arg(i).arg(state)));
+        gpioValues.append(QStringLiteral("<gpio pin=\"%1\" value=\"%2\"/>").arg(i).arg(state));
     }
-    bool sendFirst = send(QString(QStringLiteral("<sensor temperature=\"%1\"/>").arg(temp)));
-    bool sendSecond = send(gpioFrame);
-    return sendFirst && sendSecond;
+
+    QString sensorValues;
+    for (int i = 5; i < 7; ++i) {
+        gpioValues.append(QStringLiteral("<sensor pin=\"%1\" type=\"Temperature\" value=\"22.5\"/>").arg(i));
+    }
+    gpioValues.append(QStringLiteral("<sensor pin=\"7\" type=\"Light\" value=\"1\"/>"));
+    gpioValues.append(QStringLiteral("<sensor pin=\"8\" type=\"Humidity\" value=\"0\"/>"));
+
+    return send(QStringLiteral("<module_data>%1%2</module_data>").arg(gpioValues).arg(sensorValues));
 }
 
 void clientSimulator::slotReadyRead()
@@ -77,8 +80,6 @@ void clientSimulator::slotReadyRead()
 
     QString msg = tr(client->readAll().constData());
     msg.remove(QStringLiteral("\n"));
-
-    qDebug() << Q_FUNC_INFO << msg;
 
     if(msg == QStringLiteral("DATA"))
         sendData(false);
