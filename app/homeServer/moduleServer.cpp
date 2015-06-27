@@ -209,8 +209,7 @@ void moduleServer::processGPIOElement(int moduleID, const QXmlStreamReader &read
 {
     // <gpio pin=\"0\" value=\"1\"/>
     if (reader.attributes().count() != 2) {
-        Q_EMIT message(tr("moduleServer: XML parsing error: the gpio message should contain only 2 attributes")
-                       .arg(reader.errorString()), utils::Warning);
+        Q_EMIT message(tr("moduleServer: XML parsing error: the gpio message should contain exactly 2 attributes"), utils::Warning);
         return;
     }
     bool okPin, okValue;

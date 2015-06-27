@@ -194,7 +194,7 @@ void tcpServer::dataAvailable()
     if (client->canReadLine()) {
         QByteArray msg = client->readLine(MAX_MESSAGE_LENGTH);
         msg.chop(1); //remove \n
-        Q_EMIT message(tr("Line from %1: %2").arg(client->peerAddress().toString()).arg(QString::fromLatin1(msg.constData())), utils::Info);
+        //Q_EMIT message(tr("Line from %1: %2").arg(client->peerAddress().toString()).arg(QString::fromLatin1(msg.constData())), utils::Info);
         m_receivedLines++;
         //qDebug() << msg << m_receivedLines;
 
