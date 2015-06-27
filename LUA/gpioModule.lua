@@ -7,11 +7,11 @@ local GPIO2 = 1
 
 function gpioModule.setGPIOState(pin, state)
     if(state == 1) then
-        gpio.write(pin,gpio.HIGH)
-        tcpService.setGPIOVar(pin, state)
+        gpio.write(pin, gpio.HIGH)
+        gpioModule.setGPIOVar(pin, state)
     else 
         gpio.write(pin,gpio.LOW)
-        tcpService.setGPIOVar(pin, state)
+        gpioModule.setGPIOVar(pin, state)
     end
 end
 
