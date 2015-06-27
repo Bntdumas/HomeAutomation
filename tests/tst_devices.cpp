@@ -21,22 +21,22 @@ private:
 
 void devicesTest::testEnumConvertionMethods()
 {
-    QCOMPARE(Devices::enumFromStringDirection(QStringLiteral("Input")), Devices::Input);
-    QCOMPARE(Devices::enumFromStringType(QStringLiteral("Lamp")), Devices::Lamp);
-    QCOMPARE(Devices::enumFromStringSubType(QStringLiteral("Ambiance")), Devices::Ambiance);
+    QCOMPARE(devices::enumFromStringDirection(QStringLiteral("Input")), devices::Input);
+    QCOMPARE(devices::enumFromStringType(QStringLiteral("Lamp")), devices::Lamp);
+    QCOMPARE(devices::enumFromStringSubType(QStringLiteral("Ambiance")), devices::Ambiance);
 
-    QCOMPARE(Devices::stringFromEnumDirection(Devices::Input), QStringLiteral("Input"));
-    QCOMPARE(Devices::stringFromEnumType(Devices::Lamp), QStringLiteral("Lamp"));
-    QCOMPARE(Devices::stringFromEnumSubType(Devices::Ambiance), QStringLiteral("Ambiance"));
+    QCOMPARE(devices::stringFromEnumDirection(devices::Input), QStringLiteral("Input"));
+    QCOMPARE(devices::stringFromEnumType(devices::Lamp), QStringLiteral("Lamp"));
+    QCOMPARE(devices::stringFromEnumSubType(devices::Ambiance), QStringLiteral("Ambiance"));
 }
 
 void devicesTest::testCompatibility()
 {
-    QVERIFY(Devices::typeCompatible(Devices::Input, Devices::Sensor));
-    QVERIFY(!Devices::typeCompatible(Devices::Input, Devices::Lamp));
+    QVERIFY(devices::typeCompatible(devices::Input, devices::Sensor));
+    QVERIFY(!devices::typeCompatible(devices::Input, devices::Lamp));
 
-    QVERIFY(Devices::subTypeCompatible(Devices::Sensor, Devices::Temperature));
-    QVERIFY(!Devices::subTypeCompatible(Devices::Lamp, Devices::Temperature));
+    QVERIFY(devices::subTypeCompatible(devices::Sensor, devices::Temperature));
+    QVERIFY(!devices::subTypeCompatible(devices::Lamp, devices::Temperature));
 }
 
 QTEST_MAIN(devicesTest)
