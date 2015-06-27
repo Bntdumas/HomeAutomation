@@ -16,7 +16,7 @@ _G[modname] = M
 -- DS18B20 dq pin
 local pin = nil
 -- DS18B20 default pin
-local defaultPin = 9
+local defaultPin = 3
 --------------------------------------------------------------------------------
 -- Local used modules
 --------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ function readNumber(addr, unit)
       ow.reset(pin)
       ow.select(pin, addr)
       ow.write(pin, 0x44, 1)
-      -- tmr.delay(1000000)
+      tmr.delay(1000000)
       present = ow.reset(pin)
       ow.select(pin, addr)
       ow.write(pin,0xBE,1)
