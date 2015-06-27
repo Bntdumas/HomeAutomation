@@ -19,12 +19,16 @@ namespace {
     static const QString CMD_DATA = QStringLiteral("DATA");
     static const QString CMD_ID = QStringLiteral("ID");
     static const QString CMD_GPIO = QStringLiteral("GPIO");
+    static const QString CMD_CMD = QStringLiteral("CMD");
     static const QString CMD_RESET = QStringLiteral("RST");
 
     // frame keyword from the modules
     static const QString MODULE_ID = QStringLiteral("chipID");
+    static const QString MODULE_GPIOS = QStringLiteral("gpios");
     static const QString MODULE_GPIO = QStringLiteral("gpio");
     static const QString MODULE_SENSOR = QStringLiteral("sensor");
+    static const QString MODULE_SENSORS = QStringLiteral("sensors");
+    static const QString MODULE_MODULE_DATA = QStringLiteral("module_data");
     static const QString MODULE_OK = QStringLiteral("ok");
     static const QString MODULE_ERROR = QStringLiteral("error");
 
