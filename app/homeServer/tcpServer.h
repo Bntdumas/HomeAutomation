@@ -41,11 +41,23 @@ public:
     void resetLineCounter() {m_receivedLines = 0;}
     int connectedClients() {return m_clientsList.count();}
 
+
+    /**
+     * @brief convert between clients ID, IP
+     */
+    QHostAddress clientIPFromID(const QVariant &clientID);
+    QVariant clientIDFromIP(const QHostAddress IP);
+
 Q_SIGNALS:
     /**
      * @brief When a new module is connected, emit a signal with the client ID.
      */
     void newModuleConnected(const QVariant &clientID);
+
+    /**
+     * @brief When a new module is connected, emit a signal with the client IP (sent before we get it's ID).
+     */
+    void newClient(const QHostAddress &clientIP);
 
     /**
      * @brief Debug messages
@@ -59,6 +71,7 @@ public Q_SLOTS:
      */
     bool send(QTcpSocket *client, const QString &msg, bool skipIfAlreadyInQueue = false);
     bool sendAll(const QString &message);
+
 
 private Q_SLOTS:
     void dataAvailable();
@@ -106,8 +119,12 @@ protected:
      * @brief convert between clients ID, IP and sockets
      */
     QTcpSocket *clientFromID(const QVariant &clientID);
-    QVariant clientIDFromIP(const QHostAddress IP);
     QTcpSocket *clientFromIP(const QHostAddress IP);
+
+    /**
+     * @brief Cleanup the client form the different lists
+     */
+    void removeClient(QTcpSocket * client);
 
 
 private:
@@ -131,8 +148,6 @@ private:
      * @brief for testing, the number of completes lines received by the server.
      */
     int m_receivedLines;
-
-
 };
 
 #endif // TCPSERVER_H

@@ -62,20 +62,11 @@ void tcpServer::newConnection()
     QTcpSocket *newSocket =  m_tcpServer->nextPendingConnection();
     if (newSocket) {
 
+        Q_EMIT newClient(newSocket->peerAddress());
         // if we already have a client with this IP remove all occurences of it.
         QTcpSocket *previousClient = clientFromIP(newSocket->peerAddress());
         if (previousClient != Q_NULLPTR) {
-            m_clientsList.remove(previousClient);
-            m_clientWaitingForAnswer.removeAll(previousClient);
-            for (int i = 0; i < m_messageWaitingList.count(); ++i) {
-                messageClientPair item = m_messageWaitingList.at(i);
-                if (item.first == previousClient) {
-                    m_messageWaitingList.removeAt(i);
-                }
-            }
-            previousClient->deleteLater();
-            Q_EMIT message(tr("Replacing client  %1").arg(newSocket->peerAddress().toString()), utils::Info);
-
+            removeClient(previousClient);
         }
 
         m_clientsList.insert(newSocket, 0);
@@ -94,7 +85,7 @@ void tcpServer::connectionRemoved()
     if (!deletedSocket) {
         return;
     }
-    Q_EMIT message(tr("Client left  %1").arg(deletedSocket->peerAddress().toString()), utils::Info);
+    removeClient(deletedSocket);
 }
 
 const QString tcpServer::takeNextMessageForClient(QTcpSocket *client)
@@ -125,6 +116,16 @@ QTcpSocket *tcpServer::clientFromID(const QVariant &clientID)
     return Q_NULLPTR;
 }
 
+QHostAddress tcpServer::clientIPFromID(const QVariant &clientID)
+{
+    QTcpSocket * socket = clientFromID(clientID);
+    if (socket) {
+        return socket->peerAddress();
+    } else {
+        return QHostAddress();
+    }
+}
+
 QVariant tcpServer::clientIDFromIP(const QHostAddress IP)
 {
     QMap<QTcpSocket*, QVariant>::iterator i;
@@ -151,6 +152,20 @@ QTcpSocket *tcpServer::clientFromIP(const QHostAddress IP)
         }
     }
     return Q_NULLPTR;
+}
+
+void tcpServer::removeClient(QTcpSocket *client)
+{
+    Q_EMIT message(tr("Removing client  %1").arg(client->peerAddress().toString()), utils::Info);
+    m_clientsList.remove(client);
+    m_clientWaitingForAnswer.removeAll(client);
+    for (int i = 0; i < m_messageWaitingList.count(); ++i) {
+        messageClientPair item = m_messageWaitingList.at(i);
+        if (item.first == client) {
+            m_messageWaitingList.removeAt(i);
+        }
+    }
+    client->deleteLater();
 }
 
 bool tcpServer::send(QTcpSocket * client, const QString &msg, bool skipIfAlreadyInQueue)
@@ -183,9 +198,7 @@ bool tcpServer::send(QTcpSocket * client, const QString &msg, bool skipIfAlready
 }
 
 void tcpServer::dataAvailable()
-{
-    //  qDebug() << Q_FUNC_INFO;
-    
+{   
     QTcpSocket *client = qobject_cast<QTcpSocket *>(sender());
     if (client == 0) {
         return;
