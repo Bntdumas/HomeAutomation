@@ -11,9 +11,8 @@ namespace Ui {
 class espWifiModulesTest;
 }
 
-class databaseAdmin;
-class atmelProgrammer;
 class moduleServer;
+class QTimer;
 
 /**
  * @brief The home automation admin app.
@@ -36,6 +35,9 @@ private Q_SLOTS:
     void on_action_re_start_triggered();
     void deviceConnectedID(QVariant deviceID);
     void deviceConnectedIP(QHostAddress ip);
+    void gpioChanged(int moduleID, int gpioPin, bool state);
+
+    void pollingTimerTimeout();
 
 private:
     Ui::espWifiModulesTest *ui;
@@ -50,6 +52,16 @@ private:
     int rowForID(int deviceID);
 
     void incrementConnectionCount(int row);
+    void incrementFrameReceivedCount(int chipID);
+    void incrementFrameSentCount(int chipID);
+    void incrementCatastrophicFailCount(int chipID);
+    void incrementCell(int row, int column);
+
+    void trySendGpioFrame(int chipID);
+
+    QMap<int, bool> m_waitingForAnswer;
+
+    QTimer *m_pollingTimer;
 
 };
 
