@@ -186,6 +186,7 @@ bool moduleServer::sendCommandToModule(int moduleID, const QString &command)
 
 void moduleServer::processIDElement(QTcpSocket *client, const QXmlStreamReader &reader)
 {
+    // <chipID value="123456"/>
     if (reader.attributes().count() != 1) {
         Q_EMIT message(tr("moduleServer: XML parsing error: the chip ID message should contain only one attribute")
                        .arg(reader.errorString()), utils::Warning);
@@ -206,6 +207,7 @@ void moduleServer::processIDElement(QTcpSocket *client, const QXmlStreamReader &
 
 void moduleServer::processGPIOElement(int moduleID, const QXmlStreamReader &reader)
 {
+    // <gpio pin=\"0\" value=\"1\"/>
     if (reader.attributes().count() != 2) {
         Q_EMIT message(tr("moduleServer: XML parsing error: the gpio message should contain only 2 attributes")
                        .arg(reader.errorString()), utils::Warning);
