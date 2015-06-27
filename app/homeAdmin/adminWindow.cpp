@@ -51,6 +51,7 @@ void adminWindow::on_action_re_start_triggered()
     }
 
     m_server = new moduleServer(this);
+    m_server->setAutomaticPolling(true);
     connect(m_server, &moduleServer::message, this, &adminWindow::displayLogMessage);
     m_server->createTCPServer();
 }
