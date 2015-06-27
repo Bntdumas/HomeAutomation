@@ -70,7 +70,7 @@ bool moduleServer::requestIDFromModule(int moduleID)
 bool moduleServer::setModuleGPIO(int moduleID, int gpioPin, bool state)
 {
     //GPIO:<pin>,<state>
-    const QString command = QString(QStringLiteral("%1:%2,%3")).arg(CMD_GPIO).arg(gpioPin).arg(state);
+    const QString command = QString(QStringLiteral("%1:%2:%3,%4")).arg(CMD_CMD).arg(CMD_GPIO).arg(gpioPin).arg(state);
     sendCommandToModule(moduleID, command);
 }
 
