@@ -19,7 +19,7 @@ end
 
 
 -- process a single command
--- a command is a set of isntruction given by the tcp server
+-- a command is a set of instruction given by the tcp server
 function tcpService.processCommand(msg)
     commandLine = stringParsing.removeSubString(msg, "CMD:")
     for singleCommand in commandLine:gmatch("%S+") do 
