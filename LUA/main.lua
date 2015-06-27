@@ -6,13 +6,13 @@ wifi.setmode(wifi.STATION)
 wifi.sta.config("JESUS","iletaitunefois")
 local cfg =
 {
-    ip="192.168.0.53",
+    ip="192.168.0.56",
     netmask="255.255.255.0",
     gateway="192.168.0.1"
 }    
 
 -- connection to home server
-local server_ip = "192.168.0.14"
+local server_ip = "192.168.0.13"
 local server_port = 5003
 socketTCP = net.createConnection(net.TCP, 0)
 
