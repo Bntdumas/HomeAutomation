@@ -86,10 +86,10 @@ bool moduleServer::setModuleGPIO(int moduleID, int gpioPin, bool state)
     sendCommandToModule(moduleID, command);
 }
 
-void moduleServer::sendTestGPIOSwitch(int moduleID)
+void moduleServer::sendTestGPIOSwitch(int moduleID, bool state)
 {
     if (clientFromID(moduleID)) {
-        setModuleGPIO(moduleID, 4, m_state);
+        setModuleGPIO(moduleID, 4, state);
     }
 }
 
@@ -105,12 +105,12 @@ void moduleServer::setAutomaticPolling(bool state)
 void moduleServer::pollingTimerTimeout()
 {
     //requestDataFromModules();
-    m_state = !m_state;
+   /* m_state = !m_state;
 
     sendTestGPIOSwitch(10557940);
     sendTestGPIOSwitch(16670068);
     sendTestGPIOSwitch(16670915);
-    sendTestGPIOSwitch(16669492);
+    sendTestGPIOSwitch(16669492);*/
 }
 
 
@@ -199,6 +199,7 @@ void moduleServer::processIDElement(QTcpSocket *client, const QXmlStreamReader &
                        .arg(reader.attributes().first().value().toString()), utils::Warning);
         return;
     }
+
     m_clientsList.insert(client, qVariantFromValue(id));
     m_clientswithoutID.remove(client);
     Q_EMIT message(tr("%1 sent me his ID (%2)").arg(clientIDFromIP(client->peerAddress()).toString()).arg(id), utils::Info);

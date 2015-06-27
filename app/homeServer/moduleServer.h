@@ -50,7 +50,7 @@ public:
 
     bool setModuleGPIO(int moduleID, int gpioPin, bool state);
 
-    void sendTestGPIOSwitch(int moduleID);
+    void sendTestGPIOSwitch(int moduleID, bool state);
 
 Q_SIGNALS:
     void gpioChanged(int moduleID, int gpioPin, bool state);
