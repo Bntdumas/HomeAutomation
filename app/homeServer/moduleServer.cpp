@@ -86,6 +86,13 @@ bool moduleServer::setModuleGPIO(int moduleID, int gpioPin, bool state)
     sendCommandToModule(moduleID, command);
 }
 
+void moduleServer::sendTestGPIOSwitch(int moduleID)
+{
+    if (clientFromID(moduleID)) {
+        setModuleGPIO(moduleID, 4, m_state);
+    }
+}
+
 void moduleServer::setAutomaticPolling(bool state)
 {
     if (state) {
@@ -97,8 +104,13 @@ void moduleServer::setAutomaticPolling(bool state)
 
 void moduleServer::pollingTimerTimeout()
 {
-    sendAll(CMD_DATA);
+    //requestDataFromModules();
     m_state = !m_state;
+
+    sendTestGPIOSwitch(10557940);
+    sendTestGPIOSwitch(16670068);
+    sendTestGPIOSwitch(16670915);
+    sendTestGPIOSwitch(16669492);
 }
 
 
