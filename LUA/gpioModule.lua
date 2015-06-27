@@ -30,7 +30,7 @@ function gpioModule.GPIOState(pin)
 end
 
 function gpioModule.getGPIOStr(pin)
-    local msg = "<gpio pin=\""..tonumber(pin).."\" value=\""..tonumber(gpioModule.GPIOState(pin)).."\"/>"
+    local msg = "<gpio pin='"..tonumber(pin).."' value='"..tonumber(gpioModule.GPIOState(pin)).."'/>"
     return msg
 end
 
