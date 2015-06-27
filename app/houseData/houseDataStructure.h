@@ -38,7 +38,7 @@ public:
      * @return true if device succesfully added.
      * @note the device name must be unique per room
      */
-    bool addDevice(const QString &roomName, const QString &deviceName, Devices::DeviceDirection direction, Devices::DeviceType type, Devices::DeviceSubType subType,
+    bool addDevice(const QString &roomName, const QString &deviceName, devices::DeviceDirection direction, devices::DeviceType type, devices::DeviceSubType subType,
                    double value, int chipID, int esp8266Pin);
 
     /**
@@ -89,14 +89,14 @@ private:
      */
     struct Device {
         QString name;
-        Devices::DeviceDirection direction;
-        Devices::DeviceType type;
-        Devices::DeviceSubType subType;
+        devices::DeviceDirection direction;
+        devices::DeviceType type;
+        devices::DeviceSubType subType;
         float value;
         int chipID;
         int esp8266Pin;
 
-        Device(const QString &name, Devices::DeviceDirection direction, Devices::DeviceType type, Devices::DeviceSubType subType,
+        Device(const QString &name, devices::DeviceDirection direction, devices::DeviceType type, devices::DeviceSubType subType,
                float value, int chipID, int esp8266Pin):
             name(name)
           ,direction(direction)
@@ -199,9 +199,9 @@ private:
     roomList m_rooms;
 };
 
-Q_DECLARE_METATYPE(Devices::DeviceDirection)
-Q_DECLARE_METATYPE(Devices::DeviceType)
-Q_DECLARE_METATYPE(Devices::DeviceSubType)
+Q_DECLARE_METATYPE(devices::DeviceDirection)
+Q_DECLARE_METATYPE(devices::DeviceType)
+Q_DECLARE_METATYPE(devices::DeviceSubType)
 
 #endif // HOUSEDATASTRUCTURE_H
 
