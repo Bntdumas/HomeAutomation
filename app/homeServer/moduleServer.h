@@ -2,6 +2,7 @@
 #define MODULESERVER_H
 
 #include "homeServer_global.h"
+#include "devices.h"
 #include "utils.h"
 #include "tcpServer.h"
 
@@ -9,7 +10,6 @@
 #include <QMap>
 #include <QHostAddress>
 #include <QXmlStreamReader>
-
 
 /**
  * @brief The moduleServer class handles communication with the wifi enabled modules.
@@ -33,7 +33,6 @@ public:
     explicit moduleServer(QObject *parent = Q_NULLPTR);
     ~moduleServer() {}
 
-
     void setAutomaticPolling(bool state);
 
     /**
@@ -41,6 +40,7 @@ public:
       */
     bool resetModules();
     bool resetModule(int moduleID);
+    bool resetModule(QTcpSocket *socket);
 
     bool requestDataFromModules();
     bool requestDataFromModule(int moduleID);
@@ -61,6 +61,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void pollingTimerTimeout() Q_DECL_OVERRIDE;
+    void idTimerTimeout() Q_DECL_OVERRIDE;
 
 private:
     bool processLine(QTcpSocket *client, const QByteArray &line) Q_DECL_OVERRIDE;
@@ -74,6 +75,7 @@ private:
     void processSensorElement(int moduleID, const QXmlStreamReader &reader);
 
     bool m_state;
+
 
 };
 
