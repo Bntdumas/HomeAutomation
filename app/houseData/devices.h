@@ -6,11 +6,11 @@
 #include <QByteArray>
 
 /**
- * @brief The Devices class contains the available devices in the house.
+ * @brief The devices class contains the available devices in the house.
  * TODO generate this file from an XML file
  */
 
-class Devices: public QObject {
+class devices: public QObject {
 
     Q_OBJECT
 
@@ -149,7 +149,7 @@ public:
 
 private:
     static QMetaEnum metaEnum(const QString &enumName) {
-        const QMetaObject &mo = Devices::staticMetaObject;
+        const QMetaObject &mo = devices::staticMetaObject;
 
         const QByteArray byteArray = enumName.toUtf8();
         const char *textPtr = byteArray.constData();
