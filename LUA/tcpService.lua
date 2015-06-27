@@ -1,6 +1,8 @@
 local tcpService = {}
---local tempSensor = require("ds18b20")
+
+--local tempSensor=require("ds18b20")
 --tempSensor.setup(3)
+
 gpioModule = require("gpioModule")
 print("tcpService V0.8")
 
@@ -42,10 +44,8 @@ function tcpService.sendData()
 end
 
 function tcpService.getTempStr()
-    --addrs=tempSensor.addrs()
-    --return "$TEMP:"..tempSensor.read(nil,tempSensor.C)
-    val = 22.1
-    return ("<temp value=\""..tonumber(val).."\"/>")
+    val = 22.1--tempSensor.read()
+    return ("<sensor pin='3' type='Temperature' value='"..val.."'/>")
 end
 
 function tcpService.sendOK()
