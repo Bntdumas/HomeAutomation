@@ -1,4 +1,4 @@
-include_directories(../commonFiles ../homeServer)
+include_directories(../sharedElements ../homeServer ../houseData)
 
 set(homeAdmin_HDRS
     adminWindow.h
@@ -11,5 +11,5 @@ set(homeAdmin_SRCS
 )
 
 add_executable(homeAdmin ${homeAdmin_SRCS} ${homeAdmin_HDRS})
-target_link_libraries(homeAdmin Qt5::Widgets homeServer)
+target_link_libraries(homeAdmin Qt5::Widgets homeServer sharedElements houseData)
 

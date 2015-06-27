@@ -1,4 +1,4 @@
-include_directories(../commonFiles)
+include_directories(../sharedElements)
 
 set(houseData_HDRS
     devices.h
@@ -13,4 +13,4 @@ set(houseData_SRCS
 )
 
 add_library(houseData SHARED ${houseData_SRCS} ${houseData_HDRS})
-target_link_libraries(houseData Qt5::Core)
+target_link_libraries(houseData Qt5::Core sharedElements)

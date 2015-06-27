@@ -1,4 +1,4 @@
-include_directories(../commonFiles)
+include_directories(../sharedElements ../houseData)
 
 set(homeServer_HDRS
     homeServer_global.h
@@ -16,4 +16,4 @@ set(homeServer_SRCS
 )
 
 add_library(homeServer SHARED ${homeServer_SRCS} ${homeServer_HDRS})
-target_link_libraries(homeServer Qt5::Network Qt5::Xml)
+target_link_libraries(homeServer Qt5::Network Qt5::Xml sharedElements houseData)
