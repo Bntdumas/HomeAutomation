@@ -54,6 +54,8 @@ public:
 
 Q_SIGNALS:
     void gpioChanged(int moduleID, int gpioPin, bool state);
+    void sensorUpdated(int moduleID, int gpioPin, devices::DeviceSubType type, double value);
+
     void okReceived(int moduleID);
     void errorReceived(int moduleID, const QString &msg);
 
@@ -69,6 +71,7 @@ private:
      */
     void processIDElement(QTcpSocket *client, const QXmlStreamReader &reader);
     void processGPIOElement(int moduleID, const QXmlStreamReader &reader);
+    void processSensorElement(int moduleID, const QXmlStreamReader &reader);
 
     bool m_state;
 

@@ -153,16 +153,19 @@ bool moduleServer::processLine(QTcpSocket *client, const QByteArray &line)
                 Q_EMIT message(tr("moduleServer: XML parsing error: %1").arg(xml.errorString()), utils::Warning);
                 return false;
             }
-            if (xml.tokenType() == QXmlStreamReader::StartElement) {
+            if (xml.isStartElement()) {
                 const QString msgType = xml.name().toString();
+               // qDebug() << msgType;
                 if (msgType == MODULE_ID) {
                     processIDElement(client, xml);
                 } else if (msgType == MODULE_GPIO) {
                     processGPIOElement(moduleID, xml);
                 } else if (msgType == MODULE_SENSOR) {
+                    processSensorElement(moduleID, xml);
                 } else if (msgType == MODULE_OK) {
                 } else if (msgType == MODULE_ERROR) {
-
+                } else if (msgType == MODULE_GPIOS || msgType == MODULE_SENSORS || msgType == MODULE_MODULE_DATA) {
+                    continue;
                 } else {
                     Q_EMIT message(tr("moduleServer: XML parsing error: the element %1 was not recognized")
                                    .arg(msgType), utils::Warning);
@@ -217,7 +220,45 @@ void moduleServer::processGPIOElement(int moduleID, const QXmlStreamReader &read
         return;
     }
     bool state = value != 0;
-
+    Q_EMIT message(tr("%1 sent gpio information: pin %2 = %3").arg(moduleID).arg(pin).arg(state?QStringLiteral("true"):QStringLiteral("false")), utils::Info);
     Q_EMIT gpioChanged(moduleID, pin, state);
-    qDebug() << "gpio changed: " << moduleID << pin << state;
+}
+
+void moduleServer::processSensorElement(int moduleID, const QXmlStreamReader &reader)
+{
+    // <sensor pin=\"2\" type=\"temperature\" value=\"22.5\"/>
+    //qDebug() << Q_FUNC_INFO;
+    if (reader.attributes().count() != 3) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: the sensor message should contain exactly 2 attributes"), utils::Warning);
+        return;
+    }
+
+    //first attribute: module pin
+    bool okPin;
+    int pin = reader.attributes().first().value().toInt(&okPin);
+    if (!okPin) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: I could not convert %1 to int")
+                       .arg(reader.attributes().first().value().toString()), utils::Warning);
+        return;
+    }
+
+    //second attribute: sensor type
+    const QString subType = reader.attributes().at(1).value().toString();
+    // let's try to match it to a compatible DeviceSubType
+    devices::DeviceSubType subTypeEnum = devices::enumFromStringSubType(subType);
+    if (!devices::subTypeCompatible(devices::Sensor, subTypeEnum)) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: I could not retrieve the sensor type from %1").arg(subType), utils::Warning);
+        return;
+    }
+
+    // third attribute: sensor value
+    bool okValue;
+    double value = reader.attributes().last().value().toDouble(&okValue);
+    if (!okValue) {
+        Q_EMIT message(tr("moduleServer: XML parsing error: I could not convert %1 to double")
+                       .arg(reader.attributes().last().value().toString()), utils::Warning);
+        return;
+    }
+    Q_EMIT sensorUpdated(moduleID, pin, subTypeEnum, value);
+    Q_EMIT message(tr("%1 sent sensor information: %2=%3 (pin %4)").arg(moduleID).arg(subType).arg(value).arg(pin), utils::Info);
 }
