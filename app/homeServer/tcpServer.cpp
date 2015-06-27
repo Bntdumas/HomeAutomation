@@ -37,6 +37,33 @@ void tcpServer::createTCPServer()
 {
     m_receivedLines = 0;
 
+    //reset timers
+    m_pollingTimer->stop();
+    m_idTimer->stop();
+
+    // remove all clients
+    QList<QTcpSocket *> clientsToRemove;
+    QMap<QTcpSocket *, QVariant>::const_iterator i;
+    for (i = m_clientsList.constBegin(); i != m_clientsList.constEnd(); ++i) {
+         QTcpSocket *client = i.key();
+        if (client && client->isValid()) {
+            clientsToRemove.append(client);
+        }
+    }
+
+    Q_FOREACH(QTcpSocket *client, clientsToRemove) {
+        removeClient(client);
+    }
+
+
+    //make sure all lists are empty
+    if (!m_clientsList.isEmpty() ||
+            !m_clientswithoutID.isEmpty() ||
+            !m_messageWaitingList.isEmpty() ||
+            !m_clientWaitingForAnswer.isEmpty()) {
+        Q_EMIT message(tr("tcpServer: All the lists are not empty."), utils::SoftwareError);
+    }
+
     // create the server
     if (m_tcpServer) {
         delete m_tcpServer;
@@ -104,10 +131,10 @@ const QString tcpServer::takeNextMessageForClient(QTcpSocket *client)
 
 QTcpSocket *tcpServer::clientFromID(const QVariant &clientID)
 {
-    QMap<QTcpSocket*, QVariant>::iterator i;
-    for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
+    QMap<QTcpSocket*, QVariant>::const_iterator i;
+    for (i = m_clientsList.constBegin(); i != m_clientsList.constEnd(); ++i) {
         QTcpSocket *client = i.key();
-        if (client->isValid()) {
+        if (client && client->isValid()) {
             if (i.value() == clientID) {
                 return client;
             }
@@ -128,10 +155,10 @@ QHostAddress tcpServer::clientIPFromID(const QVariant &clientID)
 
 QVariant tcpServer::clientIDFromIP(const QHostAddress IP)
 {
-    QMap<QTcpSocket*, QVariant>::iterator i;
-    for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
+    QMap<QTcpSocket*, QVariant>::const_iterator i;
+    for (i = m_clientsList.constBegin(); i != m_clientsList.constEnd(); ++i) {
         QTcpSocket *client = i.key();
-        if (client->isValid()) {
+        if (client && client->isValid()) {
             if (client->peerAddress() == IP) {
                 return i.value();
             }
@@ -142,10 +169,10 @@ QVariant tcpServer::clientIDFromIP(const QHostAddress IP)
 
 QTcpSocket *tcpServer::clientFromIP(const QHostAddress IP)
 {
-    QMap<QTcpSocket*, QVariant>::iterator i;
-    for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
+    QMap<QTcpSocket*, QVariant>::const_iterator i;
+    for (i = m_clientsList.constBegin(); i != m_clientsList.constEnd(); ++i) {
         QTcpSocket *client = i.key();
-        if (client->isValid()) {
+        if (client && client->isValid()) {
             if (client->peerAddress() == IP) {
                 return client;
             }
@@ -230,10 +257,10 @@ bool tcpServer::sendAll(const QString &message)
     if (m_clientsList.isEmpty()) {
         return false;
     }
-    QMap<QTcpSocket*, QVariant>::iterator i;
-    for (i = m_clientsList.begin(); i != m_clientsList.end(); ++i) {
+    QMap<QTcpSocket*, QVariant>::const_iterator i;
+    for (i = m_clientsList.constBegin(); i != m_clientsList.constEnd(); ++i) {
         QTcpSocket *client = i.key();
-        if (!(client->isValid() && send(client, message))) {
+        if (client && !(client->isValid() && send(client, message))) {
             ret = false;
         }
     }
