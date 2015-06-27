@@ -62,7 +62,6 @@ private Q_SLOTS:
 
 private:
     bool processLine(QTcpSocket *client, const QByteArray &line) Q_DECL_OVERRIDE;
-    QString getValue(const QString &command);
     bool sendCommandToModule(int moduleID, const QString &command);
 
     /**

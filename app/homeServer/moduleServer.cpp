@@ -171,14 +171,6 @@ bool moduleServer::processLine(QTcpSocket *client, const QByteArray &line)
       }
 }
 
-QString moduleServer::getValue(const QString &command)
-{
-    /*  if (command.count(SEP_NAME_VALUE) == 1) {
-        return command.split(SEP_NAME_VALUE).last();
-    }*/
-    return QString();
-}
-
 bool moduleServer::sendCommandToModule(int moduleID, const QString &command)
 {
     QTcpSocket *client = clientFromID(moduleID);
