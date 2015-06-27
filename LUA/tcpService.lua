@@ -27,7 +27,7 @@ function tcpService.processCommand(msg)
         -- GPIO command syntax is GPIO:<pin>,<state>
         if(stringParsing.stringStarts(singleCommand, "GPIO:")) then
             gpioCommand = stringParsing.removeSubString(singleCommand, "GPIO:")
-            _, _, pinStr, stateStr = string.find(gpioCommand, "(%d+):(%d+)")
+            _, _, pinStr, stateStr = string.find(gpioCommand, "(%d+),(%d+)")
             
             pin = tonumber(pinStr)
             state = tonumber(stateStr)
