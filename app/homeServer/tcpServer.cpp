@@ -25,6 +25,12 @@ tcpServer::tcpServer(QObject *parent) :
     m_pollingTimer->setInterval(500);
     m_pollingTimer->setSingleShot(false);
     connect(m_pollingTimer, &QTimer::timeout, this, &tcpServer::pollingTimerTimeout);
+
+
+    m_idTimer = new QTimer(this);
+    m_idTimer->setInterval(5000);
+    m_idTimer->setSingleShot(false);
+    connect(m_idTimer, &QTimer::timeout, this, &tcpServer::idTimerTimeout);
 }
 
 void tcpServer::createTCPServer()
@@ -73,6 +79,8 @@ void tcpServer::newConnection()
         }
 
         m_clientsList.insert(newSocket, 0);
+        m_clientswithoutID.insert(newSocket, QTime::currentTime());
+        m_idTimer->start();
         connect(newSocket, &QTcpSocket::disconnected, this, &tcpServer::connectionRemoved);
         connect(newSocket, &QTcpSocket::readyRead, this, &tcpServer::dataAvailable);
         

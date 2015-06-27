@@ -6,6 +6,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QTime>
 #include <QHostAddress>
 
 
@@ -66,6 +67,7 @@ private Q_SLOTS:
 
 protected Q_SLOTS:
     virtual void pollingTimerTimeout() {} //default does nothing
+    virtual void idTimerTimeout() {}
 
 protected:
     /**
@@ -89,6 +91,16 @@ protected:
      * @brief This timer allows querying clients for data at regular interval
      */
     QTimer *m_pollingTimer;
+
+    /**
+     * @brief client without ID and timestamp corresponding to the time they were connected
+     */
+    QMap<QTcpSocket *, QTime> m_clientswithoutID;
+
+    /**
+     * @brief when a new client is connected, it needs to send it's ID within the timer time, otherwise a reset command is sent.
+     */
+    QTimer *m_idTimer;
 
     /**
      * @brief convert between clients ID, IP and sockets
@@ -119,6 +131,7 @@ private:
      * @brief for testing, the number of completes lines received by the server.
      */
     int m_receivedLines;
+
 
 };
 

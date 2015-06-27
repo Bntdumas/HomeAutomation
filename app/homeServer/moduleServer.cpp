@@ -39,7 +39,9 @@ namespace {
 moduleServer::moduleServer(QObject *parent) :
     tcpServer(parent)
     ,m_state(false)
-{}
+{
+    qRegisterMetaType<devices::DeviceSubType>("devices::DeviceSubType");
+}
 
 bool moduleServer::resetModules()
 {
@@ -48,7 +50,13 @@ bool moduleServer::resetModules()
 
 bool moduleServer::resetModule(int moduleID)
 {
+    Q_EMIT message(tr("moduleServer: sending reset to %1 ").arg(moduleID), utils::Warning);
     return sendCommandToModule(moduleID, CMD_RESET);
+}
+
+bool moduleServer::resetModule(QTcpSocket *socket)
+{
+    return send(socket, CMD_RESET, true);
 }
 
 bool moduleServer::requestDataFromModules()
@@ -93,6 +101,29 @@ void moduleServer::pollingTimerTimeout()
     m_state = !m_state;
 }
 
+
+void moduleServer::idTimerTimeout()
+{
+    // send reset to module if it didn't send it's ID
+    if (m_clientswithoutID.isEmpty()) {
+        m_idTimer->stop();
+        return;
+    }
+
+    QMap<QTcpSocket*, QTime>::iterator i;
+    for (i = m_clientswithoutID.begin(); i != m_clientswithoutID.end(); ++i) {
+        QTcpSocket *client = i.key();
+        if (client->isValid()) {
+            qDebug() << "second since connection" << i.value().secsTo(QTime::currentTime());
+            if (i.value().secsTo(QTime::currentTime()) >= 5) {
+                resetModule(client);
+            }
+        }
+    }
+
+
+
+}
 bool moduleServer::processLine(QTcpSocket *client, const QByteArray &line)
 {
     QXmlStreamReader xml(line);
@@ -161,6 +192,7 @@ void moduleServer::processIDElement(QTcpSocket *client, const QXmlStreamReader &
         return;
     }
     m_clientsList.insert(client, qVariantFromValue(id));
+    m_clientswithoutID.remove(client);
     Q_EMIT message(tr("%1 sent me his ID (%2)").arg(clientIDFromIP(client->peerAddress()).toString()).arg(id), utils::Info);
     Q_EMIT newModuleConnected(id);
 }
