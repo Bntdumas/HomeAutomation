@@ -100,6 +100,8 @@ void espWifiModulesTest::deviceConnectedIP(QHostAddress ip)
         // Reconnections == 0
         ui->tblViewDevicesConnected->setItem(lastRow, 3
                                              , new QTableWidgetItem(QString::number(0)));
+
+        ui->tblViewDevicesConnected->resizeColumnsToContents();
     } else {
         incrementConnectionCount(existingRow);
         ui->tblViewDevicesConnected->setItem(lastRow, 2,
