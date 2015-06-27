@@ -14,4 +14,6 @@ add_unittest(networkModuleWithHardware tst_networkModuleWithHardware.cpp)
 add_unittest(dataStructure tst_dataStructure.cpp)
 add_unittest(devices tst_devices.cpp)
 
+add_subdirectory(espWifiModulesTest)
+
 
