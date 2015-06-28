@@ -15,7 +15,7 @@ class moduleServer;
 class QTimer;
 
 /**
- * @brief The home automation admin app.
+ * @brief This app sends test frames to the wifi modules and check if their answer is valid.
  */
 class espWifiModulesTest : public QMainWindow
 {
@@ -33,10 +33,17 @@ private Q_SLOTS:
      */
     void displayLogMessage(const QString &text, const utils::messageType type);
     void on_action_re_start_triggered();
+
+    /**
+     * @brief Corresponds to the server signals
+     */
     void deviceConnectedID(QVariant deviceID);
     void deviceConnectedIP(QHostAddress ip);
     void gpioChanged(int moduleID, int gpioPin, bool state);
 
+    /**
+     * @brief To send lots of frames
+     */
     void pollingTimerTimeout();
 
 private:
@@ -51,12 +58,18 @@ private:
     int rowForIP(QHostAddress ip);
     int rowForID(int deviceID);
 
+    /**
+     * @brief Increment the different counters on the table view
+     */
     void incrementConnectionCount(int row);
     void incrementFrameReceivedCount(int chipID);
     void incrementFrameSentCount(int chipID);
     void incrementCatastrophicFailCount(int chipID);
     void incrementCell(int row, int column);
 
+    /**
+     * @brief Try to send a test frame to a module
+     */
     void trySendGpioFrame(int chipID);
 
     QMap<int, bool> m_waitingForAnswer;

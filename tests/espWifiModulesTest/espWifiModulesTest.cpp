@@ -133,10 +133,12 @@ void espWifiModulesTest::gpioChanged(int moduleID, int gpioPin, bool state)
     incrementFrameReceivedCount(moduleID);
     if (state != m_waitingForAnswer.value(moduleID)) {
         displayLogMessage(tr("espWifiModulesTest: ========= DATA CORRUPTED ===== sent a gpio value and received another"), utils::SoftwareError);
+        incrementCatastrophicFailCount(moduleID);
     }
 
     if (gpioPin != 4) {
         displayLogMessage(tr("espWifiModulesTest: ========= DATA CORRUPTED ===== wrong gpio pin"), utils::SoftwareError);
+        incrementCatastrophicFailCount(moduleID);
     }
     m_waitingForAnswer.remove(moduleID);
 }
