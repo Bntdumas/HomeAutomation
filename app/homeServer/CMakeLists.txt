@@ -3,14 +3,12 @@ include_directories(../sharedElements ../houseData)
 set(homeServer_HDRS
     homeServer_global.h
     moduleServer.h
-    tcpLineParser.h
     tcpServer.h
     userServer.h
 )
 
 set(homeServer_SRCS
     moduleServer.cpp
-    tcpLineParser.cpp
     tcpServer.cpp
     userServer.cpp
 )
