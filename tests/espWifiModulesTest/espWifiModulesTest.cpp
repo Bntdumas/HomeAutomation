@@ -50,7 +50,7 @@ void espWifiModulesTest::displayLogMessage(const QString &text, const utils::mes
 {
     switch (type) {
     case utils::Info:
-        ui->txtLog->setTextColor(Qt::darkGray);
+        return; //ui->txtLog->setTextColor(Qt::darkGray);
         break;
 
     case utils::Success:
